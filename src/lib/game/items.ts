@@ -111,16 +111,36 @@ const EQUIPMENT_BY_ID = new Map<string, EquipmentItem>(
 const LOCAL_SPRITES = new Set<string>(localSpritesRaw as string[]);
 const HABITICA_CDN = 'https://habitica-assets.s3.amazonaws.com/mobileApp/images';
 
-/** Sprites lendários/especiais que usam .gif animado no avatar do Habitica */
-const ANIMATED_AVATAR_IDS = new Set<string>([
-  'weapon_special_0',
-  'armor_special_0',
-  'head_special_0',
-  'shield_special_0',
-  'armor_special_1',
-  'head_special_1',
-  'weapon_special_critical',
+/** Mapeamento oficial de sprites especiais/animados (.gif) do sprites.css do Habitica */
+const SPECIAL_AVATAR_FILENAMES: Record<string, string> = {
+  back_special_heroicAureole: 'back_special_heroicAureole.gif',
+  weapon_special_0: 'BackerOnly-Weapon-DarkSoulsBlade.gif',
+  armor_special_0: 'BackerOnly-Equip-ShadeArmor.gif',
+  head_special_0: 'BackerOnly-Equip-ShadeHelmet.gif',
+  shield_special_0: 'BackerOnly-Shield-TormentedSkull.gif',
+  armor_special_1: 'ContributorOnly-Equip-CrystalArmor.gif',
+  head_special_1: 'ContributorOnly-Equip-CrystalHelmet.gif',
+  weapon_special_critical: 'weapon_special_critical.gif',
+  armor_special_ks2019: 'BackerOnly-Equip-MythicGryphonArmor.gif',
+  eyewear_special_ks2019: 'BackerOnly-Equip-MythicGryphonVisor.gif',
+  head_special_ks2019: 'BackerOnly-Equip-MythicGryphonHelm.gif',
+  shield_special_ks2019: 'BackerOnly-Equip-MythicGryphonShield.gif',
+  weapon_special_ks2019: 'BackerOnly-Equip-MythicGryphonGlaive.gif',
+};
+
+const ANIMATED_BACKGROUNDS = new Set<string>([
+  'background_airship.png',
+  'background_clocktower.png',
+  'background_steamworks.png',
 ]);
+
+const SPECIAL_AVATAR_OFFSETS: Record<string, { marginLeft?: number; marginTop?: number }> = {
+  weapon_special_0: { marginLeft: -3, marginTop: -18 },
+  head_special_0: { marginLeft: -3, marginTop: -18 },
+  weapon_special_1: { marginLeft: -12 },
+  head_special_1: { marginTop: 3 },
+  weapon_special_critical: { marginLeft: -12, marginTop: 12 },
+};
 
 export function getEquipmentById(id?: string): EquipmentItem | undefined {
   if (!id) return undefined;
@@ -128,14 +148,26 @@ export function getEquipmentById(id?: string): EquipmentItem | undefined {
 }
 
 /**
+ * Retorna offsets de posicionamento (em px nativos) definidos no sprites.css oficial do Habitica.
+ */
+export function getEquipmentSpriteOffset(
+  itemId: string
+): { marginLeft?: number; marginTop?: number } | undefined {
+  return SPECIAL_AVATAR_OFFSETS[itemId];
+}
+
+/**
  * Resolve o caminho de um sprite de aparência/cenário (usa /sprites/ quando local
- * e a CDN oficial do Habitica para os demais).
+ * e a CDN oficial do Habitica para os demais, incluindo cenários animados .gif).
  */
 export function getAppearanceSpritePath(fileName: string): string {
-  if (LOCAL_SPRITES.has(fileName)) {
-    return `/sprites/${fileName}`;
+  const resolved = ANIMATED_BACKGROUNDS.has(fileName)
+    ? fileName.replace(/\.png$/, '.gif')
+    : fileName;
+  if (LOCAL_SPRITES.has(resolved)) {
+    return `/sprites/${resolved}`;
   }
-  return `${HABITICA_CDN}/${fileName}`;
+  return `${HABITICA_CDN}/${resolved}`;
 }
 
 /**
@@ -143,10 +175,9 @@ export function getAppearanceSpritePath(fileName: string): string {
  * e a CDN oficial do Habitica para os demais itens e GIFs animados).
  */
 export function getEquipmentSpritePath(itemId: string, bodySize: BodySize): string {
-  const ext = ANIMATED_AVATAR_IDS.has(itemId) ? 'gif' : 'png';
-  const filename = itemId.startsWith('armor_')
-    ? `${bodySize}_${itemId}.${ext}`
-    : `${itemId}.${ext}`;
+  const filename =
+    SPECIAL_AVATAR_FILENAMES[itemId] ??
+    (itemId.startsWith('armor_') ? `${bodySize}_${itemId}.png` : `${itemId}.png`);
 
   if (LOCAL_SPRITES.has(filename)) {
     return `/sprites/${filename}`;

@@ -5,6 +5,8 @@ import {
   CharacterAppearance,
   EquippedGear,
   getAppearanceSpritePath,
+  getEquipmentById,
+  getEquipmentSpriteOffset,
   getEquipmentSpritePath,
 } from '@/lib/game/items';
 import { getPetSpritePath } from '@/lib/game/pets';
@@ -19,18 +21,23 @@ interface CharacterAvatarProps {
   className?: string;
 }
 
-const SIZE_CLASS: Record<NonNullable<CharacterAvatarProps['size']>, string> = {
-  sm: 'w-14 h-14',
-  md: 'w-20 h-20',
-  lg: 'w-28 h-28',
-  stage: 'w-[126px] h-[126px] sm:w-[140px] sm:h-[140px]',
+const SIZE_BOX: Record<
+  NonNullable<CharacterAvatarProps['size']>,
+  { cls: string; px: number }
+> = {
+  sm: { cls: 'w-14 h-14', px: 56 },
+  md: { cls: 'w-20 h-20', px: 80 },
+  lg: { cls: 'w-28 h-28', px: 112 },
+  stage: { cls: 'w-[141px] h-[147px]', px: 141 },
 };
 
 /**
- * Renderiza o palco de avatar estilo Habitica (140x140 pixel-art)
- * seguindo a ordem oficial de camadas do Habitica para todos os 8 slots:
- * Background -> Back -> Skin -> Shirt -> Armor -> Hair -> Beard/Mustache
- * -> Body -> Eyewear -> Head -> HeadAccessory -> Shield -> Weapon -> Pet.
+ * Renderiza o palco oficial 141x147 pixel-art do Habitica em coordenadas 1:1 reais:
+ * - O palco interno tem sempre 141px x 147px, escalonado uniformemente para caber no tamanho pedido.
+ * - O grupo .character-sprites é ancorado em left: 24px, top: 24px.
+ * - Todas as camadas dentro de .character-sprites têm position: absolute, top: 0, left: 0
+ *   e tamanho nativo (width: auto, height: auto), garantindo alinhamento perfeito entre
+ *   sprites de 90x90 (corpo/cabelo) e sprites largos de 114x90 (arcos, coroas, máscaras, capas).
  */
 export function CharacterAvatar({
   appearance,
@@ -54,14 +61,19 @@ export function CharacterAvatar({
     background,
   } = appearance;
   const visualGear = useCostume && costume ? costume : equipped;
-
   const hasBg = Boolean(background && background !== 'none');
-  const charLayers: { key: string; src: string }[] = [];
+
+  const charLayers: {
+    key: string;
+    src: string;
+    offset?: { marginLeft?: number; marginTop?: number };
+  }[] = [];
 
   if (visualGear.back) {
     charLayers.push({
       key: 'back',
       src: getEquipmentSpritePath(visualGear.back, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.back),
     });
   }
 
@@ -74,13 +86,7 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'armor',
       src: getEquipmentSpritePath(visualGear.armor, bodySize),
-    });
-  }
-
-  if (hairStyle > 0) {
-    charLayers.push({
-      key: 'hair_base',
-      src: getAppearanceSpritePath(`hair_base_${hairStyle}_${hairColor}.png`),
+      offset: getEquipmentSpriteOffset(visualGear.armor),
     });
   }
 
@@ -91,10 +97,10 @@ export function CharacterAvatar({
     });
   }
 
-  if (hairBeard && hairBeard > 0) {
+  if (hairStyle > 0) {
     charLayers.push({
-      key: 'hair_beard',
-      src: getAppearanceSpritePath(`hair_beard_${hairBeard}_${hairColor}.png`),
+      key: 'hair_base',
+      src: getAppearanceSpritePath(`hair_base_${hairStyle}_${hairColor}.png`),
     });
   }
 
@@ -105,10 +111,10 @@ export function CharacterAvatar({
     });
   }
 
-  if (hairFlower && hairFlower > 0) {
+  if (hairBeard && hairBeard > 0) {
     charLayers.push({
-      key: 'hair_flower',
-      src: getAppearanceSpritePath(`hair_flower_${hairFlower}.png`),
+      key: 'hair_beard',
+      src: getAppearanceSpritePath(`hair_beard_${hairBeard}_${hairColor}.png`),
     });
   }
 
@@ -116,6 +122,7 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'body',
       src: getEquipmentSpritePath(visualGear.body, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.body),
     });
   }
 
@@ -123,6 +130,7 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'eyewear',
       src: getEquipmentSpritePath(visualGear.eyewear, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.eyewear),
     });
   }
 
@@ -130,6 +138,7 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'head',
       src: getEquipmentSpritePath(visualGear.head, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.head),
     });
   }
 
@@ -137,13 +146,26 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'headAccessory',
       src: getEquipmentSpritePath(visualGear.headAccessory, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.headAccessory),
     });
   }
 
-  if (visualGear.shield) {
+  if (hairFlower && hairFlower > 0) {
+    charLayers.push({
+      key: 'hair_flower',
+      src: getAppearanceSpritePath(`hair_flower_${hairFlower}.png`),
+    });
+  }
+
+  const weaponIsTwoHanded = Boolean(
+    visualGear.weapon && getEquipmentById(visualGear.weapon)?.twoHanded
+  );
+
+  if (visualGear.shield && !weaponIsTwoHanded) {
     charLayers.push({
       key: 'shield',
       src: getEquipmentSpritePath(visualGear.shield, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.shield),
     });
   }
 
@@ -151,52 +173,73 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'weapon',
       src: getEquipmentSpritePath(visualGear.weapon, bodySize),
+      offset: getEquipmentSpriteOffset(visualGear.weapon),
     });
   }
 
+  const box = SIZE_BOX[size];
+  const scale = box.px / 141;
+
   return (
     <div
-      className={`relative shrink-0 rounded-md bg-[#271b3d] border border-[#4f2a93] overflow-hidden select-none shadow-inner ${SIZE_CLASS[size]} ${className}`}
+      className={`relative shrink-0 rounded-md bg-[#271b3d] border border-[#4f2a93] overflow-hidden select-none shadow-inner ${box.cls} ${className}`}
     >
-      {/* Camada de Fundo (Background Cenário Habitica) */}
-      {hasBg ? (
-        <img
-          src={getAppearanceSpritePath(`background_${background}.png`)}
-          alt=""
-          draggable={false}
-          className="absolute inset-0 w-full h-full object-cover [image-rendering:pixelated]"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-b from-[#36205d] via-[#2a174a] to-[#1f1238]" />
-      )}
-
-      {/* Camadas do Personagem */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        {charLayers.map((layer) => (
+      {/* Palco Oficial Habitica 141x147 escalonado proporcionalmente */}
+      <div
+        className="absolute top-1/2 left-1/2 w-[141px] h-[147px] [image-rendering:pixelated]"
+        style={{
+          transform: `translate(-50%, -50%) scale(${scale})`,
+          transformOrigin: 'center center',
+        }}
+      >
+        {/* Camada de Fundo (141x147) */}
+        {hasBg ? (
           <img
-            key={layer.key}
-            src={layer.src}
+            src={getAppearanceSpritePath(`background_${background}.png`)}
             alt=""
             draggable={false}
-            className="absolute inset-0 w-full h-full object-contain [image-rendering:pixelated]"
+            className="absolute top-0 left-0 w-[141px] h-[147px] max-w-none max-h-none"
           />
-        ))}
-      </div>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-b from-[#36205d] via-[#2a174a] to-[#1f1238]" />
+        )}
 
-      {/* Mascote no canto inferior esquerdo do palco (estilo Habitica) */}
-      {petId && (
-        <img
-          src={getPetSpritePath(petId)}
-          alt="Mascote"
-          draggable={false}
-          className="absolute bottom-0.5 left-0.5 w-[46%] h-[46%] object-contain [image-rendering:pixelated] drop-shadow-[0_2px_2px_rgba(0,0,0,0.85)]"
-        />
-      )}
+        {/* Camadas do Personagem e Equipamentos em tamanho nativo 1:1 a partir de (24, 24) */}
+        <div className="absolute top-[24px] left-[24px] w-[90px] h-[90px]">
+          {charLayers.map((layer) => (
+            <img
+              key={layer.key}
+              src={layer.src}
+              alt=""
+              draggable={false}
+              className="absolute top-0 left-0 w-auto h-auto max-w-none max-h-none"
+              style={
+                layer.offset
+                  ? {
+                      marginLeft: layer.offset.marginLeft,
+                      marginTop: layer.offset.marginTop,
+                    }
+                  : undefined
+              }
+            />
+          ))}
+        </div>
+
+        {/* Mascote no canto inferior esquerdo do palco 141x147 em tamanho nativo 1:1 */}
+        {petId && (
+          <img
+            src={getPetSpritePath(petId)}
+            alt="Mascote"
+            draggable={false}
+            className="absolute bottom-0 left-0 w-auto h-auto max-w-none max-h-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.85)]"
+          />
+        )}
+      </div>
 
       {/* Indicador discreto de Fantasia Ativa */}
       {useCostume && (
         <span
-          className="absolute top-1 right-1 text-[9px] font-condensed font-bold uppercase px-1 py-0.2 rounded bg-black/65 text-[#24cc8f] border border-[#24cc8f]/40"
+          className="absolute top-1 right-1 text-[9px] font-condensed font-bold uppercase px-1 py-0.2 rounded bg-black/65 text-[#24cc8f] border border-[#24cc8f]/40 z-10"
           title="Modo Fantasia Ativo"
         >
           Cos

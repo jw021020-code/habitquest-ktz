@@ -72,8 +72,13 @@ export function getPetById(petId?: string): PetCatalogEntry | undefined {
   return PET_BY_ID.get(petId);
 }
 
+const SPECIAL_PET_FILENAMES: Record<string, string> = {
+  'Gryphon-Gryphatrice': 'BackerOnly-Pet-Gryphatrice.gif',
+  'Gryphatrice-Jubilant': 'Pet-Gryphatrice-Jubilant.gif',
+};
+
 export function getPetSpritePath(petId: string): string {
-  const fileName = `Pet-${petId}.png`;
+  const fileName = SPECIAL_PET_FILENAMES[petId] ?? `Pet-${petId}.png`;
   return LOCAL_SPRITES.has(fileName)
     ? `/sprites/${fileName}`
     : `${HABITICA_CDN}/${fileName}`;
