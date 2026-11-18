@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+:root {
+  --hab-nav-bg: #36205d;
+  --hab-nav-border: #432874;
+  --hab-hero-from: #4f2a93;
+  --hab-hero-to: #6133b4;
+  --hab-page-bg: #1a181d;
+  --hab-col-bg: #23202a;
+  --hab-card-bg: #2c2836;
+  --hab-card-border: #3a3447;
+  --hab-text: #f3f1f7;
+  --hab-muted: #a8a1b5;
+  --hab-hp: #ff6165;
+  --hab-xp: #ffbe5d;
+  --hab-good: #24cc8f;
+  --hab-accent: #925cf3;
+}
+
+@theme inline {
+  --font-sans: var(--font-roboto), Arial, sans-serif;
+  --font-display: var(--font-roboto-condensed), Arial, sans-serif;
+}
+
+body {
+  background-color: var(--hab-page-bg);
+  color: var(--hab-text);
+  font-family: var(--font-sans);
+}
+
+.font-condensed {
+  font-family: var(--font-display);
+}

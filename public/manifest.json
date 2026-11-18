@@ -1,0 +1,17 @@
+{
+  "name": "HabitQuest — KTZ Know The Zero",
+  "short_name": "HabitQuest",
+  "description": "RPG cooperativo de Estudos Teóricos e Treinamento Físico Diário do clã KTZ - Know The Zero.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a181d",
+  "theme_color": "#432874",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
