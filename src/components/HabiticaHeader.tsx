@@ -62,10 +62,10 @@ interface HabiticaHeaderProps {
 
 const SHOP_SUBTABS: { id: ShopSubTab; label: string }[] = [
   { id: 'all', label: 'Mercado Geral' },
-  { id: 'warrior', label: 'Guerreiro' },
-  { id: 'wizard', label: 'Mago' },
-  { id: 'rogue', label: 'Ladino' },
-  { id: 'healer', label: 'Curandeiro' },
+  { id: 'healer', label: 'Escudeiro' },
+  { id: 'warrior', label: 'Espadachim' },
+  { id: 'rogue', label: 'Batedor' },
+  { id: 'wizard', label: 'Noviço Arcano' },
   { id: 'cosmetic', label: 'Cosméticos' },
 ];
 

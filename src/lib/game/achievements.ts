@@ -1,4 +1,10 @@
-import { EQUIPMENT_CATALOG, EquipmentItem } from './items';
+import {
+  EQUIPMENT_CATALOG,
+  EquipmentItem,
+  getItemRarity,
+  ItemRarity,
+  RARITY_META,
+} from './items';
 
 export interface HeroMetrics {
   tasksCompleted: number;
@@ -98,41 +104,68 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 ];
 
 export type ArmoireReward =
-  | { kind: 'equipment'; item: EquipmentItem; label: string }
-  | { kind: 'xp'; amount: number; label: string }
+  | { kind: 'equipment'; item: EquipmentItem; rarity: ItemRarity; label: string }
+  | { kind: 'gold'; amount: number; label: string }
   | { kind: 'egg'; label: string }
   | { kind: 'potion'; label: string };
 
 /**
- * Sorteia recompensa do Armoire Encantado (50% chance de equipamento inédito,
- * priorizando a coleção oficial Armoire; 50% XP, Ovo ou Poção).
+ * Sorteia recompensa do Armoire Encantado (ZERO XP):
+ * - 55% chance de Equipamento inédito ponderado por Raridade
+ *   (Comum 50% · Incomum 28% · Raro 14% · Épico 6% · Lendário 2%)
+ * - 45% chance de Recurso (40% Ovo, 40% Poção de Chocar, 20% Saco de Ouro)
  */
 export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   const ownedSet = new Set(ownedIds);
-  const unownedArmoire = EQUIPMENT_CATALOG.filter(
-    (item) => item.category === 'armoire' && !ownedSet.has(item.id)
-  );
-  const unownedPool =
-    unownedArmoire.length > 0
-      ? unownedArmoire
-      : EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
+  const unownedPool = EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
 
-  const r = Math.random();
-  if (unownedPool.length > 0 && r < 0.5) {
-    const picked = unownedPool[Math.floor(Math.random() * unownedPool.length)];
+  if (unownedPool.length > 0 && Math.random() < 0.55) {
+    const byRarity: Record<ItemRarity, EquipmentItem[]> = {
+      common: [],
+      uncommon: [],
+      rare: [],
+      epic: [],
+      legendary: [],
+    };
+    for (const item of unownedPool) {
+      byRarity[getItemRarity(item)].push(item);
+    }
+
+    const availableRarities = (Object.keys(byRarity) as ItemRarity[]).filter(
+      (r) => byRarity[r].length > 0
+    );
+    const totalWeight = availableRarities.reduce(
+      (acc, r) => acc + RARITY_META[r].weight,
+      0
+    );
+
+    let roll = Math.random() * totalWeight;
+    let chosenRarity: ItemRarity = availableRarities[0];
+    for (const r of availableRarities) {
+      roll -= RARITY_META[r].weight;
+      if (roll <= 0) {
+        chosenRarity = r;
+        break;
+      }
+    }
+
+    const bucket = byRarity[chosenRarity];
+    const picked = bucket[Math.floor(Math.random() * bucket.length)];
     return {
       kind: 'equipment',
       item: picked,
-      label: `Equipamento: ${picked.name}`,
+      rarity: chosenRarity,
+      label: `[${RARITY_META[chosenRarity].label}] ${picked.name}`,
     };
   }
 
   const sub = Math.random();
   if (sub < 0.4) {
-    return { kind: 'xp', amount: 25, label: '+25 XP Encantado' };
+    return { kind: 'egg', label: '1x Ovo' };
   }
-  if (sub < 0.7) {
-    return { kind: 'egg', label: 'Ovo' };
+  if (sub < 0.8) {
+    return { kind: 'potion', label: '1x Poção de Chocar' };
   }
-  return { kind: 'potion', label: 'Poção de Chocar' };
+  const gp = 25 + Math.floor(Math.random() * 36); // 25..60 GP
+  return { kind: 'gold', amount: gp, label: `+${gp} GP do Baú` };
 }

@@ -4,9 +4,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BookOpen, Dumbbell, ShoppingBag, Store, Users } from 'lucide-react';
 import {
   applyClassSkill,
+  BossCombatModifiers,
   calculateStudyReward,
   calculateWorkoutReward,
   getUnallocatedStatPoints,
+  getXpToNextLevel,
   grantXpAndResources,
   PlayerStats,
   ZERO_ATTRS,
@@ -23,6 +25,7 @@ import {
   EquipmentSlot,
   EquippedGear,
   getEquipmentById,
+  getItemEffectiveStats,
 } from '@/lib/game/items';
 import {
   BOSS_CATALOG,
@@ -154,9 +157,10 @@ export default function HomePage() {
   const [toast, setToast] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [onlineLoaded, setOnlineLoaded] = useState(false);
+  const [bossMods, setBossMods] = useState<BossCombatModifiers>({});
 
   const totalAttributes = useMemo(() => {
-    const gear = computeTotalAttributes(equipped);
+    const gear = computeTotalAttributes(equipped, stats.heroClass);
     const alloc = stats.allocatedStats ?? ZERO_ATTRS;
     return {
       str: gear.str + stats.buffs.str + alloc.str,
@@ -164,7 +168,7 @@ export default function HomePage() {
       con: gear.con + stats.buffs.con + alloc.con,
       per: gear.per + stats.buffs.per + alloc.per,
     };
-  }, [equipped, stats.buffs, stats.allocatedStats]);
+  }, [equipped, stats.heroClass, stats.buffs, stats.allocatedStats]);
 
   const unallocatedPoints = useMemo(
     () => getUnallocatedStatPoints(stats.level, stats.allocatedStats),
@@ -178,7 +182,14 @@ export default function HomePage() {
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed.heroName) setHeroName(parsed.heroName);
-          if (parsed.stats) setStats({ ...DEFAULT_STATS, ...parsed.stats });
+          if (parsed.stats) {
+            const loadedStats = { ...DEFAULT_STATS, ...parsed.stats };
+            loadedStats.xp_to_next = Math.min(
+              loadedStats.xp_to_next,
+              getXpToNextLevel(loadedStats.level)
+            );
+            setStats(loadedStats);
+          }
           if (parsed.studyEntries) setStudyEntries(parsed.studyEntries);
           if (parsed.workoutEntries) setWorkoutEntries(parsed.workoutEntries);
           if (parsed.party) setParty({ ...DEFAULT_PARTY, ...parsed.party });
@@ -307,6 +318,7 @@ export default function HomePage() {
       });
 
       setStats(victoryRes.nextStats);
+      setBossMods({});
       setStable((prev) => ({
         ...prev,
         eggs: prev.eggs + dropCount,
@@ -417,7 +429,7 @@ export default function HomePage() {
       totalGoldEarned: m.totalGoldEarned + res.deltaGold,
     }));
 
-    const drop = rollTaskDrop();
+    const drop = rollTaskDrop(totalAttributes.per);
     if (drop) {
       dropText = ` · 🎁 Drop: ${drop.label}!`;
       pushActionLog(`🎁 ${heroName} encontrou: ${drop.label}!`);
@@ -475,7 +487,8 @@ export default function HomePage() {
       entry.didQuestions,
       entry.questionsDone,
       totalAttributes,
-      activeBossAttack
+      activeBossAttack,
+      bossMods
     );
     processDropAndToast(res, `Estudo: ${entry.subject}`);
   };
@@ -506,7 +519,8 @@ export default function HomePage() {
       entry.cardio,
       entry.musculacao,
       totalAttributes,
-      activeBossAttack
+      activeBossAttack,
+      bossMods
     );
     processDropAndToast(res, `Treino: ${label}`);
   };
@@ -516,7 +530,7 @@ export default function HomePage() {
   };
 
   const handleCastSkill = (skill: ClassSkill) => {
-    const res = applyClassSkill(stats, skill, totalAttributes, activeBossAttack);
+    const res = applyClassSkill(stats, skill, totalAttributes, activeBossAttack, bossMods);
     if (!res.ok) {
       if (res.reason === 'full_stamina') {
         showToast('💚 Sua Estamina já está cheia!');
@@ -531,7 +545,60 @@ export default function HomePage() {
     if (res.gainedGold > 0) {
       setMetrics((m) => ({ ...m, totalGoldEarned: m.totalGoldEarned + res.gainedGold }));
     }
-    pushActionLog(`✨ ${heroName} usou ${skill.name}.`);
+
+    if (res.appliedBossVulnerable) {
+      setBossMods((m) => ({ ...m, vulnerable: true }));
+    }
+    if (res.appliedBossWeakened) {
+      setBossMods((m) => ({ ...m, weakened: true }));
+    }
+
+    // Efeitos coletivos para a Guilda KTZ (transmitidos via party_messages Realtime)
+    if (skill.isGroup) {
+      if (res.groupHealAmount && res.groupHealAmount > 0) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (+${res.groupHealAmount} STA para toda a KTZ)!`
+        );
+      } else if (res.groupManaAmount && res.groupManaAmount > 0) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (+${res.groupManaAmount} MP para toda a KTZ)!`
+        );
+      } else if (res.groupBuffDelta?.con) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (+${res.groupBuffDelta.con} CON para toda a KTZ)!`
+        );
+      } else if (res.groupBuffDelta?.str) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (+${res.groupBuffDelta.str} STR para toda a KTZ)!`
+        );
+      } else if (res.groupBuffDelta?.per) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (+${res.groupBuffDelta.per} PER para toda a KTZ)!`
+        );
+      } else if (res.appliedBossVulnerable) {
+        pushActionLog(
+          `🤝 ${heroName} usou ${skill.name} (Boss Vulnerável: +20% dano para toda a KTZ)!`
+        );
+      } else if (res.appliedBossWeakened) {
+        pushActionLog(
+          `🤝 ${heroName} lançou ${skill.name} (Boss Enfraquecido: -25% ataque para toda a KTZ)!`
+        );
+      }
+    } else {
+      pushActionLog(`✨ ${heroName} usou ${skill.name}.`);
+    }
+
+    let dropText = '';
+    if (res.bonusDropRoll) {
+      const drop = rollTaskDrop(totalAttributes.per + 25);
+      if (drop) {
+        dropText = ` · 🎁 Drop: ${drop.label}!`;
+        pushActionLog(`🎁 ${heroName} encontrou ${drop.label} usando ${skill.name}!`);
+        setStable((prev) =>
+          drop.kind === 'egg' ? { ...prev, eggs: prev.eggs + 1 } : { ...prev, potions: prev.potions + 1 }
+        );
+      }
+    }
 
     const bossOutcome =
       res.bossDamage > 0
@@ -543,21 +610,20 @@ export default function HomePage() {
       showToast(
         `🏆 ${bossOutcome.bossName} derrotado com ${skill.name}! STA/MP 100%! Próximo: ${bossOutcome.nextBossName}${lvlTag}`
       );
-    } else if (res.leveledUp) {
-      pushActionLog(`🎉 ${heroName} alcançou o Nível ${res.nextStats.level}!`);
-      showToast(`🎉 ${skill.name}: Nível ${res.nextStats.level} alcançado!`);
-    } else if (skill.kind === 'damage') {
-      showToast(
-        `✨ ${skill.name}: -${res.bossDamage} Boss HP · -${res.staminaLost} STA${res.gainedGold ? ` · +${res.gainedGold} GP` : ''}!`
-      );
-    } else if (skill.kind === 'heal') {
-      showToast(`💚 ${skill.name}: +${res.healedHp} Estamina restaurada!`);
-    } else if (skill.kind === 'xp') {
-      showToast(`📘 ${skill.name}: +${res.gainedXp} XP!`);
-    } else if (skill.kind === 'gold') {
-      showToast(`🪙 ${skill.name}: +${res.gainedGold} GP!`);
+    } else if (res.bossDamage > 0) {
+      const dodgeTag = res.dodged ? ' · 💨 Esquiva (0 STA)!' : ` · -${res.staminaLost} STA`;
+      const vulnTag = res.appliedBossVulnerable ? ' · Boss Vulnerável (+20%)' : '';
+      showToast(`⚔️ ${skill.name}: -${res.bossDamage} Boss HP${dodgeTag}${vulnTag}!`);
+    } else if (res.healedHp > 0 || res.groupHealAmount) {
+      showToast(`💚 ${skill.name}: +${res.healedHp} STA (Guilda KTZ curada)!`);
+    } else if (res.groupManaAmount) {
+      showToast(`💙 ${skill.name}: +${res.groupManaAmount} MP restaurado para toda a KTZ!`);
+    } else if (res.gainedGold > 0) {
+      showToast(`🪙 ${skill.name}: +${res.gainedGold} GP!${dropText}`);
+    } else if (skill.kind === 'stance') {
+      showToast(`⚡ ${skill.name} ativado!`);
     } else if (skill.kind === 'buff') {
-      showToast(`🛡️ ${skill.name} ativado até derrotar o Boss atual!`);
+      showToast(`🛡️ ${skill.name} aplicado para toda a KTZ!`);
     }
   };
 
@@ -566,9 +632,13 @@ export default function HomePage() {
       showToast(`🔒 Alcance o Nível ${CLASS_UNLOCK_LEVEL} para escolher sua Classe!`);
       return;
     }
+    if (stats.heroClass !== 'apprentice') {
+      showToast('🔒 Classe travada! Use o Orbe do Renascimento para escolher outro caminho.');
+      return;
+    }
     setStats((s) => ({ ...s, heroClass: nextClass }));
-    pushActionLog(`🎭 ${heroName} escolheu a classe ${CLASS_INFO[nextClass].label}!`);
-    showToast(`🎭 Classe definida: ${CLASS_INFO[nextClass].label}!`);
+    pushActionLog(`🎭 ${heroName} escolheu a classe inicial ${CLASS_INFO[nextClass].label}!`);
+    showToast(`🎭 Classe definitiva definida: ${CLASS_INFO[nextClass].label}!`);
   };
 
   const applyGearItem = (prev: EquippedGear, item: EquipmentItem): EquippedGear => {
@@ -679,8 +749,10 @@ export default function HomePage() {
       return;
     }
 
-    const statSum = (it: EquipmentItem) =>
-      it.stats.str + it.stats.int + it.stats.con + it.stats.per;
+    const statSum = (it: EquipmentItem) => {
+      const eff = getItemEffectiveStats(it, stats.heroClass);
+      return eff.str + eff.int + eff.con + eff.per;
+    };
 
     const bestForSlot = (slot: EquipmentSlot): EquipmentItem | undefined => {
       const candidates = ownedItems.filter((it) => it.slot === slot);
@@ -877,15 +949,16 @@ export default function HomePage() {
     }
 
     const p = bundle.profile;
+    const loadedLevel = p.level ?? 1;
     setHeroName(p.username);
     setStats({
-      level: p.level ?? 1,
+      level: loadedLevel,
       hp: p.hp ?? 50,
       max_hp: p.max_hp ?? 50,
       mp: p.mp ?? 30,
       max_mp: p.max_mp ?? 32,
       xp: p.xp ?? 0,
-      xp_to_next: p.xp_to_next ?? 100,
+      xp_to_next: Math.min(p.xp_to_next ?? 100, getXpToNextLevel(loadedLevel)),
       gold: p.gold ?? 0,
       heroClass: p.hero_class ?? 'apprentice',
       buffs: p.buffs ?? { ...ZERO_ATTRS },
@@ -1047,11 +1120,40 @@ export default function HomePage() {
         (payload) => {
           const m = payload.new as {
             id: string;
+            user_id?: string | null;
             username: string;
             kind: 'chat' | 'system';
             content: string;
             created_at: string;
           };
+          // Aplica efeitos coletivos de skills de membros aliados da KTZ em tempo real
+          if (m.kind === 'system' && m.user_id && m.user_id !== userId && m.content.startsWith('🤝 ')) {
+            const healMatch = m.content.match(/\+(\d+) STA para toda a KTZ/);
+            const manaMatch = m.content.match(/\+(\d+) MP para toda a KTZ/);
+            const conMatch = m.content.match(/\+(\d+) CON para toda a KTZ/);
+            const strMatch = m.content.match(/\+(\d+) STR para toda a KTZ/);
+            const perMatch = m.content.match(/\+(\d+) PER para toda a KTZ/);
+            if (healMatch) {
+              const val = Number(healMatch[1]);
+              setStats((s) => ({ ...s, hp: Math.min(s.max_hp, s.hp + val) }));
+            } else if (manaMatch) {
+              const val = Number(manaMatch[1]);
+              setStats((s) => ({ ...s, mp: Math.min(s.max_mp, s.mp + val) }));
+            } else if (conMatch) {
+              const val = Number(conMatch[1]);
+              setStats((s) => ({ ...s, buffs: { ...s.buffs, con: Math.min(40, s.buffs.con + val) } }));
+            } else if (strMatch) {
+              const val = Number(strMatch[1]);
+              setStats((s) => ({ ...s, buffs: { ...s.buffs, str: Math.min(40, s.buffs.str + val) } }));
+            } else if (perMatch) {
+              const val = Number(perMatch[1]);
+              setStats((s) => ({ ...s, buffs: { ...s.buffs, per: Math.min(40, s.buffs.per + val) } }));
+            } else if (m.content.includes('Boss Vulnerável')) {
+              setBossMods((bm) => ({ ...bm, vulnerable: true }));
+            } else if (m.content.includes('Boss Enfraquecido')) {
+              setBossMods((bm) => ({ ...bm, weakened: true }));
+            }
+          }
           setMessages((prev) => {
             if (prev.some((x) => x.id === m.id)) return prev;
             return [
@@ -1096,6 +1198,7 @@ export default function HomePage() {
         resetBuffs: true,
       });
       setStats(victoryRes.nextStats);
+      setBossMods({});
       setStable((prev) => ({
         ...prev,
         eggs: prev.eggs + prevBoss.dropCount,
@@ -1164,7 +1267,7 @@ export default function HomePage() {
     if (stats.gold < cost) return;
 
     let simInventory = [...inventory];
-    let totalXp = 0;
+    let totalGold = 0;
     let totalEggs = 0;
     let totalPotions = 0;
     const newEquipNames: string[] = [];
@@ -1178,8 +1281,8 @@ export default function HomePage() {
           simInventory.push(reward.item.id);
         }
         newEquipNames.push(reward.item.name);
-      } else if (reward.kind === 'xp') {
-        totalXp += reward.amount;
+      } else if (reward.kind === 'gold') {
+        totalGold += reward.amount;
       } else if (reward.kind === 'egg') {
         totalEggs += 1;
       } else if (reward.kind === 'potion') {
@@ -1188,11 +1291,14 @@ export default function HomePage() {
     }
 
     const armoireRes = grantXpAndResources(stats, totalAttributes, {
-      xp: totalXp,
-      goldDelta: -cost,
+      goldDelta: -cost + totalGold,
     });
     setStats(armoireRes.nextStats);
-    setMetrics((m) => ({ ...m, armoireOpened: m.armoireOpened + count }));
+    setMetrics((m) => ({
+      ...m,
+      armoireOpened: m.armoireOpened + count,
+      totalGoldEarned: m.totalGoldEarned + totalGold,
+    }));
     if (simInventory.length > inventory.length) {
       setInventory(simInventory);
     }
@@ -1206,16 +1312,11 @@ export default function HomePage() {
 
     if (count === 1) {
       pushActionLog(`🎁 ${heroName} abriu o Armoire Encantado e ganhou: ${lastSingleLabel}!`);
-      if (armoireRes.leveledUp) {
-        pushActionLog(`🎉 ${heroName} alcançou o Nível ${armoireRes.nextStats.level}!`);
-        showToast(`🎁 Armoire: ${lastSingleLabel} · 🎉 Nível ${armoireRes.nextStats.level}!`);
-      } else {
-        showToast(`🎁 Armoire Encantado: ${lastSingleLabel}!`);
-      }
+      showToast(`🎁 Armoire Encantado: ${lastSingleLabel}!`);
     } else {
       const parts: string[] = [];
       if (newEquipNames.length > 0) parts.push(`${newEquipNames.length} equips`);
-      if (totalXp > 0) parts.push(`+${totalXp} XP`);
+      if (totalGold > 0) parts.push(`+${totalGold} GP`);
       if (totalEggs > 0) parts.push(`${totalEggs} Ovos`);
       if (totalPotions > 0) parts.push(`${totalPotions} Poções`);
       const summary = parts.join(', ');
@@ -1342,6 +1443,9 @@ export default function HomePage() {
           heroClass={stats.heroClass}
           level={stats.level}
           mp={stats.mp}
+          guardCharges={stats.guardCharges}
+          critGuarantee={stats.critGuarantee}
+          shadowCharges={stats.shadowCharges}
           onChangeClass={handleChangeClass}
           onCastSkill={handleCastSkill}
         />
@@ -1395,6 +1499,7 @@ export default function HomePage() {
         gold={stats.gold}
         hp={stats.hp}
         maxHp={stats.max_hp}
+        heroClass={stats.heroClass}
         appearance={appearance}
         equipped={equipped}
         costume={costume}

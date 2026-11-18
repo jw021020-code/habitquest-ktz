@@ -16,6 +16,17 @@ export interface PlayerStats {
   buffs: Attributes;
   allocatedStats?: Attributes;
   rebirths?: number;
+  /** Cargas de redução de dano de Estamina (-50%) da Postura Defensiva (Escudeiro) */
+  guardCharges?: number;
+  /** Crítico garantido (1.75x) e ignora Exaustão no próximo ataque (Espadachim) */
+  critGuarantee?: boolean;
+  /** Cargas de +20% crítico e -40% perda de Estamina de Passos Sombrios (Batedor) */
+  shadowCharges?: number;
+}
+
+export interface BossCombatModifiers {
+  vulnerable?: boolean; // +20% dano recebido pelo Boss
+  weakened?: boolean; // -25% ataque do Boss
 }
 
 export interface RewardPreview {
@@ -26,6 +37,15 @@ export interface RewardPreview {
 }
 
 export const ZERO_ATTRS: Attributes = { str: 0, int: 0, con: 0, per: 0 };
+
+/**
+ * Curva polinomial equilibrada de XP para o próximo nível:
+ * Nível 1->2 = 100 | Nível 5->6 = 408 | Nível 10->11 = 1.153 | Nível 50->51 = 21.513
+ */
+export function getXpToNextLevel(level: number): number {
+  const safe = Math.max(1, level);
+  return 100 + (safe - 1) * 45 + Math.pow(safe - 1, 2) * 8;
+}
 
 export function getUnallocatedStatPoints(level: number, allocated?: Attributes): number {
   const a = allocated ?? ZERO_ATTRS;
@@ -45,7 +65,7 @@ function applyLevelUps(
 ) {
   let nextLevel = level;
   let nextXp = xp;
-  let nextXpToNext = xpToNext;
+  let nextXpToNext = Math.min(xpToNext, getXpToNextLevel(level));
   let nextHp = hp;
   let nextMaxHp = maxHp;
   let nextMp = mp;
@@ -55,7 +75,7 @@ function applyLevelUps(
   while (nextXp >= nextXpToNext) {
     nextXp -= nextXpToNext;
     nextLevel += 1;
-    nextXpToNext = Math.round(nextXpToNext * 1.25);
+    nextXpToNext = getXpToNextLevel(nextLevel);
     nextMaxHp += 5;
     nextHp = nextMaxHp;
     nextMaxMp = 30 + attrs.int * 2 + nextLevel * 2;
@@ -76,8 +96,8 @@ function applyLevelUps(
 }
 
 /**
- * Concede XP/Ouro de fontes externas (vitória de Boss, Armoire Encantado etc.)
- * garantindo sempre verificação de Level-Up, restauração opcional de 100% STA/MP
+ * Concede XP/Ouro de fontes permitidas (vitória de Boss, estudos/treinos, ouro de baú)
+ * garantindo verificação de Level-Up, restauração opcional de 100% STA/MP
  * e reset de buffs temporários de combate.
  */
 export function grantXpAndResources(
@@ -126,9 +146,31 @@ export function grantXpAndResources(
       xp_to_next: progressed.xp_to_next,
       gold: Math.max(0, stats.gold + (opts.goldDelta ?? 0)),
       buffs: opts.resetBuffs ? { ...ZERO_ATTRS } : stats.buffs,
+      guardCharges: opts.resetBuffs ? 0 : stats.guardCharges,
+      critGuarantee: opts.resetBuffs ? false : stats.critGuarantee,
+      shadowCharges: opts.resetBuffs ? 0 : stats.shadowCharges,
     },
     leveledUp: progressed.leveledUp,
   };
+}
+
+function computeStaminaLoss(
+  bossAttack: number,
+  attrs: Attributes,
+  stats: PlayerStats,
+  bossMods?: BossCombatModifiers,
+  extraMitigationMult = 1.0
+): number {
+  const conMitigation = Math.max(0.35, 1 - attrs.con * 0.02);
+  const bossWeakMult = bossMods?.weakened ? 0.75 : 1.0;
+  const guardMult = (stats.guardCharges ?? 0) > 0 ? 0.5 : 1.0;
+  const shadowMult = (stats.shadowCharges ?? 0) > 0 ? 0.6 : 1.0;
+  return Math.max(
+    1,
+    Math.round(
+      bossAttack * 0.45 * conMitigation * bossWeakMult * guardMult * shadowMult * extraMitigationMult
+    )
+  );
 }
 
 function computeBasePreview(
@@ -137,19 +179,24 @@ function computeBasePreview(
   baseGold: number,
   baseBossDamage: number,
   attrs: Attributes,
-  bossAttack: number
+  bossAttack: number,
+  bossMods?: BossCombatModifiers
 ): RewardPreview {
-  const exhaustMult = stats.hp <= 0 ? 0.7 : 1.0;
-  const xp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02)));
+  const exhaustMult = stats.hp <= 0 && !stats.critGuarantee ? 0.7 : 1.0;
+  const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
+  const levelScale = 1 + Math.min(2.0, (stats.level - 1) * 0.02);
+  const xp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02) * levelScale));
   const gold = Math.max(1, Math.round(baseGold * (1 + attrs.per * 0.02) * exhaustMult));
-  const bossDamage = Math.max(1, Math.round(baseBossDamage * (1 + attrs.str * 0.02) * exhaustMult));
-  const conMitigation = Math.max(0.35, 1 - attrs.con * 0.02);
-  const staminaLost = Math.max(2, Math.round(bossAttack * 0.45 * conMitigation));
+  const bossDamage = Math.max(
+    1,
+    Math.round(baseBossDamage * (1 + attrs.str * 0.02) * exhaustMult * vulnMult * levelScale)
+  );
+  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
   return { xp, gold, bossDamage, staminaLost };
 }
 
 /**
- * Prévia determinística (sem sorteio de crítico) para exibir em tempo real no card de Estudo.
+ * Prévia determinística para exibir em tempo real no card de Estudo.
  */
 export function previewStudyReward(
   stats: PlayerStats,
@@ -157,7 +204,8 @@ export function previewStudyReward(
   didQuestions: boolean,
   questionsDone: number,
   attrs: Attributes = ZERO_ATTRS,
-  bossAttack = 12
+  bossAttack = 12,
+  bossMods?: BossCombatModifiers
 ): RewardPreview {
   const safeMinutes = Math.max(1, minutes || 1);
   const safeQuestions = didQuestions ? Math.max(0, questionsDone || 0) : 0;
@@ -167,30 +215,40 @@ export function previewStudyReward(
 
   return computeBasePreview(
     stats,
-    14 * totalFactor,
-    5 * totalFactor,
-    8 * totalFactor,
+    18 * totalFactor,
+    6 * totalFactor,
+    10 * totalFactor,
     attrs,
-    bossAttack
+    bossAttack,
+    bossMods
   );
 }
 
 /**
- * Prévia determinística (sem sorteio de crítico) para exibir em tempo real no card de Treino.
+ * Prévia determinística para exibir em tempo real no card de Treino.
  */
 export function previewWorkoutReward(
   stats: PlayerStats,
   cardio: boolean,
   musculacao: boolean,
   attrs: Attributes = ZERO_ATTRS,
-  bossAttack = 12
+  bossAttack = 12,
+  bossMods?: BossCombatModifiers
 ): RewardPreview {
   const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
   if (count === 0) {
     return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
   }
   const mult = count === 2 ? 2.2 : 1.0;
-  return computeBasePreview(stats, 18 * mult, 7 * mult, 12 * mult, attrs, bossAttack);
+  return computeBasePreview(
+    stats,
+    22 * mult,
+    8 * mult,
+    14 * mult,
+    attrs,
+    bossAttack,
+    bossMods
+  );
 }
 
 function applyProgressReward(
@@ -200,30 +258,32 @@ function applyProgressReward(
   baseBossDamage: number,
   baseMp: number,
   attrs: Attributes,
-  bossAttack: number
+  bossAttack: number,
+  bossMods?: BossCombatModifiers
 ) {
-  const isExhausted = stats.hp <= 0;
-  // Exausto reduz apenas Ouro e Dano (-30%), NUNCA reduz XP
+  const guaranteedCrit = Boolean(stats.critGuarantee);
+  const isExhausted = stats.hp <= 0 && !guaranteedCrit;
   const exhaustMult = isExhausted ? 0.7 : 1.0;
+  const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
+  const levelScale = 1 + Math.min(2.0, (stats.level - 1) * 0.02);
 
-  const critChance = Math.min(0.35, 0.08 + (attrs.str + attrs.per) * 0.004);
-  const isCritical = Math.random() < critChance;
-  const critMult = isCritical ? 1.5 : 1.0;
+  const shadowBonusCrit = (stats.shadowCharges ?? 0) > 0 ? 0.2 : 0;
+  const critChance = Math.min(0.55, 0.08 + (attrs.str + attrs.per) * 0.004 + shadowBonusCrit);
+  const isCritical = guaranteedCrit || Math.random() < critChance;
+  const critMult = guaranteedCrit ? 1.75 : isCritical ? 1.5 : 1.0;
 
-  const gainedXp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02) * critMult));
+  const gainedXp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02) * levelScale * critMult));
   const gainedGold = Math.max(
     1,
     Math.round(baseGold * (1 + attrs.per * 0.02) * critMult * exhaustMult)
   );
   const bossDamage = Math.max(
     1,
-    Math.round(baseBossDamage * (1 + attrs.str * 0.02) * critMult * exhaustMult)
+    Math.round(baseBossDamage * (1 + attrs.str * 0.02) * levelScale * critMult * exhaustMult * vulnMult)
   );
-  const gainedMp = Math.max(1, Math.round(baseMp + attrs.int * 0.15));
+  const gainedMp = Math.max(2, Math.round(baseMp + attrs.int * 0.15));
 
-  // Contra-ataque do Boss consome Estamina (reduzido por CON, nunca mata)
-  const conMitigation = Math.max(0.35, 1 - attrs.con * 0.02);
-  const staminaLost = Math.max(2, Math.round(bossAttack * 0.45 * conMitigation));
+  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
   const staminaAfterHit = Math.max(0, stats.hp - staminaLost);
 
   const maxMp = Math.max(stats.max_mp, 30 + attrs.int * 2 + stats.level * 2);
@@ -251,6 +311,9 @@ function applyProgressReward(
       xp: progressed.xp,
       xp_to_next: progressed.xp_to_next,
       gold: stats.gold + gainedGold,
+      guardCharges: Math.max(0, (stats.guardCharges ?? 0) - 1),
+      shadowCharges: Math.max(0, (stats.shadowCharges ?? 0) - 1),
+      critGuarantee: false,
     },
     deltaXp: gainedXp,
     deltaGold: gainedGold,
@@ -263,16 +326,14 @@ function applyProgressReward(
   };
 }
 
-/**
- * Calcula recompensa RPG ao registrar Estudo Teórico (tempo em minutos + questões feitas).
- */
 export function calculateStudyReward(
   stats: PlayerStats,
   minutes: number,
   didQuestions: boolean,
   questionsDone: number,
   attrs: Attributes = ZERO_ATTRS,
-  bossAttack = 12
+  bossAttack = 12,
+  bossMods?: BossCombatModifiers
 ) {
   const safeMinutes = Math.max(1, minutes);
   const safeQuestions = didQuestions ? Math.max(0, questionsDone) : 0;
@@ -283,58 +344,66 @@ export function calculateStudyReward(
 
   return applyProgressReward(
     stats,
-    14 * totalFactor,
-    5 * totalFactor,
-    8 * totalFactor,
-    3 * Math.min(3, totalFactor),
+    18 * totalFactor,
+    6 * totalFactor,
+    10 * totalFactor,
+    4 * Math.min(3, totalFactor),
     attrs,
-    bossAttack
+    bossAttack,
+    bossMods
   );
 }
 
-/**
- * Calcula recompensa RPG ao registrar Treinamento Físico (Cárdio e/ou Musculação).
- */
 export function calculateWorkoutReward(
   stats: PlayerStats,
   cardio: boolean,
   musculacao: boolean,
   attrs: Attributes = ZERO_ATTRS,
-  bossAttack = 12
+  bossAttack = 12,
+  bossMods?: BossCombatModifiers
 ) {
   const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
   const mult = count === 2 ? 2.2 : 1.0;
 
   return applyProgressReward(
     stats,
-    18 * mult,
-    7 * mult,
-    12 * mult,
-    4 * mult,
+    22 * mult,
+    8 * mult,
+    14 * mult,
+    5 * mult,
     attrs,
-    bossAttack
+    bossAttack,
+    bossMods
   );
 }
 
-/**
- * Executa uma habilidade da classe gastando Mana (MP).
- */
-export function applyClassSkill(
-  stats: PlayerStats,
-  skill: ClassSkill,
-  attrs: Attributes,
-  bossAttack = 12
-): {
+export interface SkillCastResult {
   ok: boolean;
   reason?: 'no_mp' | 'full_stamina' | 'buff_maxed';
   nextStats: PlayerStats;
   bossDamage: number;
   healedHp: number;
-  gainedXp: number;
   gainedGold: number;
   staminaLost: number;
-  leveledUp: boolean;
-} {
+  dodged?: boolean;
+  bonusDropRoll?: boolean;
+  groupHealAmount?: number;
+  groupManaAmount?: number;
+  groupBuffDelta?: Partial<Attributes>;
+  appliedBossVulnerable?: boolean;
+  appliedBossWeakened?: boolean;
+}
+
+/**
+ * Executa qualquer uma das 18 habilidades (ZERO XP concedido por skills).
+ */
+export function applyClassSkill(
+  stats: PlayerStats,
+  skill: ClassSkill,
+  attrs: Attributes,
+  bossAttack = 12,
+  bossMods?: BossCombatModifiers
+): SkillCastResult {
   if (stats.mp < skill.mpCost) {
     return {
       ok: false,
@@ -342,75 +411,27 @@ export function applyClassSkill(
       nextStats: stats,
       bossDamage: 0,
       healedHp: 0,
-      gainedXp: 0,
       gainedGold: 0,
       staminaLost: 0,
-      leveledUp: false,
     };
   }
 
-  if (skill.kind === 'heal' && stats.hp >= stats.max_hp) {
+  if (skill.id === 'quick_breath' && stats.hp >= stats.max_hp) {
     return {
       ok: false,
       reason: 'full_stamina',
       nextStats: stats,
       bossDamage: 0,
       healedHp: 0,
-      gainedXp: 0,
       gainedGold: 0,
       staminaLost: 0,
-      leveledUp: false,
     };
   }
 
-  if (skill.kind === 'buff' && skill.buffDelta) {
-    const cap = skill.id === 'protective_aura' ? 16 : 15;
-    const nextStr = Math.min(cap, stats.buffs.str + (skill.buffDelta.str ?? 0));
-    const nextInt = Math.min(cap, stats.buffs.int + (skill.buffDelta.int ?? 0));
-    const nextCon = Math.min(cap, stats.buffs.con + (skill.buffDelta.con ?? 0));
-    const nextPer = Math.min(cap, stats.buffs.per + (skill.buffDelta.per ?? 0));
-
-    if (
-      nextStr === stats.buffs.str &&
-      nextInt === stats.buffs.int &&
-      nextCon === stats.buffs.con &&
-      nextPer === stats.buffs.per
-    ) {
-      return {
-        ok: false,
-        reason: 'buff_maxed',
-        nextStats: stats,
-        bossDamage: 0,
-        healedHp: 0,
-        gainedXp: 0,
-        gainedGold: 0,
-        staminaLost: 0,
-        leveledUp: false,
-      };
-    }
-
-    return {
-      ok: true,
-      nextStats: {
-        ...stats,
-        mp: stats.mp - skill.mpCost,
-        buffs: {
-          str: nextStr,
-          int: nextInt,
-          con: nextCon,
-          per: nextPer,
-        },
-      },
-      bossDamage: 0,
-      healedHp: 0,
-      gainedXp: 0,
-      gainedGold: 0,
-      staminaLost: 0,
-      leveledUp: false,
-    };
-  }
-
-  const exhaustMult = stats.hp <= 0 ? 0.7 : 1.0;
+  const guaranteedCrit = Boolean(stats.critGuarantee);
+  const exhaustMult = stats.hp <= 0 && !guaranteedCrit ? 0.7 : 1.0;
+  const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
+  const critMult = guaranteedCrit ? 1.75 : 1.0;
 
   let nextStats: PlayerStats = {
     ...stats,
@@ -418,47 +439,200 @@ export function applyClassSkill(
   };
   let bossDamage = 0;
   let healedHp = 0;
-  let gainedXp = 0;
   let gainedGold = 0;
   let staminaLost = 0;
-  let leveledUp = false;
+  let dodged = false;
+  let bonusDropRoll = false;
+  let groupHealAmount = 0;
+  let groupManaAmount = 0;
+  let groupBuffDelta: Partial<Attributes> | undefined;
+  let appliedBossVulnerable = false;
+  let appliedBossWeakened = false;
 
-  if (skill.kind === 'damage') {
-    if (stats.heroClass === 'warrior') {
-      bossDamage = Math.max(1, Math.round((22 + attrs.str * 2) * exhaustMult));
-    } else if (stats.heroClass === 'wizard') {
-      bossDamage = Math.max(1, Math.round((20 + attrs.int * 2) * exhaustMult));
-    } else {
-      bossDamage = Math.max(1, Math.round((16 + attrs.per * 2) * exhaustMult));
-      gainedGold = Math.max(1, Math.round((4 + Math.floor(attrs.per * 0.5)) * exhaustMult));
-      nextStats.gold += gainedGold;
+  switch (skill.id) {
+    // --- APRENDIZ ---
+    case 'improvised_strike': {
+      bossDamage = Math.max(
+        1,
+        Math.round((8 + attrs.str * 0.8 + attrs.int * 0.4) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.7);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
     }
-    const conMitigation = Math.max(0.35, 1 - attrs.con * 0.02);
-    staminaLost = Math.max(2, Math.round(bossAttack * 0.45 * conMitigation));
-    nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
-  } else if (skill.kind === 'heal') {
-    healedHp = Math.min(
-      nextStats.max_hp - nextStats.hp,
-      15 + attrs.con + Math.floor(attrs.int * 0.5)
-    );
-    nextStats.hp += healedHp;
-  } else if (skill.kind === 'xp') {
-    gainedXp = 25 + attrs.int * 2;
-    const progressed = applyLevelUps(
-      nextStats.level,
-      nextStats.xp + gainedXp,
-      nextStats.xp_to_next,
-      nextStats.hp,
-      nextStats.max_hp,
-      nextStats.mp,
-      nextStats.max_mp,
-      attrs
-    );
-    nextStats = { ...nextStats, ...progressed };
-    leveledUp = progressed.leveledUp;
-  } else if (skill.kind === 'gold') {
-    gainedGold = Math.max(1, Math.round((12 + attrs.per * 2) * exhaustMult));
-    nextStats.gold += gainedGold;
+    case 'quick_breath': {
+      healedHp = Math.min(nextStats.max_hp - nextStats.hp, Math.round(8 + attrs.con * 0.5));
+      nextStats.hp += healedHp;
+      break;
+    }
+
+    // --- ESCUDEIRO (CON / TANK) ---
+    case 'shield_bash': {
+      bossDamage = Math.max(
+        1,
+        Math.round((14 + attrs.con * 1.4 + attrs.str * 0.6) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.5);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
+    }
+    case 'guild_wall': {
+      const amount = Math.round(14 + attrs.con * 0.9);
+      healedHp = Math.min(nextStats.max_hp - nextStats.hp, amount);
+      nextStats.hp += healedHp;
+      groupHealAmount = amount;
+      break;
+    }
+    case 'defensive_stance': {
+      nextStats.guardCharges = 3;
+      break;
+    }
+    case 'guild_bastion': {
+      const bonus = Math.max(8, Math.round(attrs.con * 0.15));
+      const cap = 40;
+      const nextCon = Math.min(cap, nextStats.buffs.con + bonus);
+      if (nextCon === nextStats.buffs.con) {
+        return {
+          ok: false,
+          reason: 'buff_maxed',
+          nextStats: stats,
+          bossDamage: 0,
+          healedHp: 0,
+          gainedGold: 0,
+          staminaLost: 0,
+        };
+      }
+      nextStats.buffs = { ...nextStats.buffs, con: nextCon };
+      groupBuffDelta = { con: bonus };
+      break;
+    }
+
+    // --- ESPADACHIM (STR / DANO BRUTO) ---
+    case 'heavy_slash': {
+      bossDamage = Math.max(
+        1,
+        Math.round((20 + attrs.str * 2.2) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
+    }
+    case 'sure_strike': {
+      nextStats.critGuarantee = true;
+      break;
+    }
+    case 'guard_break': {
+      bossDamage = Math.max(
+        1,
+        Math.round((12 + attrs.str * 1.2) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      appliedBossVulnerable = true;
+      break;
+    }
+    case 'war_cry': {
+      const bonus = Math.max(8, Math.round(attrs.str * 0.15));
+      const cap = 40;
+      const nextStr = Math.min(cap, nextStats.buffs.str + bonus);
+      if (nextStr === nextStats.buffs.str) {
+        return {
+          ok: false,
+          reason: 'buff_maxed',
+          nextStats: stats,
+          bossDamage: 0,
+          healedHp: 0,
+          gainedGold: 0,
+          staminaLost: 0,
+        };
+      }
+      nextStats.buffs = { ...nextStats.buffs, str: nextStr };
+      groupBuffDelta = { str: bonus };
+      break;
+    }
+
+    // --- BATEDOR (PER / AGILIDADE & SAQUE) ---
+    case 'agile_dash': {
+      bossDamage = Math.max(
+        1,
+        Math.round((15 + attrs.per * 1.8) * exhaustMult * vulnMult * critMult)
+      );
+      dodged = Math.random() < 0.5;
+      staminaLost = dodged ? 0 : computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
+    }
+    case 'opportunist_loot': {
+      gainedGold = Math.max(1, Math.round((16 + attrs.per * 1.6) * exhaustMult));
+      nextStats.gold += gainedGold;
+      bonusDropRoll = true;
+      break;
+    }
+    case 'shadow_steps': {
+      nextStats.shadowCharges = 3;
+      break;
+    }
+    case 'mark_prey': {
+      const bonus = Math.max(8, Math.round(attrs.per * 0.15));
+      const cap = 40;
+      const nextPer = Math.min(cap, nextStats.buffs.per + bonus);
+      if (nextPer === nextStats.buffs.per) {
+        return {
+          ok: false,
+          reason: 'buff_maxed',
+          nextStats: stats,
+          bossDamage: 0,
+          healedHp: 0,
+          gainedGold: 0,
+          staminaLost: 0,
+        };
+      }
+      nextStats.buffs = { ...nextStats.buffs, per: nextPer };
+      groupBuffDelta = { per: bonus };
+      break;
+    }
+
+    // --- NOVIÇO ARCANO (INT / MAGIA & MANA) ---
+    case 'arcane_bolt': {
+      bossDamage = Math.max(
+        1,
+        Math.round((18 + attrs.int * 2.0) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.75);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
+    }
+    case 'ethereal_wave': {
+      const amount = Math.round(14 + Math.floor(attrs.int * 0.5));
+      nextStats.mp = Math.min(nextStats.max_mp, nextStats.mp + amount);
+      groupManaAmount = amount;
+      break;
+    }
+    case 'curse_weakness': {
+      appliedBossWeakened = true;
+      break;
+    }
+    case 'focused_flame': {
+      bossDamage = Math.max(
+        1,
+        Math.round((32 + attrs.int * 2.8) * exhaustMult * vulnMult * critMult)
+      );
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
+      nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
+      nextStats.critGuarantee = false;
+      break;
+    }
+  }
+
+  if (bossDamage > 0) {
+    nextStats.guardCharges = Math.max(0, (nextStats.guardCharges ?? 0) - 1);
+    nextStats.shadowCharges = Math.max(0, (nextStats.shadowCharges ?? 0) - 1);
   }
 
   return {
@@ -466,9 +640,14 @@ export function applyClassSkill(
     nextStats,
     bossDamage,
     healedHp,
-    gainedXp,
     gainedGold,
     staminaLost,
-    leveledUp,
+    dodged,
+    bonusDropRoll,
+    groupHealAmount,
+    groupManaAmount,
+    groupBuffDelta,
+    appliedBossVulnerable,
+    appliedBossWeakened,
   };
 }

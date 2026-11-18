@@ -196,10 +196,82 @@ export function getEquipmentShopIconPath(itemId: string): string {
   return `${HABITICA_CDN}/${shopFilename}`;
 }
 
+export type ItemRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+
+export const RARITY_META: Record<
+  ItemRarity,
+  { label: string; badgeClass: string; weight: number }
+> = {
+  common: {
+    label: 'Comum',
+    badgeClass: 'bg-slate-700/70 text-slate-200 border-slate-500/40',
+    weight: 50,
+  },
+  uncommon: {
+    label: 'Incomum',
+    badgeClass: 'bg-emerald-900/70 text-emerald-300 border-emerald-500/40',
+    weight: 28,
+  },
+  rare: {
+    label: 'Raro',
+    badgeClass: 'bg-sky-900/70 text-sky-300 border-sky-500/40',
+    weight: 14,
+  },
+  epic: {
+    label: 'Épico',
+    badgeClass: 'bg-purple-900/70 text-purple-300 border-purple-500/50',
+    weight: 6,
+  },
+  legendary: {
+    label: 'Lendário',
+    badgeClass: 'bg-amber-900/70 text-amber-300 border-amber-400/60',
+    weight: 2,
+  },
+};
+
+export function getItemRarity(item: EquipmentItem): ItemRarity {
+  const sum = item.stats.str + item.stats.int + item.stats.con + item.stats.per;
+  if (sum >= 30) return 'legendary';
+  if (sum >= 20) return 'epic';
+  if (sum >= 12) return 'rare';
+  if (sum >= 5) return 'uncommon';
+  return 'common';
+}
+
+export function hasClassAffinity(
+  item: EquipmentItem,
+  heroClass?: PlayableHeroClass
+): boolean {
+  return Boolean(
+    heroClass && heroClass !== 'apprentice' && item.heroClass === heroClass
+  );
+}
+
 /**
- * Soma os atributos de todos os itens equipados nos 8 slots oficiais.
+ * Retorna os atributos efetivos de um equipamento considerando o bônus de +50%
+ * quando equipado por um herói da mesma classe (afinidade de classe).
  */
-export function computeTotalAttributes(equipped: EquippedGear): Attributes {
+export function getItemEffectiveStats(
+  item: EquipmentItem,
+  heroClass?: PlayableHeroClass
+): Attributes {
+  const mult = hasClassAffinity(item, heroClass) ? 1.5 : 1.0;
+  return {
+    str: Math.round(item.stats.str * mult),
+    int: Math.round(item.stats.int * mult),
+    con: Math.round(item.stats.con * mult),
+    per: Math.round(item.stats.per * mult),
+  };
+}
+
+/**
+ * Soma os atributos de todos os itens equipados nos 8 slots oficiais,
+ * aplicando +50% de bônus de afinidade para itens da classe do herói.
+ */
+export function computeTotalAttributes(
+  equipped: EquippedGear,
+  heroClass?: PlayableHeroClass
+): Attributes {
   const total: Attributes = { str: 0, int: 0, con: 0, per: 0 };
   const slots: EquipmentSlot[] = [
     'weapon',
@@ -214,10 +286,11 @@ export function computeTotalAttributes(equipped: EquippedGear): Attributes {
   for (const slot of slots) {
     const item = getEquipmentById(equipped[slot]);
     if (item) {
-      total.str += item.stats.str;
-      total.int += item.stats.int;
-      total.con += item.stats.con;
-      total.per += item.stats.per;
+      const eff = getItemEffectiveStats(item, heroClass);
+      total.str += eff.str;
+      total.int += eff.int;
+      total.con += eff.con;
+      total.per += eff.per;
     }
   }
   return total;

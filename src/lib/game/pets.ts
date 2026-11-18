@@ -100,13 +100,15 @@ export function pickRandomUnownedPet(
 }
 
 /**
- * Chance de 22% de dropar um Ovo ou Poção de Chocar ao registrar estudo/treino.
+ * Chance escalada por Percepção (PER) de dropar um Ovo ou Poção de Chocar ao registrar estudo/treino.
+ * Base: 16%, chegando até 40% com PER alto.
  */
-export function rollTaskDrop():
+export function rollTaskDrop(per = 0):
   | { kind: 'egg'; label: string }
   | { kind: 'potion'; label: string }
   | null {
-  if (Math.random() > 0.22) return null;
+  const chance = Math.min(0.4, 0.16 + Math.max(0, per) * 0.0025);
+  if (Math.random() > chance) return null;
 
   return Math.random() < 0.5
     ? { kind: 'egg', label: 'Ovo' }

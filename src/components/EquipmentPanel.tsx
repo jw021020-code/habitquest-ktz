@@ -25,11 +25,17 @@ import {
   getAppearanceSpritePath,
   getEquipmentById,
   getEquipmentShopIconPath,
+  getItemEffectiveStats,
+  getItemRarity,
   HAIR_BANGS_OPTIONS,
   HAIR_BASE_OPTIONS,
   HAIR_COLORS,
   HAIR_FLOWER_OPTIONS,
+  hasClassAffinity,
   HeroClass,
+  ItemRarity,
+  PlayableHeroClass,
+  RARITY_META,
   SHIRT_OPTIONS,
   SKIN_OPTIONS,
   SkinGroup,
@@ -54,6 +60,7 @@ interface EquipmentPanelProps {
   gold: number;
   hp: number;
   maxHp: number;
+  heroClass: PlayableHeroClass;
   appearance: CharacterAppearance;
   equipped: EquippedGear;
   costume: EquippedGear;
@@ -107,10 +114,10 @@ const SLOT_LABEL: Record<EquipmentSlot, string> = {
 const CLASS_LABEL: Record<HeroClass | 'all', string> = {
   all: 'Todas',
   apprentice: 'Aprendiz',
-  warrior: 'Guerreiro',
-  wizard: 'Mago',
-  rogue: 'Ladino',
-  healer: 'Curandeiro',
+  warrior: 'Espadachim',
+  wizard: 'Noviço Arcano',
+  rogue: 'Batedor',
+  healer: 'Escudeiro',
   cosmetic: 'Sem Classe / Visual',
 };
 
@@ -177,6 +184,7 @@ export function EquipmentPanel({
   gold,
   hp,
   maxHp,
+  heroClass,
   appearance,
   equipped,
   costume,
@@ -210,6 +218,7 @@ export function EquipmentPanel({
   const [sortMode, setSortMode] = useState<ShopSortMode>('stats-desc');
   const [shopStatFocus, setShopStatFocus] = useState<StatFocusFilter>('all');
   const [shopUtilityFilter, setShopUtilityFilter] = useState<ShopUtilityFilter>('all');
+  const [shopRarityFilter, setShopRarityFilter] = useState<ItemRarity | 'all'>('all');
   const [afterBuyMode, setAfterBuyMode] = useState<AfterBuyMode>('bag');
   const [visibleLimit, setVisibleLimit] = useState<number>(PAGE_SIZE);
   const [searchQuery, setSearchQuery] = useState('');
@@ -217,6 +226,7 @@ export function EquipmentPanel({
   const [invStatusFilter, setInvStatusFilter] = useState<InvStatusFilter>('all');
   const [invClassFilter, setInvClassFilter] = useState<HeroClass | 'all'>('all');
   const [invCategoryFilter, setInvCategoryFilter] = useState<GearCategory | 'all'>('all');
+  const [invRarityFilter, setInvRarityFilter] = useState<ItemRarity | 'all'>('all');
   const [invSortMode, setInvSortMode] = useState<InvSortMode>('equipped-stats');
   const [invVisibleLimit, setInvVisibleLimit] = useState<number>(INV_PAGE_SIZE);
 
@@ -233,7 +243,9 @@ export function EquipmentPanel({
 
   const getEquippedDelta = (item: EquipmentItem): number => {
     const cur = getEquipmentById(equipped[item.slot]);
-    return getStatSum(item.stats) - (cur ? getStatSum(cur.stats) : 0);
+    const itemEff = getItemEffectiveStats(item, heroClass);
+    const curEff = cur ? getItemEffectiveStats(cur, heroClass) : undefined;
+    return getStatSum(itemEff) - (curEff ? getStatSum(curEff) : 0);
   };
 
   const ownedCountBySlot = ALL_SLOTS.reduce(
@@ -253,6 +265,7 @@ export function EquipmentPanel({
     if (slotFilter !== 'all' && item.slot !== slotFilter) return false;
     if (invClassFilter !== 'all' && item.heroClass !== invClassFilter) return false;
     if (invCategoryFilter !== 'all' && item.category !== invCategoryFilter) return false;
+    if (invRarityFilter !== 'all' && getItemRarity(item) !== invRarityFilter) return false;
 
     const isEq = equipped[item.slot] === item.id;
     const isCos = costume[item.slot] === item.id;
@@ -272,10 +285,18 @@ export function EquipmentPanel({
       const aActive = equipped[a.slot] === a.id || costume[a.slot] === a.id ? 1 : 0;
       const bActive = equipped[b.slot] === b.id || costume[b.slot] === b.id ? 1 : 0;
       if (aActive !== bActive) return bActive - aActive;
-      return getStatSum(b.stats) - getStatSum(a.stats) || a.name.localeCompare(b.name);
+      return (
+        getStatSum(getItemEffectiveStats(b, heroClass)) -
+          getStatSum(getItemEffectiveStats(a, heroClass)) ||
+        a.name.localeCompare(b.name)
+      );
     }
     if (invSortMode === 'stats-desc') {
-      return getStatSum(b.stats) - getStatSum(a.stats) || a.name.localeCompare(b.name);
+      return (
+        getStatSum(getItemEffectiveStats(b, heroClass)) -
+          getStatSum(getItemEffectiveStats(a, heroClass)) ||
+        a.name.localeCompare(b.name)
+      );
     }
     if (invSortMode === 'str-desc') return b.stats.str - a.stats.str || getStatSum(b.stats) - getStatSum(a.stats);
     if (invSortMode === 'int-desc') return b.stats.int - a.stats.int || getStatSum(b.stats) - getStatSum(a.stats);
@@ -294,6 +315,7 @@ export function EquipmentPanel({
     if (categoryFilter === 'seasonal' && seasonFilter !== 'all' && item.season !== seasonFilter) {
       return false;
     }
+    if (shopRarityFilter !== 'all' && getItemRarity(item) !== shopRarityFilter) return false;
     if (shopStatFocus !== 'all' && item.stats[shopStatFocus] <= 0) return false;
 
     const sum = getStatSum(item.stats);
@@ -638,29 +660,29 @@ export function EquipmentPanel({
                       className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
                     >
                       <option value="all">Classe: Todas</option>
-                      <option value="warrior">Guerreiro</option>
-                      <option value="wizard">Mago</option>
-                      <option value="rogue">Ladino</option>
-                      <option value="healer">Curandeiro</option>
+                      <option value="healer">Escudeiro</option>
+                      <option value="warrior">Espadachim</option>
+                      <option value="rogue">Batedor</option>
+                      <option value="wizard">Noviço Arcano</option>
                       <option value="cosmetic">Visual / Sem Classe</option>
                     </select>
                   </div>
 
                   <div className="lg:col-span-2">
                     <select
-                      value={invCategoryFilter}
+                      value={invRarityFilter}
                       onChange={(e) => {
-                        setInvCategoryFilter(e.target.value as GearCategory | 'all');
+                        setInvRarityFilter(e.target.value as ItemRarity | 'all');
                         setInvVisibleLimit(INV_PAGE_SIZE);
                       }}
                       className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
                     >
-                      <option value="all">Coleção: Todas</option>
-                      <option value="class">Classes</option>
-                      <option value="seasonal">Sazonais</option>
-                      <option value="armoire">Armoire</option>
-                      <option value="mystery">Mistério</option>
-                      <option value="special">Especiais</option>
+                      <option value="all">Raridade: Todas</option>
+                      <option value="common">Comum</option>
+                      <option value="uncommon">Incomum</option>
+                      <option value="rare">Raro</option>
+                      <option value="epic">Épico</option>
+                      <option value="legendary">Lendário</option>
                     </select>
                   </div>
 
@@ -714,6 +736,10 @@ export function EquipmentPanel({
                       const isEquipped = equipped[item.slot] === item.id;
                       const isCostume = costume[item.slot] === item.id;
                       const delta = getEquippedDelta(item);
+                      const rarity = getItemRarity(item);
+                      const rarityMeta = RARITY_META[rarity];
+                      const hasAffinity = hasClassAffinity(item, heroClass);
+                      const effStats = getItemEffectiveStats(item, heroClass);
                       return (
                         <div
                           key={item.id}
@@ -739,6 +765,19 @@ export function EquipmentPanel({
                               <span className="absolute top-1 left-1 text-[9px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
                                 {SLOT_LABEL[item.slot]}
                               </span>
+                              <span
+                                className={`absolute top-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded border ${rarityMeta.badgeClass}`}
+                              >
+                                {rarityMeta.label}
+                              </span>
+                              {hasAffinity && (
+                                <span
+                                  className="absolute bottom-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/50"
+                                  title="Afinidade de Classe: +50% de atributos"
+                                >
+                                  +50%
+                                </span>
+                              )}
                               {item.twoHanded && (
                                 <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
                                   2 Mãos
@@ -749,7 +788,7 @@ export function EquipmentPanel({
                               {item.name}
                             </p>
                             <p className="text-[11px] text-[#ffbe5d] font-condensed mt-0.5">
-                              {formatStats(item.stats)}
+                              {formatStats(effStats)}
                             </p>
                             {!isEquipped && delta !== 0 && (
                               <span
@@ -1528,6 +1567,39 @@ export function EquipmentPanel({
 
               <div>
                 <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
+                  Raridade
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {(
+                    [
+                      { id: 'all', label: 'Todas' },
+                      { id: 'common', label: 'Comum' },
+                      { id: 'uncommon', label: 'Incomum' },
+                      { id: 'rare', label: 'Raro' },
+                      { id: 'epic', label: 'Épico' },
+                      { id: 'legendary', label: 'Lendário' },
+                    ] as const
+                  ).map((rar) => (
+                    <button
+                      key={rar.id}
+                      onClick={() => {
+                        setShopRarityFilter(rar.id);
+                        setVisibleLimit(PAGE_SIZE);
+                      }}
+                      className={`px-2 py-1 rounded text-[11px] font-condensed font-bold ${
+                        shopRarityFilter === rar.id
+                          ? 'bg-[#6133b4] text-white'
+                          : 'bg-[#1a181d] text-[#a8a1b5]'
+                      }`}
+                    >
+                      {rar.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
                   Ordenar por
                 </p>
                 <select
@@ -1650,7 +1722,7 @@ export function EquipmentPanel({
                     </div>
                     <p className="text-xs font-condensed font-bold text-white">Armoire Encantado</p>
                     <p className="text-[11px] text-[#d6c7ff] mt-0.5">
-                      Sorteia Equipamentos, XP, Ovo ou Poção!
+                      Sorteia Equipamentos (por Raridade), Ovo, Poção ou Ouro!
                     </p>
                   </div>
                   <div className="grid grid-cols-2 border-t border-[#3a3447]">
@@ -1728,6 +1800,10 @@ export function EquipmentPanel({
                 {visibleShopItems.map((item) => {
                   const canAfford = gold >= item.price;
                   const delta = getEquippedDelta(item);
+                  const rarity = getItemRarity(item);
+                  const rarityMeta = RARITY_META[rarity];
+                  const hasAffinity = hasClassAffinity(item, heroClass);
+                  const effStats = getItemEffectiveStats(item, heroClass);
                   return (
                     <div
                       key={item.id}
@@ -1742,9 +1818,22 @@ export function EquipmentPanel({
                             loading="lazy"
                             className="w-16 h-16 object-contain [image-rendering:pixelated]"
                           />
-                          <span className="absolute top-1 left-1 text-[9px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
+                          <span className="absolute top-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
                             {CLASS_LABEL[item.heroClass]}
                           </span>
+                          <span
+                            className={`absolute top-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded border ${rarityMeta.badgeClass}`}
+                          >
+                            {rarityMeta.label}
+                          </span>
+                          {hasAffinity && (
+                            <span
+                              className="absolute bottom-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/50"
+                              title="Afinidade de Classe: +50% de atributos"
+                            >
+                              +50%
+                            </span>
+                          )}
                           {item.twoHanded && (
                             <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
                               2 Mãos
@@ -1755,7 +1844,7 @@ export function EquipmentPanel({
                           {item.name}
                         </p>
                         <p className="text-[11px] text-[#24cc8f] font-condensed mt-0.5">
-                          {formatStats(item.stats)}
+                          {formatStats(effStats)}
                         </p>
                         {delta !== 0 && (
                           <span
