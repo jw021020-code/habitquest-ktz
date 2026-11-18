@@ -4,6 +4,7 @@ import React from 'react';
 import {
   CharacterAppearance,
   EquippedGear,
+  getAppearanceSpritePath,
   getEquipmentSpritePath,
 } from '@/lib/game/items';
 import { getPetSpritePath } from '@/lib/game/pets';
@@ -47,6 +48,7 @@ export function CharacterAvatar({
     hairStyle,
     hairBangs,
     hairColor,
+    hairFlower,
     hairBeard,
     hairMustache,
     background,
@@ -64,8 +66,8 @@ export function CharacterAvatar({
   }
 
   charLayers.push(
-    { key: 'skin', src: `/sprites/skin_${skin}.png` },
-    { key: 'shirt', src: `/sprites/${bodySize}_shirt_${shirt}.png` }
+    { key: 'skin', src: getAppearanceSpritePath(`skin_${skin}.png`) },
+    { key: 'shirt', src: getAppearanceSpritePath(`${bodySize}_shirt_${shirt}.png`) }
   );
 
   if (visualGear.armor) {
@@ -75,22 +77,38 @@ export function CharacterAvatar({
     });
   }
 
-  charLayers.push(
-    { key: 'hair_base', src: `/sprites/hair_base_${hairStyle}_${hairColor}.png` },
-    { key: 'hair_bangs', src: `/sprites/hair_bangs_${hairBangs}_${hairColor}.png` }
-  );
+  if (hairStyle > 0) {
+    charLayers.push({
+      key: 'hair_base',
+      src: getAppearanceSpritePath(`hair_base_${hairStyle}_${hairColor}.png`),
+    });
+  }
+
+  if (hairBangs > 0) {
+    charLayers.push({
+      key: 'hair_bangs',
+      src: getAppearanceSpritePath(`hair_bangs_${hairBangs}_${hairColor}.png`),
+    });
+  }
 
   if (hairBeard && hairBeard > 0) {
     charLayers.push({
       key: 'hair_beard',
-      src: `/sprites/hair_beard_${hairBeard}_${hairColor}.png`,
+      src: getAppearanceSpritePath(`hair_beard_${hairBeard}_${hairColor}.png`),
     });
   }
 
   if (hairMustache && hairMustache > 0) {
     charLayers.push({
       key: 'hair_mustache',
-      src: `/sprites/hair_mustache_${hairMustache}_${hairColor}.png`,
+      src: getAppearanceSpritePath(`hair_mustache_${hairMustache}_${hairColor}.png`),
+    });
+  }
+
+  if (hairFlower && hairFlower > 0) {
+    charLayers.push({
+      key: 'hair_flower',
+      src: getAppearanceSpritePath(`hair_flower_${hairFlower}.png`),
     });
   }
 
@@ -143,7 +161,7 @@ export function CharacterAvatar({
       {/* Camada de Fundo (Background Cenário Habitica) */}
       {hasBg ? (
         <img
-          src={`/sprites/background_${background}.png`}
+          src={getAppearanceSpritePath(`background_${background}.png`)}
           alt=""
           draggable={false}
           className="absolute inset-0 w-full h-full object-cover [image-rendering:pixelated]"

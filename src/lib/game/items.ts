@@ -1,4 +1,5 @@
 import gearCatalogRaw from './gear-catalog.json';
+import appearancesCatalogRaw from './appearances-catalog.json';
 import localSpritesRaw from '../../../scripts/sprites-manifest.json';
 
 export type EquipmentSlot =
@@ -18,16 +19,16 @@ export type HeroClass = PlayableHeroClass | 'cosmetic';
 export type GearCategory = 'class' | 'seasonal' | 'armoire' | 'mystery' | 'special';
 export type GearSeason = 'winter' | 'spring' | 'summer' | 'fall';
 
-export type HairColor = 'black' | 'brown' | 'blond' | 'red' | 'white';
-export type ShirtColor =
-  | 'black'
-  | 'blue'
-  | 'green'
-  | 'pink'
-  | 'purple'
-  | 'white'
-  | 'yellow'
-  | 'convict';
+export type HairColor = string;
+export type ShirtColor = string;
+export type SkinGroup =
+  | 'padrao'
+  | 'arcoiris'
+  | 'pastel'
+  | 'animais'
+  | 'sobrenatural'
+  | 'aquatica'
+  | 'inverno';
 
 export interface Attributes {
   str: number;
@@ -40,12 +41,13 @@ export interface CharacterAppearance {
   skin: string;
   bodySize: BodySize;
   shirt: ShirtColor;
-  hairStyle: number; // 1..5
-  hairBangs: number; // 1..4
+  hairStyle: number; // 0..20 (0 = sem base/careca)
+  hairBangs: number; // 0..4 (0 = sem franja)
   hairColor: HairColor;
+  hairFlower?: number; // 0..16 (flores de cabelo e brincos)
   hairBeard?: number; // 0..3
   hairMustache?: number; // 0..2
-  background?: string; // 'none' ou nome do background
+  background?: string; // 'none' ou ID do background oficial
 }
 
 export type EquippedGear = Partial<Record<EquipmentSlot, string>>;
@@ -63,53 +65,25 @@ export interface EquipmentItem {
   stats: Attributes;
 }
 
-export const SKIN_OPTIONS = [
-  { id: 'f5a76e', label: 'Claro Quente', hex: '#f5a76e' },
-  { id: 'ddc994', label: 'Claro Neutro', hex: '#ddc994' },
-  { id: 'ea8349', label: 'Dourado', hex: '#ea8349' },
-  { id: 'c06534', label: 'Bronze', hex: '#c06534' },
-  { id: '98461a', label: 'Escuro', hex: '#98461a' },
-  { id: '915533', label: 'Café', hex: '#915533' },
-  { id: 'c3e1dc', label: 'Elfo / Gelo', hex: '#c3e1dc' },
-] as const;
+interface AppearancesCatalogData {
+  backgrounds: { id: string; label: string; notes?: string }[];
+  skins: { id: string; label: string; group: SkinGroup; hex: string }[];
+  shirts: { id: string; label: string }[];
+  hairBases: { id: number; label: string }[];
+  hairBangs: { id: number; label: string }[];
+  hairColors: { id: string; label: string; hex: string }[];
+  hairFlowers: { id: number; label: string }[];
+}
 
-export const SHIRT_OPTIONS: { id: ShirtColor; label: string }[] = [
-  { id: 'black', label: 'Preta' },
-  { id: 'blue', label: 'Azul' },
-  { id: 'green', label: 'Verde' },
-  { id: 'purple', label: 'Roxa' },
-  { id: 'pink', label: 'Rosa' },
-  { id: 'yellow', label: 'Amarela' },
-  { id: 'white', label: 'Branca' },
-  { id: 'convict', label: 'Listrada' },
-];
+const APPEARANCES_CATALOG = appearancesCatalogRaw as AppearancesCatalogData;
 
-export const HAIR_COLORS: { id: HairColor; label: string; hex: string }[] = [
-  { id: 'black', label: 'Preto', hex: '#1e293b' },
-  { id: 'brown', label: 'Castanho', hex: '#78350f' },
-  { id: 'blond', label: 'Loiro', hex: '#eab308' },
-  { id: 'red', label: 'Ruivo', hex: '#dc2626' },
-  { id: 'white', label: 'Branco', hex: '#e2e8f0' },
-];
-
-export const BACKGROUND_OPTIONS: { id: string; label: string }[] = [
-  { id: 'none', label: 'Sem Fundo' },
-  { id: 'forest', label: 'Floresta' },
-  { id: 'autumn_forest', label: 'Floresta de Outono' },
-  { id: 'beach', label: 'Praia' },
-  { id: 'clouds', label: 'Nuvens' },
-  { id: 'coral_reef', label: 'Recife de Coral' },
-  { id: 'dusty_canyons', label: 'Cânions' },
-  { id: 'fairy_ring', label: 'Círculo das Fadas' },
-  { id: 'graveyard', label: 'Cemitério' },
-  { id: 'harvest_fields', label: 'Campos de Colheita' },
-  { id: 'haunted_house', label: 'Casa Assombrada' },
-  { id: 'open_waters', label: 'Mar Aberto' },
-  { id: 'pumpkin_patch', label: 'Plantação de Abóboras' },
-  { id: 'seafarer_ship', label: 'Navio Pirata' },
-  { id: 'thunderstorm', label: 'Tempestade' },
-  { id: 'volcano', label: 'Vulcão' },
-];
+export const SKIN_OPTIONS = APPEARANCES_CATALOG.skins;
+export const SHIRT_OPTIONS = APPEARANCES_CATALOG.shirts;
+export const HAIR_BASE_OPTIONS = APPEARANCES_CATALOG.hairBases;
+export const HAIR_BANGS_OPTIONS = APPEARANCES_CATALOG.hairBangs;
+export const HAIR_COLORS = APPEARANCES_CATALOG.hairColors;
+export const HAIR_FLOWER_OPTIONS = APPEARANCES_CATALOG.hairFlowers;
+export const BACKGROUND_OPTIONS = APPEARANCES_CATALOG.backgrounds;
 
 export const DEFAULT_APPEARANCE: CharacterAppearance = {
   skin: 'f5a76e',
@@ -118,6 +92,7 @@ export const DEFAULT_APPEARANCE: CharacterAppearance = {
   hairStyle: 1,
   hairBangs: 1,
   hairColor: 'brown',
+  hairFlower: 0,
   hairBeard: 0,
   hairMustache: 0,
   background: 'none',
@@ -150,6 +125,17 @@ const ANIMATED_AVATAR_IDS = new Set<string>([
 export function getEquipmentById(id?: string): EquipmentItem | undefined {
   if (!id) return undefined;
   return EQUIPMENT_BY_ID.get(id);
+}
+
+/**
+ * Resolve o caminho de um sprite de aparência/cenário (usa /sprites/ quando local
+ * e a CDN oficial do Habitica para os demais).
+ */
+export function getAppearanceSpritePath(fileName: string): string {
+  if (LOCAL_SPRITES.has(fileName)) {
+    return `/sprites/${fileName}`;
+  }
+  return `${HABITICA_CDN}/${fileName}`;
 }
 
 /**

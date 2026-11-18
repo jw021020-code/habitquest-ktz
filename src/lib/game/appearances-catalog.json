@@ -1,0 +1,2878 @@
+{
+  "backgrounds": [
+    {
+      "id": "none",
+      "label": "Sem Fundo",
+      "notes": "Fundo roxo padrão do HabitQuest"
+    },
+    {
+      "id": "beach",
+      "label": "Praia",
+      "notes": "Descanse numa praia quentinha."
+    },
+    {
+      "id": "fairy_ring",
+      "label": "Anel de Fada",
+      "notes": "Dance num anel de fada."
+    },
+    {
+      "id": "forest",
+      "label": "Floresta",
+      "notes": "Passeie por uma floresta de verão."
+    },
+    {
+      "id": "open_waters",
+      "label": "Mar Aberto",
+      "notes": "Aproveite o mar aberto."
+    },
+    {
+      "id": "coral_reef",
+      "label": "Recife de Corais",
+      "notes": "Nade em um recife de corais."
+    },
+    {
+      "id": "seafarer_ship",
+      "label": "Navio Marítimo",
+      "notes": "Navegue a bordo de um navio marítimo."
+    },
+    {
+      "id": "volcano",
+      "label": "Vulcão",
+      "notes": "Aqueça-se dentro de um vulcão."
+    },
+    {
+      "id": "clouds",
+      "label": "Nuvens",
+      "notes": "Voe através das nuvens."
+    },
+    {
+      "id": "dusty_canyons",
+      "label": "Desfiladeiro Árido",
+      "notes": "Vagueie por um Desfiladeiro Árido."
+    },
+    {
+      "id": "thunderstorm",
+      "label": "da Tempestade de Raios",
+      "notes": "Conduza relâmpagos em uma Tempestade de Raios."
+    },
+    {
+      "id": "autumn_forest",
+      "label": "Floresta de Outono",
+      "notes": "Passeie por uma Floresta de Outono."
+    },
+    {
+      "id": "harvest_fields",
+      "label": "Campos de Colheita",
+      "notes": "Cultive os seus Campos de Colheita."
+    },
+    {
+      "id": "graveyard",
+      "label": "Cemitério",
+      "notes": "Visite um Cemitério Assustador."
+    },
+    {
+      "id": "haunted_house",
+      "label": "Casa Assombrada",
+      "notes": "Passe despercebido por uma Casa Assombrada."
+    },
+    {
+      "id": "pumpkin_patch",
+      "label": "Canteiro de Abóboras",
+      "notes": "Entalhe lanternas de Halloween em um Canteiro de Abóboras."
+    },
+    {
+      "id": "harvest_feast",
+      "label": "Festa da Colheita",
+      "notes": "Divirta-se em uma Festa da Colheita."
+    },
+    {
+      "id": "sunset_meadow",
+      "label": "Pôr do Sol no Campo",
+      "notes": "Admire um Pôr do Sol no Campo."
+    },
+    {
+      "id": "starry_skies",
+      "label": "Céus Estrelados",
+      "notes": "Contemple os Céus Estrelados."
+    },
+    {
+      "id": "iceberg",
+      "label": "Icebergue",
+      "notes": "Flutue sobre um Iceberg."
+    },
+    {
+      "id": "twinkly_lights",
+      "label": "Pisca-pisca de Inverno",
+      "notes": "Passeie entre as árvores enfeitadas com luzes festivas."
+    },
+    {
+      "id": "south_pole",
+      "label": "Polo Sul",
+      "notes": "Visite o gelado Polo Sul."
+    },
+    {
+      "id": "ice_cave",
+      "label": "Caverna de Gelo",
+      "notes": "Entre em uma Caverna de Gelo."
+    },
+    {
+      "id": "frigid_peak",
+      "label": "Pico Gelado",
+      "notes": "Escale um Pico Gelado."
+    },
+    {
+      "id": "snowy_pines",
+      "label": "Pinheiros Nevados",
+      "notes": "Abrigue-se entre Pinheiros Nevados."
+    },
+    {
+      "id": "blacksmithy",
+      "label": "Forja",
+      "notes": "Trabalhe na Forja."
+    },
+    {
+      "id": "crystal_cave",
+      "label": "Caverna de Cristal",
+      "notes": "Explore uma Caverna de Cristal."
+    },
+    {
+      "id": "distant_castle",
+      "label": "Castelo Distante",
+      "notes": "Defenda um Castelo Distante."
+    },
+    {
+      "id": "spring_rain",
+      "label": "Chuva de Primavera",
+      "notes": "Dance na Chuva de Primavera."
+    },
+    {
+      "id": "stained_glass",
+      "label": "Vitral",
+      "notes": "Admire alguns Vitrais."
+    },
+    {
+      "id": "rolling_hills",
+      "label": "Colinas",
+      "notes": "Brinque pelas Colinas."
+    },
+    {
+      "id": "cherry_trees",
+      "label": "Cerejeiras",
+      "notes": "Admire o florescer das Cerejeiras."
+    },
+    {
+      "id": "floral_meadow",
+      "label": "Campo Florido",
+      "notes": "Faça um piquenique em um Campo Florido."
+    },
+    {
+      "id": "gumdrop_land",
+      "label": "Terra das Guloseimas",
+      "notes": "Saboreie a paisagem da Terra das Guloseimas."
+    },
+    {
+      "id": "marble_temple",
+      "label": "Templo de Mármore",
+      "notes": "Pose em frente a um Templo de Mármore."
+    },
+    {
+      "id": "mountain_lake",
+      "label": "Lago da Montanha",
+      "notes": "Mergulhe os dedos dos pés em um Lago da Montanha."
+    },
+    {
+      "id": "pagodas",
+      "label": "Pagodes",
+      "notes": "Escale até o topo dos Pagodes."
+    },
+    {
+      "id": "drifting_raft",
+      "label": "Jangada à Deriva",
+      "notes": "Reme em uma Jangada à Deriva."
+    },
+    {
+      "id": "shimmery_bubbles",
+      "label": "Bolhas Cintilantes",
+      "notes": "Flutue por um mar de Bolhas Cintilantes."
+    },
+    {
+      "id": "island_waterfalls",
+      "label": "Cachoeiras da Ilha",
+      "notes": "Faça um piquenique perto das Cachoeiras da Ilha."
+    },
+    {
+      "id": "dilatory_ruins",
+      "label": "Ruínas do Dilatório",
+      "notes": "Mergulhe nas Ruínas do Dilatório."
+    },
+    {
+      "id": "giant_wave",
+      "label": "Onda Gigante",
+      "notes": "Surfe em uma Onda Gigante!"
+    },
+    {
+      "id": "sunken_ship",
+      "label": "Navio Submerso",
+      "notes": "Explore um Navio Submerso."
+    },
+    {
+      "id": "pyramids",
+      "label": "Pirâmides",
+      "notes": "Admire as Pirâmides."
+    },
+    {
+      "id": "sunset_savannah",
+      "label": "Pôr do Sol na Savana",
+      "notes": "Siga o Pôr do Sol na Savana."
+    },
+    {
+      "id": "twinkly_party_lights",
+      "label": "Pisca-piscas de Festa",
+      "notes": "Dance sob os Pisca-piscas de Festa!"
+    },
+    {
+      "id": "market",
+      "label": "Mercado de Habitica",
+      "notes": "Faça compras no Mercado de Habitica."
+    },
+    {
+      "id": "stable",
+      "label": "Estábulo de Habitica",
+      "notes": "Cuide das suas montarias no Estábulo de Habitica."
+    },
+    {
+      "id": "tavern",
+      "label": "Taberna de Habitica",
+      "notes": "Visite a Taberna de Habitica."
+    },
+    {
+      "id": "harvest_moon",
+      "label": "Lua da Colheita",
+      "notes": "Cacareje sob a Lua da Colheita."
+    },
+    {
+      "id": "slimy_swamp",
+      "label": "Pântano Pegajoso",
+      "notes": "Deslize por um Pântano Pegajoso."
+    },
+    {
+      "id": "swarming_darkness",
+      "label": "Escuridão Abundante",
+      "notes": "Arrepie-se na Escuridão Abundante."
+    },
+    {
+      "id": "floating_islands",
+      "label": "Ilhas Flutuantes",
+      "notes": "Salte pela Ilhas Flutuantes."
+    },
+    {
+      "id": "night_dunes",
+      "label": "Dunas Noturnas",
+      "notes": "Caminhe pacificamente pelas Dunas Noturnas."
+    },
+    {
+      "id": "sunset_oasis",
+      "label": "Pôr do Sol no Oasis",
+      "notes": "Aproveite o Pôr do Sol no Oasis."
+    },
+    {
+      "id": "alpine_slopes",
+      "label": "Encostas Alpinas",
+      "notes": "Esquie nas Encostas Alpinas."
+    },
+    {
+      "id": "snowy_sunrise",
+      "label": "Nascer do Sol Nevado",
+      "notes": "Contemple o Nascer do Sol Nevado."
+    },
+    {
+      "id": "winter_town",
+      "label": "Cidade de Inverno",
+      "notes": "Agite-se pela Cidade de Inverno."
+    },
+    {
+      "id": "frozen_lake",
+      "label": "Lago Congelado",
+      "notes": "Ande de skate em um Lago Congelado."
+    },
+    {
+      "id": "snowman_army",
+      "label": "Exército de Bonecos de Neve",
+      "notes": "Lidere um Exército de Bonecos de Neve."
+    },
+    {
+      "id": "winter_night",
+      "label": "Noite de Inverno",
+      "notes": "Olhe para as estrelas de uma Noite de Inverno."
+    },
+    {
+      "id": "bamboo_forest",
+      "label": "Floresta de Bambu",
+      "notes": "Passeie pela Floresta de Bambu."
+    },
+    {
+      "id": "cozy_library",
+      "label": "Biblioteca Aconchegante",
+      "notes": "Leia na Biblioteca Aconchegante."
+    },
+    {
+      "id": "grand_staircase",
+      "label": "Grande Escadaria",
+      "notes": "Desça pela Grande Escadaria."
+    },
+    {
+      "id": "deep_mine",
+      "label": "Mina Profunda",
+      "notes": "Encontre metais preciosos em uma Mina Profunda."
+    },
+    {
+      "id": "rainforest",
+      "label": "Floresta Tropical",
+      "notes": "Aventure-se em uma Floresta Tropical."
+    },
+    {
+      "id": "stone_circle",
+      "label": "Círculo de Pedras",
+      "notes": "Lançar feitiços em um Círculo de Pedras."
+    },
+    {
+      "id": "archery_range",
+      "label": "Campo de tiro com arco",
+      "notes": "Praticar no campo de tiro com arco."
+    },
+    {
+      "id": "giant_florals",
+      "label": "Flores Gigantes",
+      "notes": "Divirta-se em cima de Flores Gigantes."
+    },
+    {
+      "id": "rainbows_end",
+      "label": "Final do arco-íris",
+      "notes": "Descubra ouro ao final do arco-íris."
+    },
+    {
+      "id": "beehive",
+      "label": "Colmeia",
+      "notes": "Faça zumbidos e dance em uma colméia."
+    },
+    {
+      "id": "gazebo",
+      "label": "Pavilhão",
+      "notes": "Enfrente um Gazebo."
+    },
+    {
+      "id": "tree_roots",
+      "label": "Raízes da árvore",
+      "notes": "Explore as Raízes da Árvore."
+    },
+    {
+      "id": "lighthouse_shore",
+      "label": "Farol da Costa",
+      "notes": "Passeie pelo Farol da Costa."
+    },
+    {
+      "id": "lilypad",
+      "label": "Vitória Régia",
+      "notes": "Suba em uma Vitória Régia."
+    },
+    {
+      "id": "waterfall_rock",
+      "label": "Pedra da Cachoeira",
+      "notes": "Se molhe na Pedra da Cachoeira."
+    },
+    {
+      "id": "aquarium",
+      "label": "Aquário",
+      "notes": "Bob em um Aquário."
+    },
+    {
+      "id": "dilatory_castle",
+      "label": "Castelo do Retardo",
+      "notes": "Nade até depois do Castelo do Retardo."
+    },
+    {
+      "id": "deep_sea",
+      "label": "Mar Profundo",
+      "notes": "Mergulhe no Mar Profundo."
+    },
+    {
+      "id": "idyllic_cabin",
+      "label": "Cabana Bucólica",
+      "notes": "Volte para uma Cabana Bucólica."
+    },
+    {
+      "id": "mountain_pyramid",
+      "label": "Montanha Pirâmide",
+      "notes": "Suba os muitos degraus da Montanha Pirâmide."
+    },
+    {
+      "id": "stormy_ship",
+      "label": "Navio da Tempestade",
+      "notes": "Segure-se contra o vento e as ondas abordo do Navio da Tempestade."
+    },
+    {
+      "id": "cornfields",
+      "label": "Milheirais",
+      "notes": "Desfruta de um lindo dia nos Milheirais."
+    },
+    {
+      "id": "farmhouse",
+      "label": "Quinta",
+      "notes": "Diz olá aos animais no caminho para a Quinta."
+    },
+    {
+      "id": "orchard",
+      "label": "Pomar",
+      "notes": "Colher fruta madura num Pomar."
+    },
+    {
+      "id": "rainy_city",
+      "label": "Cidade Chuvosa",
+      "notes": "Mergulhe pela Cidade Chuvosa."
+    },
+    {
+      "id": "spider_web",
+      "label": "Teia de Aranha",
+      "notes": "Fique enrolado na Teia da Aranha."
+    },
+    {
+      "id": "strange_sewers",
+      "label": "Esgotos Estranhos",
+      "notes": "Escorregue pelos Esgotos Estranhos."
+    },
+    {
+      "id": "midnight_clouds",
+      "label": "Nuvens da Meia-noite",
+      "notes": "Voe através das Nuvens da Meia-noite."
+    },
+    {
+      "id": "stormy_rooftops",
+      "label": "Terraços Tempestuosos",
+      "notes": "Rasteje através de Terraços Tempestuosos."
+    },
+    {
+      "id": "windy_autumn",
+      "label": "Outono Ventoso",
+      "notes": "Persiga folhas durante um Outono Ventoso."
+    },
+    {
+      "id": "shimmering_ice_prism",
+      "label": "Prismas de Gelo Reluzentes",
+      "notes": "Dance através dos Prismas de Gelo Reluzentes."
+    },
+    {
+      "id": "winter_fireworks",
+      "label": "Fogos de Artifício de Inverno",
+      "notes": "Lançar Fogo de Artifício de Inverno."
+    },
+    {
+      "id": "winter_storefront",
+      "label": "Loja de Inverno",
+      "notes": "Comprar presentes numa Loja de Inverno."
+    },
+    {
+      "id": "blizzard",
+      "label": "Nevão",
+      "notes": "Enfrente um forte Nevão."
+    },
+    {
+      "id": "sparkling_snowflake",
+      "label": "Floco de Neve Brilhante",
+      "notes": "Deslize num Floco de Neve Brilhante."
+    },
+    {
+      "id": "stoikalm_volcanoes",
+      "label": "Vulcões Stoïkalm",
+      "notes": "Explore os Vulcões Stoïkalm."
+    },
+    {
+      "id": "bell_tower",
+      "label": "Torre do Sino",
+      "notes": "Trepar até à Torre do Sino."
+    },
+    {
+      "id": "treasure_room",
+      "label": "Sala do Tesouro",
+      "notes": "Delicie-se com a riqueza da Sala do Tesouro."
+    },
+    {
+      "id": "wedding_arch",
+      "label": "Arco de Casamento",
+      "notes": "Dispor debaixo do Arco de Casamento."
+    },
+    {
+      "id": "magic_beanstalk",
+      "label": "Feijoeiro Mágico",
+      "notes": "Subir um feijoeiro mágico."
+    },
+    {
+      "id": "meandering_cave",
+      "label": "Caverna Sinuosa",
+      "notes": "Explore a Caverna Sinuosa."
+    },
+    {
+      "id": "mistiflying_circus",
+      "label": "Circo Místico Voador",
+      "notes": "Divirta-se no Circo Místico Voador."
+    },
+    {
+      "id": "bug_covered_log",
+      "label": "Tronco coberto de Bugs",
+      "notes": "Investigue um tronco coberto de Bugs."
+    },
+    {
+      "id": "giant_birdhouse",
+      "label": "Casa de Pássaros gigante",
+      "notes": "Poleiro numa Casa de Pássaros gigante."
+    },
+    {
+      "id": "mist_shrouded_mountain",
+      "label": "Montanha encoberta por névoa",
+      "notes": "Topo de uma montanha encoberta por névoa."
+    },
+    {
+      "id": "guardian_statues",
+      "label": "Estátuas Guardiãs",
+      "notes": "Mantenha vigia em frente às Estátuas Guardiãs."
+    },
+    {
+      "id": "habit_city_streets",
+      "label": "Ruas da Cidade do Hábito",
+      "notes": "Explore as Ruas da Cidade do Hábito."
+    },
+    {
+      "id": "on_tree_branch",
+      "label": "No Ramo de uma Árvore",
+      "notes": "Empoleire-se no Ramo de uma Árvore."
+    },
+    {
+      "id": "buried_treasure",
+      "label": "Tesouro Enterrado",
+      "notes": "Descubra Tesouro Enterrado."
+    },
+    {
+      "id": "ocean_sunrise",
+      "label": "Nascer do Sol sobre o Oceano",
+      "notes": "Admire um Nascer do Sol sobre o Oceano."
+    },
+    {
+      "id": "sandcastle",
+      "label": "Castelo de Areia",
+      "notes": "Governe sobre um Castelo de Areia."
+    },
+    {
+      "id": "giant_seashell",
+      "label": "Concha Gigante",
+      "notes": "Salão numa Concha Gigante."
+    },
+    {
+      "id": "kelp_forest",
+      "label": "Floresta de Algas",
+      "notes": "Nade através de uma Floresta de Algas."
+    },
+    {
+      "id": "midnight_lake",
+      "label": "Lago da Meia-Noite",
+      "notes": "Descançar no Lago da Meia-Noite."
+    },
+    {
+      "id": "back_of_giant_beast",
+      "label": "As Costas de uma Besta Gigante",
+      "notes": "Cavalgue nas Costas de uma Besta Gigante."
+    },
+    {
+      "id": "desert_dunes",
+      "label": "Dunas do Deserto",
+      "notes": "Explore as Dunas do Deserto de forma brava."
+    },
+    {
+      "id": "summer_fireworks",
+      "label": "Fogos de Artifício de Verão",
+      "notes": "Celebre o Dia de Nomeação de Habitica com Fogos de Artifício de Verão!"
+    },
+    {
+      "id": "beside_well",
+      "label": "Ao lado de um Poço",
+      "notes": "Passeio ao lado de um Poço."
+    },
+    {
+      "id": "garden_shed",
+      "label": "Cabana de Jardim",
+      "notes": "Trabalhe numa Cabana de Jardim."
+    },
+    {
+      "id": "pixelists_workshop",
+      "label": "Oficina de Pixelist",
+      "notes": "Crie obras primas na Oficina de Pixelist."
+    },
+    {
+      "id": "magical_candles",
+      "label": "Velas Mágicas",
+      "notes": "Delicie-se no brilho de Velas Mágicas."
+    },
+    {
+      "id": "spooky_hotel",
+      "label": "Hotel Assustador",
+      "notes": "Esgueire-se pelo corredor de um Hotel Assustador."
+    },
+    {
+      "id": "tar_pits",
+      "label": "Poços de Alcatrão",
+      "notes": "Ande na ponta dos pés nos Poços de Alcatrão."
+    },
+    {
+      "id": "fiber_arts_room",
+      "label": "Sala de Artes de Fibra",
+      "notes": "Teça fio na Sala de Artes de Fibra."
+    },
+    {
+      "id": "midnight_castle",
+      "label": "Castelo da Meia-Noite",
+      "notes": "Caminhe pelo Castelo da Meia-Noite."
+    },
+    {
+      "id": "tornado",
+      "label": "Tornado",
+      "notes": "Voe através de um Tornado."
+    },
+    {
+      "id": "crosscountry_ski_trail",
+      "label": "Trilha de Esqui de Fundo",
+      "notes": "Deslize por um trilho de Esqui de Fundo."
+    },
+    {
+      "id": "starry_winter_night",
+      "label": "Céu Noturno de Inverno Estrelado",
+      "notes": "Admire um céu estrelado noturno no Inverno."
+    },
+    {
+      "id": "toymakers_workshop",
+      "label": "Oficina do Fabricante de Brinquedos",
+      "notes": "Delicie-se com a maravilha da oficina de um fabricante de brinquedos."
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "notes": "Aprecie o brilho invernal de uma Aurora."
+    },
+    {
+      "id": "driving_a_sleigh",
+      "label": "Trenó",
+      "notes": "Conduza um trenó sobre campos cobertos de neve."
+    },
+    {
+      "id": "flying_over_icy_steppes",
+      "label": "Estepes Geladas",
+      "notes": "Voe sobre estepes geladas."
+    },
+    {
+      "id": "chessboard_land",
+      "label": "Terra do Tabuleiro de Xadrez",
+      "notes": "Joga um jogo na Terra do Tabuleiro de Xadrez."
+    },
+    {
+      "id": "magical_museum",
+      "label": "Museu Mágico",
+      "notes": "Visita um Museu Mágico."
+    },
+    {
+      "id": "rose_garden",
+      "label": "Jardim de Rosas",
+      "notes": "Vagueia por entre um perfumado Jardim de Rosas."
+    },
+    {
+      "id": "driving_a_coach",
+      "label": "Conduzindo uma Carruagem",
+      "notes": "Diverte-te Conduzindo uma Carruagem através de campos de flores."
+    },
+    {
+      "id": "elegant_balcony",
+      "label": "Varanda Elegante",
+      "notes": "Aprecia a paisagem a partir de uma Varanda Elegante."
+    },
+    {
+      "id": "gorgeous_greenhouse",
+      "label": "Estufa Esbelta",
+      "notes": "Passeia-te por entre a flora de uma Estufa Esbelta."
+    },
+    {
+      "id": "flying_over_an_ancient_forest",
+      "label": "Floresta Antiga",
+      "notes": "Voa sobre as copas de uma Floresta Antiga."
+    },
+    {
+      "id": "flying_over_a_field_of_wildflowers",
+      "label": "Campo de Flores Silvestres",
+      "notes": "Plana sobre um Campo de Flores Silvestres."
+    },
+    {
+      "id": "tulip_garden",
+      "label": "Jardim de Túlipas",
+      "notes": "Caminha em bicos dos pés por entre um Jardim de Túlipas."
+    },
+    {
+      "id": "champions_colosseum",
+      "label": "Coliseu dos Campeões",
+      "notes": "Deixa-te inundar pela glória do Coliseu dos Campeões."
+    },
+    {
+      "id": "fantastical_shoe_store",
+      "label": "Loja de Sapatos Fantásticos",
+      "notes": "Procura calçado novo e divertido na Loja de Sapatos Fantásticos."
+    },
+    {
+      "id": "terraced_rice_field",
+      "label": "Arrozal Com Terraço",
+      "notes": "Desfruta de um Arrozal Com Terraço durante a época do cultivo."
+    },
+    {
+      "id": "at_the_docks",
+      "label": "Docas",
+      "notes": "Pesca do cimo das Docas."
+    },
+    {
+      "id": "rowboat",
+      "label": "Barco a Remos",
+      "notes": "Canta cantigas num Barco a Remos."
+    },
+    {
+      "id": "pirate_flag",
+      "label": "Bandeira Pirata",
+      "notes": "Hasteia uma temível Bandeira Pirata."
+    },
+    {
+      "id": "dark_deep",
+      "label": "Profundezas Escuras",
+      "notes": "Nade nas profundezas escuras entre criaturas bioluminiscentes."
+    },
+    {
+      "id": "dilatory_city",
+      "label": "Cidade de Retardo",
+      "notes": "Vagueie pelo mar subterrâneo da Cidade de Retardo."
+    },
+    {
+      "id": "tide_pool",
+      "label": "Piscina de Maré",
+      "notes": "Observe a vida marinha perto de uma Piscina de Maré."
+    },
+    {
+      "id": "training_grounds",
+      "label": "Campo de Treino",
+      "notes": "Luta no Campo de Treino."
+    },
+    {
+      "id": "flying_over_rocky_canyon",
+      "label": "Desfiladeiro Rochoso",
+      "notes": "Espreita um cenário avassalador debaixo de ti enquanto voas sobre um Desfiladeiro Rochoso."
+    },
+    {
+      "id": "bridge",
+      "label": "Ponte",
+      "notes": "Atravessa uma ponte catita."
+    },
+    {
+      "id": "apple_picking",
+      "label": "Apanha da Maçã",
+      "notes": "Vai à Apanha da Maçã e leva para casa um alqueire."
+    },
+    {
+      "id": "giant_book",
+      "label": "Livro Gigante",
+      "notes": "Lê enquanto caminhas pelas páginas do Livro Gigante."
+    },
+    {
+      "id": "cozy_barn",
+      "label": "Estábulo Aconchegante",
+      "notes": "Descontrai com os teus animais de estimação e montadas no seu Estábulo Aconchegante."
+    },
+    {
+      "id": "bayou",
+      "label": "Pântano",
+      "notes": "Aproveite o brilho dos vaga-lumes no Pântano sombrio."
+    },
+    {
+      "id": "creepy_castle",
+      "label": "Castelo Arrepiante",
+      "notes": "Atreva-se a aproximar-se de um Castelo Arrepiante."
+    },
+    {
+      "id": "dungeon",
+      "label": "Masmorra",
+      "notes": "Resgate os prisioneiros de uma Masmorra arrepilante."
+    },
+    {
+      "id": "back_alley",
+      "label": "Beco das Traseiras",
+      "notes": "Pareça suspeito enquanto paira num Beco das Traseiras."
+    },
+    {
+      "id": "glowing_mushroom_cave",
+      "label": "Caverna de Cogumelos Brilhantes",
+      "notes": "Olhe com fascínio para uma Caverna de Cogumelos Brilhantes."
+    },
+    {
+      "id": "cozy_bedroom",
+      "label": "Quarto Aconchegante",
+      "notes": "Enrole-se num Quarto Aconchegante."
+    },
+    {
+      "id": "flying_over_snowy_mountains",
+      "label": "Montanhas nevadas",
+      "notes": "Sobrevoa as Montanhas Nevadas durante a noite."
+    },
+    {
+      "id": "frosty_forest",
+      "label": "Floresta Gelada",
+      "notes": "Equipa-te para uma caminhada pela Floresta Gelada."
+    },
+    {
+      "id": "snowy_day_fireplace",
+      "label": "Lareira em Dia de Neve",
+      "notes": "Aconchega-te perto da Lareira em Dia de Neve."
+    },
+    {
+      "id": "avalanche",
+      "label": "Avalanche",
+      "notes": "Foge da força poderosa de uma Avalanche."
+    },
+    {
+      "id": "archaeological_dig",
+      "label": "Escavação Arqueológica",
+      "notes": "Desenterra os segredos ancestrais do passado numa Escavação Arqueológica."
+    },
+    {
+      "id": "scribes_workshop",
+      "label": "Oficina do Escriba",
+      "notes": "Escreve o teu próximo pergaminho na Oficina do Escriba."
+    },
+    {
+      "id": "medieval_kitchen",
+      "label": "Cozinha Medieval",
+      "notes": "Cozinhe uma tempestade em uma cozinha medieval."
+    },
+    {
+      "id": "old_fashioned_bakery",
+      "label": "Padaria à Moda Antiga",
+      "notes": "Aprecie deliciosos cheiros ao lado de fora de uma padaria à moda antiga."
+    },
+    {
+      "id": "valentines_day_feasting_hall",
+      "label": "Salão de Festas do Dia dos Namorados",
+      "notes": "Apaixone-se em um salão de festas do Dia dos Namorados."
+    },
+    {
+      "id": "duck_pond",
+      "label": "Lago do pato",
+      "notes": "Alimente aves aquáticas no Lago do Pato."
+    },
+    {
+      "id": "field_with_colored_eggs",
+      "label": "Campo com Ovos Coloridos",
+      "notes": "Procure o tesouro da primavera em um campo com ovos coloridos."
+    },
+    {
+      "id": "flower_market",
+      "label": "Mercado de Flores",
+      "notes": "Encontre as cores perfeitas para buquê ou jardim no mercado de flores."
+    },
+    {
+      "id": "halflings_house",
+      "label": "Casa do Hobbit",
+      "notes": "VIsite uma charmosa Casa de Hobbit."
+    },
+    {
+      "id": "blossoming_desert",
+      "label": "Deserto das Flores",
+      "notes": "Testemunhe uma rara super floração no Deserto das Flores."
+    },
+    {
+      "id": "birch_forest",
+      "label": "Floresta de Bétulas",
+      "notes": "Flerte em uma pacífica Floresta de Bétulas."
+    },
+    {
+      "id": "dojo",
+      "label": "Dojô",
+      "notes": "Aprenda novos golpes em um Dojo."
+    },
+    {
+      "id": "park_with_statue",
+      "label": "Parque com estátua",
+      "notes": "Siga um caminho florido através de um parque com uma estátua."
+    },
+    {
+      "id": "rainbow_meadow",
+      "label": "Prado Arco-Íris",
+      "notes": "Encontre o pote de ouro ao final do arco-íris."
+    },
+    {
+      "id": "school_of_fish",
+      "label": "Escola de Peixe",
+      "notes": "Nade em uma Escola de Peixe."
+    },
+    {
+      "id": "seaside_cliffs",
+      "label": "Penhascos à beira-mar",
+      "notes": "Fique em uma praia com a beleza de penhascos acima."
+    },
+    {
+      "id": "underwater_vents",
+      "label": "Respiradouros subaquáticos",
+      "notes": "Dê um mergulho profundo, até os Respiradouros subaquáticas."
+    },
+    {
+      "id": "lake_with_floating_lanterns",
+      "label": "Lago com Lanternas Flutuantes",
+      "notes": "Observe as estrelas na atmosfera do festival de um lago com lanternas flutuantes."
+    },
+    {
+      "id": "flying_over_tropical_islands",
+      "label": "Sobrevoando as ilhas tropicais",
+      "notes": "Deixe a vista tomar-te o fôlego ao sobrevoar as ilhas tropicais."
+    },
+    {
+      "id": "among_giant_anemones",
+      "label": "Entre Anêmonas Gigantes",
+      "notes": "Explore a vida no recife, protegida de predadores pelas anêmonas gigantes."
+    },
+    {
+      "id": "amid_ancient_ruins",
+      "label": "Entre Ruínas Antigas",
+      "notes": "Fique em reverência pelo passado misterioso Entre as Ruínas Antigas."
+    },
+    {
+      "id": "giant_dandelions",
+      "label": "Dentes-de-leão Gigantes",
+      "notes": "Divirta-se entre Dentes-de-leão Gigantes."
+    },
+    {
+      "id": "treehouse",
+      "label": "Casa na Árvore",
+      "notes": "Passeie por um refúgio arbóreo só para ti, em tua própria Casa na Árvore."
+    },
+    {
+      "id": "autumn_flower_garden",
+      "label": "Jardim de Flores de Outono",
+      "notes": "Aproveite o calor de um jardim de Flores de Outono."
+    },
+    {
+      "id": "in_an_ancient_tomb",
+      "label": "Tumba Antiga",
+      "notes": "Enfrente os mistérios de uma Tumba Antiga."
+    },
+    {
+      "id": "in_a_classroom",
+      "label": "Sala de aula",
+      "notes": "Absorva o conhecimento de seus mentores em uma sala de aula."
+    },
+    {
+      "id": "foggy_moor",
+      "label": "Floresta Nebulosa",
+      "notes": "Cuidado ao caminhar na Floresta Nebulosa."
+    },
+    {
+      "id": "monster_makers_workshop",
+      "label": "Oficina do Criador de Monstros",
+      "notes": "Experimente ciências desacreditadas em uma Oficina de Criador de Monstros."
+    },
+    {
+      "id": "pumpkin_carriage",
+      "label": "Carruagem de abóbora",
+      "notes": "Ande em uma carruagem de abóbora encantada antes de o relógio bater meia-noite."
+    },
+    {
+      "id": "farmers_market",
+      "label": "Mercado Agrícola",
+      "notes": "Compre os alimentos mais frescos no Mercado Agrícola."
+    },
+    {
+      "id": "flying_in_a_thunderstorm",
+      "label": "Tempestade Tumultuosa",
+      "notes": "Persiga uma Tempestade Tumultuosa tão de perto quanto ousares."
+    },
+    {
+      "id": "potion_shop",
+      "label": "Loja de poções",
+      "notes": "Encontre um elixir para qualquer doença em uma Loja de Poções."
+    },
+    {
+      "id": "holiday_market",
+      "label": "Mercado de Natal",
+      "notes": "Encontre os presentes e decorações perfeitos em um Mercado de Natal."
+    },
+    {
+      "id": "holiday_wreath",
+      "label": "Coroa de Natal",
+      "notes": "Enfeite seu personagem com uma fragrante Coroa de Natal."
+    },
+    {
+      "id": "winter_nocturne",
+      "label": "Noite de Inverno",
+      "notes": "Aproveite a luz das estrelas de uma Noite de Inverno."
+    },
+    {
+      "id": "birthday_party",
+      "label": "Festa de Aniversário",
+      "notes": "Comemora a festa de aniversário de teu Habiticano favorito."
+    },
+    {
+      "id": "desert_with_snow",
+      "label": "Deserto de Neve",
+      "notes": "Testemunhe a beleza rara e tranquila de um Deserto de Neve."
+    },
+    {
+      "id": "snowglobe",
+      "label": "Globo de Neve",
+      "notes": "Agite um Globo de Neve e ocupe seu lugar em um microcosmo de uma paisagem de inverno."
+    },
+    {
+      "id": "elegant_ballroom",
+      "label": "Salão de Baile Elegante",
+      "notes": "Dance a noite toda em um Salão de Baile Elegante."
+    },
+    {
+      "id": "hall_of_heroes",
+      "label": "Salão dos Heróis",
+      "notes": "Aproxima-te do Salão dos Heróis com apreço e reverência."
+    },
+    {
+      "id": "tea_party",
+      "label": "Festa do Chá",
+      "notes": "Participe de uma Festa do Cha elegante."
+    },
+    {
+      "id": "among_giant_flowers",
+      "label": "Entre Flores Gigantes",
+      "notes": "Divirta-se entre flores gigantes."
+    },
+    {
+      "id": "butterfly_garden",
+      "label": "Jardim das Borboletas",
+      "notes": "Festa com polinizadores em um Jardim de Borboletas."
+    },
+    {
+      "id": "succulent_garden",
+      "label": "Jardim Suculento",
+      "notes": "Aprecie a beleza árida de um Jardim Suculento."
+    },
+    {
+      "id": "animal_clouds",
+      "label": "Nuvens de Animais",
+      "notes": "Exercite sua imaginação encontrando formas de animais nas nuvens."
+    },
+    {
+      "id": "heather_field",
+      "label": "Campo de Azaleas",
+      "notes": "Desfrute do aroma de um Campo de Azaleas."
+    },
+    {
+      "id": "rainy_barnyard",
+      "label": "Celeiro Chuvoso",
+      "notes": "Dê um passeio molhado e exuberante por um Celeiro Chuvoso."
+    },
+    {
+      "id": "habit_city_rooftops",
+      "label": "Tehados da Cidade dos Hábitos",
+      "notes": "Salte venturosamente pelos Tehados da Cidade dos Hábitos."
+    },
+    {
+      "id": "hot_air_balloon",
+      "label": "Balão de ar quente",
+      "notes": "Voe acima da paisagem em um Balão de ar quente."
+    },
+    {
+      "id": "strawberry_patch",
+      "label": "Caminho dos morangos",
+      "notes": "Colha frutas frescas em um Caminho de morangos."
+    },
+    {
+      "id": "relaxation_river",
+      "label": "Rio Relaxamento",
+      "notes": "Navegue lentamente pelo Rio Relaxamento."
+    },
+    {
+      "id": "salt_lake",
+      "label": "Lago salgado",
+      "notes": "Contemple as surpreendentes ondulações vermelhas de um Lago Salgado."
+    },
+    {
+      "id": "viking_ship",
+      "label": "Navio Viking",
+      "notes": "Embarque em uma aventura a bordo de um navio Viking."
+    },
+    {
+      "id": "beach_cabana",
+      "label": "Cabana de Praia",
+      "notes": "Relaxe à sombra de uma cabana de praia."
+    },
+    {
+      "id": "swimming_among_jellyfish",
+      "label": "Nadando entre medusas",
+      "notes": "Emociona-te com a beleza e o perigo Nadando entre as medusas."
+    },
+    {
+      "id": "underwater_ruins",
+      "label": "Ruínas Subaquáticas",
+      "notes": "Explore as ruínas subaquáticas afundadas há muito tempo."
+    },
+    {
+      "id": "camping_out",
+      "label": "Acampando",
+      "notes": "Aproveite o ar livre em Acampando."
+    },
+    {
+      "id": "jungle_canopy",
+      "label": "Floresta Tropical",
+      "notes": "Aproveite o esplendor sufocante de uma Floresta Tropical."
+    },
+    {
+      "id": "productivity_plaza",
+      "label": "Praça da Produtividade",
+      "notes": "Faça um passeio inspirador pela Praça da Produtividade da Cidade dos Hábitos."
+    },
+    {
+      "id": "flying_over_an_autumn_forest",
+      "label": "Voando sobre uma Floresta de Outono",
+      "notes": "Contemple as cores brilhantes abaixo enquanto Voa sobre uma Floresta de Outono."
+    },
+    {
+      "id": "giant_autumn_leaf",
+      "label": "Folha Gigante",
+      "notes": "Pouse em uma Folha Gigante antes que ela caia."
+    },
+    {
+      "id": "herding_sheep_in_autumn",
+      "label": "Rebanho de Ovelhas",
+      "notes": "Junte-se a um Rebanho de Ovelhas."
+    },
+    {
+      "id": "crescent_moon",
+      "label": "Lua Crescente",
+      "notes": "Faça o trabalho dos seus sonhos sentado em uma Lua Crescente."
+    },
+    {
+      "id": "haunted_forest",
+      "label": "Floresta Assombrada",
+      "notes": "Tente não se perder na Floresta Assombrada."
+    },
+    {
+      "id": "spooky_scarecrow_field",
+      "label": "Campo do Espantalho Assustador",
+      "notes": "Prova que és mais ousado do que um pássaro ao enfrentares o Campo do Espantalho Assustador."
+    },
+    {
+      "id": "mystical_observatory",
+      "label": "Observatório Místico",
+      "notes": "Lê o teu destino nas estrelas a partir do Observatório Místico."
+    },
+    {
+      "id": "resting_in_the_inn",
+      "label": "Descansando na Taverna",
+      "notes": "Trabalhe no conforto e segurança do seu quarto Descansando na Taverna."
+    },
+    {
+      "id": "river_of_lava",
+      "label": "Rio de Lava",
+      "notes": "Desafia a convecção dando um passeio ao longo do Rio de Lava."
+    },
+    {
+      "id": "gingerbread_house",
+      "label": "Casa de Pão de Gengibre",
+      "notes": "Aproveita a vista, os aromas e (se ousares) os sabores de uma Casa de Pão de Gengibre."
+    },
+    {
+      "id": "holiday_hearth",
+      "label": "Lareira Natalina",
+      "notes": "Relaxe, aqueça-se e seque-se ao lado de uma Lareira Natalina."
+    },
+    {
+      "id": "inside_an_ornament",
+      "label": "Interior de um Ornamento",
+      "notes": "Deixa a tua alegria festiva brilhar a partir do Interior de um Ornamento."
+    },
+    {
+      "id": "hot_spring",
+      "label": "Fonte Termal",
+      "notes": "Derrete as tuas preocupações com um mergulho numa Fonte Termal."
+    },
+    {
+      "id": "icicle_bridge",
+      "label": "Ponte de Gelo",
+      "notes": "Atravessa a Ponte de Gelo com cuidado."
+    },
+    {
+      "id": "wintry_castle",
+      "label": "Castelo Invernal",
+      "notes": "Vê o Castelo Invernal através da névoa fria."
+    },
+    {
+      "id": "flying_over_glacier",
+      "label": "Voar Sobre um Glaciar",
+      "notes": "Testemunha uma grandiosidade gelada ao Voar Sobre um Glaciar."
+    },
+    {
+      "id": "heart_shaped_bubbles",
+      "label": "Bolhas em forma de coração",
+      "notes": "Flutua alegremente entre Bolhas em Forma de Coração."
+    },
+    {
+      "id": "throne_room",
+      "label": "Sala do Trono",
+      "notes": "Conceda uma audiência na sua luxuosa Sala do Trono."
+    },
+    {
+      "id": "in_the_armory",
+      "label": "No Arsenal",
+      "notes": "Equipa-te no Arsenal."
+    },
+    {
+      "id": "splash_in_a_puddle",
+      "label": "A chapinhar numa Poça de Água",
+      "notes": "Disfruta do resultado da tempestade ao Chapinhar numa Poça de Água."
+    },
+    {
+      "id": "spring_thaw",
+      "label": "Degelo da Primavera",
+      "notes": "Observa a rendição do inverno ao Degelo da Primavera."
+    },
+    {
+      "id": "among_cattails",
+      "label": "Entre Taboas",
+      "notes": "Admira a vida selvagem Entre Taboas."
+    },
+    {
+      "id": "cottage_construction",
+      "label": "Casa de Campo em Construção",
+      "notes": "Ajuda ou pelo menos supervisiona uma Casa de Campo em Construção."
+    },
+    {
+      "id": "elegant_garden",
+      "label": "Jardim Elegante",
+      "notes": "Percorra os caminhos bem cuidados de um Jardim Elegante."
+    },
+    {
+      "id": "afternoon_picnic",
+      "label": "Piquenique à Tarde",
+      "notes": "Disfruta de um Piquenique à Tarde sozinho(a) ou com a tua mascote."
+    },
+    {
+      "id": "dragons_lair",
+      "label": "Caverna do Dragão",
+      "notes": "Tenta não incomodar o inquilino da Caverna do Dragão."
+    },
+    {
+      "id": "windmills",
+      "label": "Moinhos de Vento",
+      "notes": "Prepare-se e aventure-se contra os Moinhos de Vento."
+    },
+    {
+      "id": "clothesline",
+      "label": "Corda da Roupa",
+      "notes": "Estende-te com a roupa a secar na Corda da Roupa."
+    },
+    {
+      "id": "forested_lakeshore",
+      "label": "Margem Florestal do Lago",
+      "notes": "Sê a inveja da tua equipa com o teu local especial na Margem Florestal do Lago."
+    },
+    {
+      "id": "water_mill",
+      "label": "Moinho de Água",
+      "notes": "Observa a roda do Moinho de Água a girar e a girar."
+    },
+    {
+      "id": "underwater_among_koi",
+      "label": "Debaixo de Água entre Carpas",
+      "notes": "Deslumbra e deslumbra-te por carpas brilhantes, Debaixo de Água entre Carpas."
+    },
+    {
+      "id": "ghost_ship",
+      "label": "Navio Fantasma",
+      "notes": "Prova a veracidade de contos e lendas ao embarcares num Barco Fantasma."
+    },
+    {
+      "id": "raging_river",
+      "label": "Rio Furioso",
+      "notes": "Ergue-te perante a poderosa corrente do Rio Furioso."
+    },
+    {
+      "id": "daytime_misty_forest",
+      "label": "Floresta Enevoada",
+      "notes": "Banha-te no brilho da luz do dia que flui através da Floresta Enevoada."
+    },
+    {
+      "id": "rope_bridge",
+      "label": "Ponte de Corda",
+      "notes": "Mostra aos desconfiados que a Ponte de Corda é perfeitamente segura."
+    },
+    {
+      "id": "stone_tower",
+      "label": "Torre de Pedra",
+      "notes": "Contempla os baluartes de uma Torre de Pedra para outra."
+    },
+    {
+      "id": "autumn_lakeshore",
+      "label": "Margem Outonal do Lago",
+      "notes": "Repouse na Margem Outonal do Lago para apreciar as reflexões do bosque na água."
+    },
+    {
+      "id": "autumn_poplars",
+      "label": "Floresta Outonal de Álamo",
+      "notes": "Delicia-te nas brilhantes sombras castanhas e douradas da Floresta Outonal de Álamo."
+    },
+    {
+      "id": "vineyard",
+      "label": "Vinha",
+      "notes": "Explora a expansão de uma Vinha frutífera."
+    },
+    {
+      "id": "cryptic_candles",
+      "label": "Velas Misteriosas",
+      "notes": "Invoque forças arcanas através das Velas Misteriosas."
+    },
+    {
+      "id": "haunted_photo",
+      "label": "Foto Assombrada",
+      "notes": "Descubra-se preso no mundo monocromático de uma Fotografia Assombrada."
+    },
+    {
+      "id": "undead_hands",
+      "label": "Mãos Mortas-vivas",
+      "notes": "Tente escapar das garras das Mãos Mortas-vivas."
+    },
+    {
+      "id": "fortune_tellers_shop",
+      "label": "Loja de Caçadores de Fortuna",
+      "notes": "Busque detalhes fascinantes sobre o seu futuro em uma Loja de Caçadores de Fortuna."
+    },
+    {
+      "id": "inside_a_potion_bottle",
+      "label": "Dentro de uma Garrafa de Poção",
+      "notes": "Olhe através do vidro enquanto espera pela recuperação que vem dentro de uma Garrafa de Poção."
+    },
+    {
+      "id": "spiral_staircase",
+      "label": "Escada Espiral",
+      "notes": "Subir, descer, girar em torno de uma Escada Espiral."
+    },
+    {
+      "id": "winter_canyon",
+      "label": "Desfiladeiro de Inverno",
+      "notes": "Aventura em um Desfiladeiro de Inverno!"
+    },
+    {
+      "id": "ice_palace",
+      "label": "Palácio de Gelo",
+      "notes": "Reinar no Palácio de Gelo."
+    },
+    {
+      "id": "frozen_polar_waters",
+      "label": "Congeladas Águas Polares",
+      "notes": "Explore as Congeladas Águas Polares."
+    },
+    {
+      "id": "meteor_shower",
+      "label": "Chuva de Meteoros",
+      "notes": "Observe a deslumbrante exposição noturna de uma chuva de Meteoros."
+    },
+    {
+      "id": "palm_tree_with_fairy_lights",
+      "label": "Palmeira com Luzes de Fada",
+      "notes": "Posicionado em um palmeiral com Luzes de Fada."
+    },
+    {
+      "id": "snowy_farm",
+      "label": "Quinta das Neves",
+      "notes": "Verifique se todos estão bem e quentes na sua Quinta das Neves."
+    },
+    {
+      "id": "winter_waterfall",
+      "label": "Cascata de Inverno",
+      "notes": "Maravilhar-se com uma Cascata de Inverno."
+    },
+    {
+      "id": "orange_grove",
+      "label": "Laranjal",
+      "notes": "Passear por um Laranjal perfumado."
+    },
+    {
+      "id": "iridescent_clouds",
+      "label": "Nuvens Iridescentes",
+      "notes": "Flutuar em Nuvens Iridescentes."
+    },
+    {
+      "id": "animals_den",
+      "label": "Esconderijo do Bicho da Floresta",
+      "notes": "Aconchegado no esconderijo do Bicho da Floresta."
+    },
+    {
+      "id": "brick_wall_with_ivy",
+      "label": "Parede de Tijolos com Ivy",
+      "notes": "Admire uma Parede de Tijolos com a Ivy."
+    },
+    {
+      "id": "flowering_prairie",
+      "label": "Pradaria Florida",
+      "notes": "Brincar através de uma Pradaria Florida."
+    },
+    {
+      "id": "blossoming_trees",
+      "label": "Árvores Florescidas",
+      "notes": "Passando um tempo em baixo de Árvores Florescidas."
+    },
+    {
+      "id": "flower_shop",
+      "label": "Loja de Flores",
+      "notes": "Aprecie o doce aroma de uma Loja de Flores."
+    },
+    {
+      "id": "springtime_lake",
+      "label": "Lago da Primavera",
+      "notes": "Aprecie as vistas ao longo das margens de um Lago da Primavera."
+    },
+    {
+      "id": "on_a_castle_wall",
+      "label": "Na Muralha de um Castelo",
+      "notes": "Preste atenção na Muralha de um Castelo."
+    },
+    {
+      "id": "enchanted_music_room",
+      "label": "Sala de Música Encantada",
+      "notes": "Toque em uma Sala de Música Encantada."
+    },
+    {
+      "id": "castle_gate",
+      "label": "Portão do Castelo",
+      "notes": "Fique de guarda no Portão do Castelo."
+    },
+    {
+      "id": "beach_with_dunes",
+      "label": "Praia com Dunas",
+      "notes": "Explore uma praia com dunas."
+    },
+    {
+      "id": "mountain_waterfall",
+      "label": "Cascata da montanha",
+      "notes": "Admire a cascata da montanha."
+    },
+    {
+      "id": "sailboat_at_sunset",
+      "label": "Veleiro ao pôr-do-sol",
+      "notes": "Aproveite a beleza de um veleiro ao pôr-do-sol."
+    },
+    {
+      "id": "bioluminescent_waves",
+      "label": "Ondas Bioluminescentes",
+      "notes": "Admirar o brilho das Ondas Bioluminescentes."
+    },
+    {
+      "id": "underwater_cave",
+      "label": "Caverna Subaquática",
+      "notes": "Explore uma Caverna Subaquática."
+    },
+    {
+      "id": "underwater_statues",
+      "label": "Jardim da Estátua Subaquática",
+      "notes": "Tente não hesitar no Jardim da Estátua Subaquática."
+    },
+    {
+      "id": "rainbow_eucalyptus",
+      "label": "Eucalipto Arco-íris",
+      "notes": "Admire os Eucaliptais Arco-íris."
+    },
+    {
+      "id": "messy_room",
+      "label": "Quarto Sujo",
+      "notes": "Arrume um Quarto Sujo."
+    },
+    {
+      "id": "by_a_campfire",
+      "label": "Em uma fogueira",
+      "notes": "Desfrute do brilho de uma Fogueira."
+    },
+    {
+      "id": "theatre_stage",
+      "label": "Palco de Teatro",
+      "notes": "Apresente-se num Palco de Teatro."
+    },
+    {
+      "id": "autumn_picnic",
+      "label": "Piquenique de Outono",
+      "notes": "Aproveite um Piquenique de Outono."
+    },
+    {
+      "id": "old_photo",
+      "label": "Foto Antiga",
+      "notes": "Pose para uma Foto Antiga."
+    },
+    {
+      "id": "spooky_ruins",
+      "label": "Ruínas assustadoras",
+      "notes": "Explore algumas Ruínas Assustadoras."
+    },
+    {
+      "id": "mask_makers_workshop",
+      "label": "Oficina de Fabricantes de Máscaras",
+      "notes": "Experimente um novo rosto na Oficina de Fabricantes de Máscaras."
+    },
+    {
+      "id": "cemetery_gate",
+      "label": "Entrada do Cemitério",
+      "notes": "Assombre uma Entrada de Cemitério."
+    },
+    {
+      "id": "among_giant_mushrooms",
+      "label": "Entre Cogumelos Gigantes",
+      "notes": "Maravilhar-se com os Cogumelos Gigantes."
+    },
+    {
+      "id": "misty_autumn_forest",
+      "label": "Floresta Nebulosa de Outono",
+      "notes": "Vaguear por uma floresta nebulosa de Outono."
+    },
+    {
+      "id": "autumn_bridge",
+      "label": "Ponte no Outono",
+      "notes": "Admire a beleza de uma ponte no Outono."
+    },
+    {
+      "id": "branches_of_a_holiday_tree",
+      "label": "Ramos de uma árvore de férias",
+      "notes": "Brincadeira nos ramos de uma Árvore de Férias."
+    },
+    {
+      "id": "inside_a_crystal",
+      "label": "Dentro de um Cristal",
+      "notes": "Apareça no interior de um Cristal."
+    },
+    {
+      "id": "snowy_village",
+      "label": "Aldeia das Neves",
+      "notes": "Admire uma Aldeia das Neves."
+    },
+    {
+      "id": "rime_ice",
+      "label": "Gelo de Calcário",
+      "notes": "Admire o Gelo cintilante de Calcário."
+    },
+    {
+      "id": "snowy_temple",
+      "label": "Templo de neve",
+      "notes": "Ver um Templo sereno de Neve."
+    },
+    {
+      "id": "winter_lake_with_swans",
+      "label": "Lago de Inverno com cisnes",
+      "notes": "Desfrute da natureza num Lago de Inverno Com Cisnes."
+    },
+    {
+      "id": "in_front_of_fountain",
+      "label": "Na Frente de uma Fonte",
+      "notes": "Passeio na Frente de uma Fonte."
+    },
+    {
+      "id": "golden_birdcage",
+      "label": "Gaiola Dourada",
+      "notes": "Esconda-se numa Gaiola Dourada."
+    },
+    {
+      "id": "fancy_bedroom",
+      "label": "Quarto de Luxo",
+      "notes": "Ostente em um Quarto de Luxo."
+    },
+    {
+      "id": "jungle_watering_hole",
+      "label": "Buraco de Irrigação da Selva",
+      "notes": "Pare para tomar um gole num Buraco de Irrigação da Selva."
+    },
+    {
+      "id": "mangrove_forest",
+      "label": "Floresta de Manguezal",
+      "notes": "Explore a orla da Floresta de Manguezal."
+    },
+    {
+      "id": "old_timey_basketball_court",
+      "label": "Campo de Basquetebol da Velha Guarda",
+      "notes": "Dispare aros em um Campo de Basquetebol da Velha Guarda."
+    },
+    {
+      "id": "leafy_tree_tunnel",
+      "label": "Túnel de Árvores Frondosas",
+      "notes": "Passeie por um túnel de Árvores Frondosas."
+    },
+    {
+      "id": "springtime_shower",
+      "label": "Banho da Primavera",
+      "notes": "Veja um florido banho de primavera."
+    },
+    {
+      "id": "under_wisteria",
+      "label": "Sob Glicínias",
+      "notes": "Relaxe sob as glicínias."
+    },
+    {
+      "id": "in_a_painting",
+      "label": "Em uma pintura",
+      "notes": "Desfrute de atividades criativas dentro de uma pintura."
+    },
+    {
+      "id": "flying_over_hedge_maze",
+      "label": "Voando sobre o labirinto de cerca viva",
+      "notes": "Maravilhe-se enquanto voa sobre um labirinto de cerca viva."
+    },
+    {
+      "id": "cretaceous_forest",
+      "label": "Floresta Cretácea",
+      "notes": "Aprecie a antiga vegetação de uma floresta do Cretáceo."
+    },
+    {
+      "id": "in_an_aquarium",
+      "label": "Em um Aquário",
+      "notes": "Dê um mergulho tranquilo com os peixes em um aquário."
+    },
+    {
+      "id": "inside_adventurers_hideout",
+      "label": "Dentro do Esconderijo de um Aventureiro",
+      "notes": "Planeje uma viagem dentro do Esconderijo de um Aventureiro."
+    },
+    {
+      "id": "crater_lake",
+      "label": "Lago da Cratera",
+      "notes": "Admire um lindo Lago da Cratera."
+    },
+    {
+      "id": "on_a_paddlewheel_boat",
+      "label": "Em um Barco com Rodas de Pás",
+      "notes": "Ande em um Barco com Rodas de Pás."
+    },
+    {
+      "id": "colorful_coral",
+      "label": "Coral Colorido",
+      "notes": "Mergulhe entre Corais Coloridos."
+    },
+    {
+      "id": "boardwalk_into_sunset",
+      "label": "Calçadão até o Pôr do Sol",
+      "notes": "Passeie em um Calçadão até o Pôr do Sol."
+    },
+    {
+      "id": "bonsai_collection",
+      "label": "Coleção de Bonsais",
+      "notes": "Admire uma linda coleção de Bonsais."
+    },
+    {
+      "id": "dreamy_island",
+      "label": "Ilha dos Sonhos",
+      "notes": "Aprecie a paisagem em uma Ilha dos Sonhos."
+    },
+    {
+      "id": "rock_garden",
+      "label": "Jardim de Pedras",
+      "notes": "Relaxe em um Jardim de Pedras."
+    },
+    {
+      "id": "moving_day",
+      "label": "Dia de Mudança",
+      "notes": "Faça as malas para o Dia de Mudança."
+    },
+    {
+      "id": "covered_bridge_in_autumn",
+      "label": "Ponte Coberta no Outono",
+      "notes": "Atravesse uma Ponte Coberta no Outono."
+    },
+    {
+      "id": "baobab_forest",
+      "label": "Floresta de Baobá",
+      "notes": "Maravilhe-se com a Floresta dos Baobás."
+    },
+    {
+      "id": "spectral_candle_room",
+      "label": "Sala das Velas Espectrais",
+      "notes": "Comunique-se com espíritos na sala de velas espectrais."
+    },
+    {
+      "id": "monstrous_cave",
+      "label": "Caverna Monstruosa",
+      "notes": "Contemple a boca da Caverna Monstruosa."
+    },
+    {
+      "id": "jack_o_lantern_stacks",
+      "label": "Pilhas de abóbora",
+      "notes": "Admire um campo de pilhas de abóbora."
+    },
+    {
+      "id": "giant_cat",
+      "label": "Gato gigante",
+      "notes": "Tire uma soneca com o Gato Gigante."
+    },
+    {
+      "id": "barrel_cellar",
+      "label": "Adega de Barris",
+      "notes": "Procure delícias culinárias em uma Adega de Barris."
+    },
+    {
+      "id": "autumn_tree_tunnel",
+      "label": "Túnel de Árvores de Outono",
+      "notes": "Aprecie a beleza de um túnel de árvores de outono."
+    },
+    {
+      "id": "holiday_tree_forest",
+      "label": "Floresta de Árvore de Natal",
+      "notes": "Decore Árvore de Natal em uma floresta."
+    },
+    {
+      "id": "ice_sculpture_festival",
+      "label": "Festival de Esculturas de Gelo",
+      "notes": "Visite um Festival de Esculturas de Gelo."
+    },
+    {
+      "id": "winter_full_moon",
+      "label": "Lua Cheia de Inverno",
+      "notes": "Contemple a Lua Cheia de Inverno."
+    },
+    {
+      "id": "winter_mountain_range",
+      "label": "Cordilheira de Inverno",
+      "notes": "Escale uma Cordilheira de Inverno."
+    },
+    {
+      "id": "frozen_blue_pond",
+      "label": "Lagoa Azul Congelada",
+      "notes": "Relaxe na Lagoa Azul Congelada."
+    },
+    {
+      "id": "ice_bubble_lake",
+      "label": "Lago de Bolhas de Gelo",
+      "notes": "Fique com cuidado em cima do Lago de Bolhas de Gelo."
+    },
+    {
+      "id": "colorful_street",
+      "label": "Rua Colorida",
+      "notes": "Vendo a Rua Colorida."
+    },
+    {
+      "id": "swan_boat",
+      "label": "Barco Cisne",
+      "notes": "Faça um passeio em um Barco Cisne."
+    },
+    {
+      "id": "heart_tree_tunnel",
+      "label": "Túnel da Árvore Coração",
+      "notes": "Passeie pelo Túnel da Árvore Coração."
+    },
+    {
+      "id": "flowering_forest",
+      "label": "Floresta Florida",
+      "notes": "Inspire o perfume da Floresta Florida."
+    },
+    {
+      "id": "dog_park",
+      "label": "Parque para Cães",
+      "notes": "Brinque no Parque para Cães."
+    },
+    {
+      "id": "rainy_rainforest",
+      "label": "Floresta Tropical Chuvosa",
+      "notes": "Desfrute de uma chuva refrescante na Floresta Tropical Chuvosa."
+    },
+    {
+      "id": "forest_sunset",
+      "label": "Pôr do Sol na Floresta",
+      "notes": "Desfrute do brilho de um Pôr do Sol na Floresta."
+    },
+    {
+      "id": "wall_flowering_vines",
+      "label": "Parede com Vinhas Floridas",
+      "notes": "Convive ao pé da parede de Vinhas Floridas."
+    },
+    {
+      "id": "container_garden",
+      "label": "Jardim de Contentores",
+      "notes": "Suje as mãos com o Jardim de Contentores."
+    },
+    {
+      "id": "dragons_back",
+      "label": "As Costas do Dragão",
+      "notes": "Navegue pelo céu nas Costas do Dragão."
+    },
+    {
+      "id": "maypole",
+      "label": "Mastro",
+      "notes": "Dance à volta do Mastro alegre."
+    },
+    {
+      "id": "potters_studio",
+      "label": "Ateliê do Oleiro",
+      "notes": "Crie arte no Ateliê do Oleiro."
+    },
+    {
+      "id": "shell_gate",
+      "label": "Portão das Conchas",
+      "notes": "Marche pelo coral decorado do Portão das Conchas."
+    },
+    {
+      "id": "river_bottom",
+      "label": "Fundo do Rio",
+      "notes": "Explore o Fundo do Rio."
+    },
+    {
+      "id": "savanna",
+      "label": "Pastagens Enevoadas",
+      "notes": "Caminhe pelas Pastagens Enevoadas."
+    },
+    {
+      "id": "magic_door_in_forest",
+      "label": "Porta Mágica na Floresta",
+      "notes": "Atreva-se a passar pela Porta Mágica na Floresta."
+    },
+    {
+      "id": "surrounded_by_ghosts",
+      "label": "Rodeado por Fantasmas",
+      "notes": "Passe uma noite assustadora Rodeado por Fantasmas."
+    },
+    {
+      "id": "castle_hall_with_hearth",
+      "label": "Salão do Castelo com Lareira",
+      "notes": "Aproveite o calor do Salão do Castelo com Lareira."
+    },
+    {
+      "id": "first_snow_forest",
+      "label": "A Primeira Neve na Floresta",
+      "notes": "Entre na Primeira Neve da Floresta."
+    },
+    {
+      "id": "winter_landscape_with_cabin",
+      "label": "Paisagem de Inverno com Cabana",
+      "notes": "Fique aconchegado na Paisagem de Inverno com Cabana."
+    },
+    {
+      "id": "old_fashioned_tea_shop",
+      "label": "Loja Antiquada de Chá",
+      "notes": "Aproveite uma bebida aconchegante numa Loja Antiquada de Chá."
+    },
+    {
+      "id": "mountain_scene_with_blossoms",
+      "label": "Paisagem de Montanha com Flores",
+      "notes": "Aprecie as paisagens encantadoras e os cheiros da Paisagem de Montanha com Flores."
+    },
+    {
+      "id": "garden_with_flower_beds",
+      "label": "Jardim com Cama de Flores",
+      "notes": "Participe do florescer da primavera em um Jardim com Cama de Flores."
+    },
+    {
+      "id": "trail_through_a_forest",
+      "label": "Trilha pela Floresta",
+      "notes": "Percorra uma trilha pela floresta."
+    },
+    {
+      "id": "summer_seashore",
+      "label": "Litoral de verão",
+      "notes": "Pegue uma onda no litoral de verão."
+    },
+    {
+      "id": "sirens_lair",
+      "label": "Covil da Sereia",
+      "notes": "Ouse mergulhar na toca da sereia."
+    },
+    {
+      "id": "sunny_street_with_shops",
+      "label": "Rua ensolarada com lojas",
+      "notes": "Aprecie as imagens e os sons de uma rua ensolarada com lojas."
+    },
+    {
+      "id": "autumn_swamp",
+      "label": "Pântano de Outono",
+      "notes": "Absorva as vibrações assombrosas de um Pântano de Outono."
+    },
+    {
+      "id": "inside_forest_witchs_cottage",
+      "label": "Cabana da Bruxa da Floresta",
+      "notes": "Lance feitiços dentro da Cabana da Bruxa da Floresta."
+    },
+    {
+      "id": "castle_keep_with_banners",
+      "label": "Castelo adornado com estandartes",
+      "notes": "Cante histórias de feitos heroicos em um Salão do Castelo adornado com estandartes."
+    },
+    {
+      "id": "nighttime_street_with_shops",
+      "label": "Rua noturna com lojas",
+      "notes": "Aproveite do brilho acolhedor de uma rua noturna com lojas."
+    },
+    {
+      "id": "winter_desert_with_saguaros",
+      "label": "Deserto de Inverno com Saguaros",
+      "notes": "Respire o ar fresco de um Deserto de Inverno com Saguaros."
+    },
+    {
+      "id": "elegant_palace",
+      "label": "Palácio Elegante",
+      "notes": "Admire os salões coloridos de um Palácio Elegante."
+    },
+    {
+      "id": "waterfall_with_rainbow",
+      "label": "Cachoeira com arco-íris",
+      "notes": "Admire a beleza estonteante de uma cachoeira com arco-íris."
+    },
+    {
+      "id": "riding_a_comet",
+      "label": "Andando em um cometa",
+      "notes": "Viajem pelo espaço a bordo de um cometa!"
+    },
+    {
+      "id": "elven_citadel",
+      "label": "Cidadela Élfica",
+      "notes": "Faça uma viagem panorâmica até uma cidadela élfica."
+    },
+    {
+      "id": "beach_with_volcano",
+      "label": "Praia com Vulcão",
+      "notes": "Observa as maravilhas da natureza em uma Praia com um Vulcão."
+    },
+    {
+      "id": "tropical_coral_garden",
+      "label": "Jardim de Corais Tropicais",
+      "notes": "Mergulhe em um Jardim Tropical de Corais."
+    },
+    {
+      "id": "vegetable_garden",
+      "label": "Horta",
+      "notes": "Planta verduras gostosas em uma Horta."
+    },
+    {
+      "id": "sunset_with_joshua_trees",
+      "label": "Pôr do sol com árvores de Josué",
+      "notes": "Contemple a vista majestosa de um pôr do sol com as árvores de Josué ao fundo."
+    },
+    {
+      "id": "outside_a_witchs_hut",
+      "label": "Do lado de fora da cabana de uma bruxa",
+      "notes": "Atreva-se a aventurar-se para além da cabana da bruxa."
+    },
+    {
+      "id": "path_in_late_autumn",
+      "label": "Caminho no final do outono",
+      "notes": "Em busca de aventura em uma trilha no final do outono."
+    },
+    {
+      "id": "snowy_meadow",
+      "label": "Snowy Meadow",
+      "notes": "Make tracks in a Snowy Meadow."
+    },
+    {
+      "id": "pastel_clouds_and_stars",
+      "label": "Pastel Clouds and Stars",
+      "notes": "Float among Pastel Clouds and Stars."
+    },
+    {
+      "id": "nighttime_cherry_blossoms",
+      "label": "Nighttime Cherry Blossoms",
+      "notes": "Take a moonlit stroll under Nighttime Cherry Blossoms."
+    },
+    {
+      "id": "birthday_bash",
+      "label": "Festa de Aniversário",
+      "notes": "Habitica está fazendo uma festa de aniversário, e todos estão convidados!"
+    },
+    {
+      "id": "on_a_strange_planet",
+      "label": "Em um Planeta Estranho",
+      "notes": "Se aventure onde nenhum Habitican jamais esteve antes: Em um Planeta Estranho."
+    },
+    {
+      "id": "airship",
+      "label": "Dirigível",
+      "notes": "Torne-se um marinheiro do céu a bordo do seu próprio dirigível."
+    },
+    {
+      "id": "clocktower",
+      "label": "Torre do Relógio",
+      "notes": "Situa teu covil secreto atrás da face de uma Torre do Relógio."
+    },
+    {
+      "id": "steamworks",
+      "label": "Sala de Máquinas",
+      "notes": "Construa dispositivos poderosos de vapor e aço em uma Sala de Máquinas."
+    },
+    {
+      "id": "violet",
+      "label": "Violeta",
+      "notes": "Um plano de fundo violeta vibrante."
+    },
+    {
+      "id": "blue",
+      "label": "Azul",
+      "notes": "Um plano de fundo básico azul."
+    },
+    {
+      "id": "green",
+      "label": "Verde",
+      "notes": "Um belo plano de fundo verde."
+    },
+    {
+      "id": "purple",
+      "label": "Purpura",
+      "notes": "Um plano de fundo purpura agradável."
+    },
+    {
+      "id": "red",
+      "label": "Vermelho",
+      "notes": "Um plano de fundo vermelho radical."
+    },
+    {
+      "id": "yellow",
+      "label": "Amarelo",
+      "notes": "Um plano de fundo amarelo apetitoso."
+    }
+  ],
+  "skins": [
+    {
+      "id": "915533",
+      "label": "Claro Quente",
+      "group": "padrao",
+      "hex": "#e0a988"
+    },
+    {
+      "id": "ddc994",
+      "label": "Claro Neutro",
+      "group": "padrao",
+      "hex": "#ddc994"
+    },
+    {
+      "id": "f5a76e",
+      "label": "Dourado",
+      "group": "padrao",
+      "hex": "#f5a76e"
+    },
+    {
+      "id": "ea8349",
+      "label": "Bronze",
+      "group": "padrao",
+      "hex": "#ea8349"
+    },
+    {
+      "id": "c06534",
+      "label": "Escuro",
+      "group": "padrao",
+      "hex": "#c06534"
+    },
+    {
+      "id": "98461a",
+      "label": "Café",
+      "group": "padrao",
+      "hex": "#98461a"
+    },
+    {
+      "id": "c3e1dc",
+      "label": "Elfo / Gelo",
+      "group": "padrao",
+      "hex": "#c3e1dc"
+    },
+    {
+      "id": "6bd049",
+      "label": "Orc / Verde",
+      "group": "padrao",
+      "hex": "#6bd049"
+    },
+    {
+      "id": "eb052b",
+      "label": "Vermelho",
+      "group": "arcoiris",
+      "hex": "#eb052b"
+    },
+    {
+      "id": "f69922",
+      "label": "Laranja",
+      "group": "arcoiris",
+      "hex": "#f69922"
+    },
+    {
+      "id": "f5d70f",
+      "label": "Amarelo",
+      "group": "arcoiris",
+      "hex": "#f5d70f"
+    },
+    {
+      "id": "0ff591",
+      "label": "Turquesa",
+      "group": "arcoiris",
+      "hex": "#0ff591"
+    },
+    {
+      "id": "2b43f6",
+      "label": "Azul",
+      "group": "arcoiris",
+      "hex": "#2b43f6"
+    },
+    {
+      "id": "d7a9f7",
+      "label": "Lavanda",
+      "group": "arcoiris",
+      "hex": "#d7a9f7"
+    },
+    {
+      "id": "800ed0",
+      "label": "Roxo",
+      "group": "arcoiris",
+      "hex": "#800ed0"
+    },
+    {
+      "id": "rainbow",
+      "label": "Arco-Íris",
+      "group": "arcoiris",
+      "hex": "#ff6ec7"
+    },
+    {
+      "id": "bear",
+      "label": "Urso",
+      "group": "animais",
+      "hex": "#8d5524"
+    },
+    {
+      "id": "cactus",
+      "label": "Cacto",
+      "group": "animais",
+      "hex": "#4caf50"
+    },
+    {
+      "id": "fox",
+      "label": "Raposa",
+      "group": "animais",
+      "hex": "#e66c2c"
+    },
+    {
+      "id": "lion",
+      "label": "Leão",
+      "group": "animais",
+      "hex": "#e5a93c"
+    },
+    {
+      "id": "panda",
+      "label": "Panda",
+      "group": "animais",
+      "hex": "#e2e8f0"
+    },
+    {
+      "id": "pig",
+      "label": "Porco",
+      "group": "animais",
+      "hex": "#f9a8d4"
+    },
+    {
+      "id": "tiger",
+      "label": "Tigre",
+      "group": "animais",
+      "hex": "#f97316"
+    },
+    {
+      "id": "wolf",
+      "label": "Lobo",
+      "group": "animais",
+      "hex": "#94a3b8"
+    },
+    {
+      "id": "pastelPink",
+      "label": "Rosa Pastel",
+      "group": "pastel",
+      "hex": "#fbcfe8"
+    },
+    {
+      "id": "pastelOrange",
+      "label": "Laranja Pastel",
+      "group": "pastel",
+      "hex": "#fed7aa"
+    },
+    {
+      "id": "pastelYellow",
+      "label": "Amarelo Pastel",
+      "group": "pastel",
+      "hex": "#fef08a"
+    },
+    {
+      "id": "pastelGreen",
+      "label": "Verde Pastel",
+      "group": "pastel",
+      "hex": "#bbf7d0"
+    },
+    {
+      "id": "pastelBlue",
+      "label": "Azul Pastel",
+      "group": "pastel",
+      "hex": "#bfdbfe"
+    },
+    {
+      "id": "pastelPurple",
+      "label": "Roxo Pastel",
+      "group": "pastel",
+      "hex": "#e9d5ff"
+    },
+    {
+      "id": "pastelRainbowChevron",
+      "label": "Chevron Arco-Íris",
+      "group": "pastel",
+      "hex": "#f5d0fe"
+    },
+    {
+      "id": "pastelRainbowDiagonal",
+      "label": "Diagonal Arco-Íris",
+      "group": "pastel",
+      "hex": "#ddd6fe"
+    },
+    {
+      "id": "monster",
+      "label": "Monstro",
+      "group": "sobrenatural",
+      "hex": "#65a30d"
+    },
+    {
+      "id": "pumpkin",
+      "label": "Abóbora",
+      "group": "sobrenatural",
+      "hex": "#ea580c"
+    },
+    {
+      "id": "skeleton",
+      "label": "Esqueleto",
+      "group": "sobrenatural",
+      "hex": "#e5e7eb"
+    },
+    {
+      "id": "zombie",
+      "label": "Zumbi",
+      "group": "sobrenatural",
+      "hex": "#84cc16"
+    },
+    {
+      "id": "ghost",
+      "label": "Fantasma",
+      "group": "sobrenatural",
+      "hex": "#cbd5e1"
+    },
+    {
+      "id": "shadow",
+      "label": "Sombra",
+      "group": "sobrenatural",
+      "hex": "#334155"
+    },
+    {
+      "id": "candycorn",
+      "label": "Doce de Milho",
+      "group": "sobrenatural",
+      "hex": "#fb923c"
+    },
+    {
+      "id": "ogre",
+      "label": "Ogro",
+      "group": "sobrenatural",
+      "hex": "#4d7c0f"
+    },
+    {
+      "id": "pumpkin2",
+      "label": "Lanterna Halloween",
+      "group": "sobrenatural",
+      "hex": "#f97316"
+    },
+    {
+      "id": "reptile",
+      "label": "Réptil",
+      "group": "sobrenatural",
+      "hex": "#16a34a"
+    },
+    {
+      "id": "shadow2",
+      "label": "Espectro",
+      "group": "sobrenatural",
+      "hex": "#1e293b"
+    },
+    {
+      "id": "skeleton2",
+      "label": "Ossos",
+      "group": "sobrenatural",
+      "hex": "#f1f5f9"
+    },
+    {
+      "id": "transparent",
+      "label": "Transparente",
+      "group": "sobrenatural",
+      "hex": "#64748b"
+    },
+    {
+      "id": "zombie2",
+      "label": "Morto-Vivo",
+      "group": "sobrenatural",
+      "hex": "#4ade80"
+    },
+    {
+      "id": "clownfish",
+      "label": "Peixe-Palhaço",
+      "group": "aquatica",
+      "hex": "#fb923c"
+    },
+    {
+      "id": "deepocean",
+      "label": "Oceano Profundo",
+      "group": "aquatica",
+      "hex": "#1e3a8a"
+    },
+    {
+      "id": "merblue",
+      "label": "Sereia Azul",
+      "group": "aquatica",
+      "hex": "#38bdf8"
+    },
+    {
+      "id": "mergold",
+      "label": "Sereia Dourada",
+      "group": "aquatica",
+      "hex": "#fbbf24"
+    },
+    {
+      "id": "mergreen",
+      "label": "Sereia Verde",
+      "group": "aquatica",
+      "hex": "#34d399"
+    },
+    {
+      "id": "merruby",
+      "label": "Sereia Rubi",
+      "group": "aquatica",
+      "hex": "#f43f5e"
+    },
+    {
+      "id": "shark",
+      "label": "Tubarão",
+      "group": "aquatica",
+      "hex": "#64748b"
+    },
+    {
+      "id": "tropicalwater",
+      "label": "Águas Tropicais",
+      "group": "aquatica",
+      "hex": "#2dd4bf"
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "group": "inverno",
+      "hex": "#a78bfa"
+    },
+    {
+      "id": "dapper",
+      "label": "Elegante",
+      "group": "inverno",
+      "hex": "#475569"
+    },
+    {
+      "id": "festive",
+      "label": "Festiva",
+      "group": "inverno",
+      "hex": "#ef4444"
+    },
+    {
+      "id": "holly",
+      "label": "Azevinho",
+      "group": "inverno",
+      "hex": "#15803d"
+    },
+    {
+      "id": "polar",
+      "label": "Polar",
+      "group": "inverno",
+      "hex": "#e0f2fe"
+    },
+    {
+      "id": "sugar",
+      "label": "Açucarada",
+      "group": "inverno",
+      "hex": "#f472b6"
+    },
+    {
+      "id": "snowy",
+      "label": "Nevada",
+      "group": "inverno",
+      "hex": "#f8fafc"
+    },
+    {
+      "id": "winterstar",
+      "label": "Estrela de Inverno",
+      "group": "inverno",
+      "hex": "#60a5fa"
+    }
+  ],
+  "shirts": [
+    {
+      "id": "black",
+      "label": "Preta"
+    },
+    {
+      "id": "blue",
+      "label": "Azul"
+    },
+    {
+      "id": "green",
+      "label": "Verde"
+    },
+    {
+      "id": "pink",
+      "label": "Rosa"
+    },
+    {
+      "id": "white",
+      "label": "Branca"
+    },
+    {
+      "id": "yellow",
+      "label": "Amarela"
+    },
+    {
+      "id": "convict",
+      "label": "Listrada"
+    },
+    {
+      "id": "cross",
+      "label": "Cruzada"
+    },
+    {
+      "id": "fire",
+      "label": "Fogo"
+    },
+    {
+      "id": "horizon",
+      "label": "Horizonte"
+    },
+    {
+      "id": "ocean",
+      "label": "Oceano"
+    },
+    {
+      "id": "purple",
+      "label": "Roxa"
+    },
+    {
+      "id": "rainbow",
+      "label": "Arco-Íris"
+    },
+    {
+      "id": "redblue",
+      "label": "Vermelha & Azul"
+    },
+    {
+      "id": "thunder",
+      "label": "Trovão"
+    },
+    {
+      "id": "tropical",
+      "label": "Tropical"
+    },
+    {
+      "id": "zombie",
+      "label": "Zumbi"
+    }
+  ],
+  "hairBases": [
+    {
+      "id": 0,
+      "label": "Sem Base (Careca)"
+    },
+    {
+      "id": 1,
+      "label": "Rabo de Cavalo"
+    },
+    {
+      "id": 2,
+      "label": "Maria-Chiquinha"
+    },
+    {
+      "id": 3,
+      "label": "Trança"
+    },
+    {
+      "id": 4,
+      "label": "Trança Dupla"
+    },
+    {
+      "id": 5,
+      "label": "Ondulado Longo"
+    },
+    {
+      "id": 6,
+      "label": "Ondulado Curto"
+    },
+    {
+      "id": 7,
+      "label": "Liso Longo"
+    },
+    {
+      "id": 8,
+      "label": "Liso Curto"
+    },
+    {
+      "id": 9,
+      "label": "Rabo Alto (Esq.)"
+    },
+    {
+      "id": 10,
+      "label": "Coque (Esq.)"
+    },
+    {
+      "id": 11,
+      "label": "Rabo Alto (Dir.)"
+    },
+    {
+      "id": 12,
+      "label": "Coque (Dir.)"
+    },
+    {
+      "id": 13,
+      "label": "Rabo Alto Duplo"
+    },
+    {
+      "id": 14,
+      "label": "Coque Duplo"
+    },
+    {
+      "id": 15,
+      "label": "Penteado Preso"
+    },
+    {
+      "id": 16,
+      "label": "Cacheado Longo"
+    },
+    {
+      "id": 17,
+      "label": "Cacheado Curto"
+    },
+    {
+      "id": 18,
+      "label": "Bagunçado"
+    },
+    {
+      "id": 19,
+      "label": "Moicano"
+    },
+    {
+      "id": 20,
+      "label": "Fauxhawk"
+    }
+  ],
+  "hairBangs": [
+    {
+      "id": 0,
+      "label": "Sem Franja"
+    },
+    {
+      "id": 1,
+      "label": "Lateral"
+    },
+    {
+      "id": 2,
+      "label": "Reta"
+    },
+    {
+      "id": 3,
+      "label": "Desfiada"
+    },
+    {
+      "id": 4,
+      "label": "Cacheada"
+    }
+  ],
+  "hairColors": [
+    {
+      "id": "white",
+      "label": "Branco / Grisalho",
+      "hex": "#f1f5f9"
+    },
+    {
+      "id": "brown",
+      "label": "Castanho",
+      "hex": "#6b3e26"
+    },
+    {
+      "id": "blond",
+      "label": "Loiro",
+      "hex": "#facc15"
+    },
+    {
+      "id": "red",
+      "label": "Ruivo",
+      "hex": "#dc2626"
+    },
+    {
+      "id": "black",
+      "label": "Preto",
+      "hex": "#1e293b"
+    },
+    {
+      "id": "candycane",
+      "label": "Bengala Doce",
+      "hex": "#fb7185"
+    },
+    {
+      "id": "frost",
+      "label": "Geada",
+      "hex": "#bae6fd"
+    },
+    {
+      "id": "winternight",
+      "label": "Noite de Inverno",
+      "hex": "#1e3a8a"
+    },
+    {
+      "id": "holly",
+      "label": "Azevinho",
+      "hex": "#166534"
+    },
+    {
+      "id": "pblue",
+      "label": "Azul Pastel Esp.",
+      "hex": "#93c5fd"
+    },
+    {
+      "id": "pgreen",
+      "label": "Verde Pastel Esp.",
+      "hex": "#86efac"
+    },
+    {
+      "id": "porange",
+      "label": "Laranja Pastel Esp.",
+      "hex": "#fdba74"
+    },
+    {
+      "id": "ppink",
+      "label": "Rosa Pastel Esp.",
+      "hex": "#f9a8d4"
+    },
+    {
+      "id": "ppurple",
+      "label": "Roxo Pastel Esp.",
+      "hex": "#d8b4fe"
+    },
+    {
+      "id": "pyellow",
+      "label": "Amarelo Pastel Esp.",
+      "hex": "#fde047"
+    },
+    {
+      "id": "rainbow",
+      "label": "Arco-Íris",
+      "hex": "#ec4899"
+    },
+    {
+      "id": "yellow",
+      "label": "Amarelo Vivo",
+      "hex": "#eab308"
+    },
+    {
+      "id": "green",
+      "label": "Verde Esmeralda",
+      "hex": "#22c55e"
+    },
+    {
+      "id": "purple",
+      "label": "Roxo Vivo",
+      "hex": "#a855f7"
+    },
+    {
+      "id": "blue",
+      "label": "Azul Safira",
+      "hex": "#3b82f6"
+    },
+    {
+      "id": "TRUred",
+      "label": "Carmesim",
+      "hex": "#b91c1c"
+    },
+    {
+      "id": "pblue2",
+      "label": "Azul Cintilante",
+      "hex": "#7dd3fc"
+    },
+    {
+      "id": "pgreen2",
+      "label": "Verde Cintilante",
+      "hex": "#6ee7b7"
+    },
+    {
+      "id": "porange2",
+      "label": "Laranja Cintilante",
+      "hex": "#fcd34d"
+    },
+    {
+      "id": "ppink2",
+      "label": "Rosa Cintilante",
+      "hex": "#f472b6"
+    },
+    {
+      "id": "ppurple2",
+      "label": "Roxo Cintilante",
+      "hex": "#c084fc"
+    },
+    {
+      "id": "pyellow2",
+      "label": "Amarelo Cintilante",
+      "hex": "#fef08a"
+    },
+    {
+      "id": "sunset",
+      "label": "Pôr do Sol",
+      "hex": "#f97316"
+    },
+    {
+      "id": "sunlitwaves",
+      "label": "Ondas Ensolaradas",
+      "hex": "#38bdf8"
+    },
+    {
+      "id": "seasprite",
+      "label": "Espírito do Mar",
+      "hex": "#2dd4bf"
+    },
+    {
+      "id": "sandnsea",
+      "label": "Areia e Mar",
+      "hex": "#fbbf24"
+    },
+    {
+      "id": "orchid",
+      "label": "Orquídea",
+      "hex": "#d946ef"
+    },
+    {
+      "id": "lava",
+      "label": "Lava",
+      "hex": "#ea580c"
+    },
+    {
+      "id": "candycorn",
+      "label": "Doce de Milho",
+      "hex": "#fb923c"
+    },
+    {
+      "id": "ghostwhite",
+      "label": "Branco Fantasma",
+      "hex": "#e2e8f0"
+    },
+    {
+      "id": "halloween",
+      "label": "Halloween",
+      "hex": "#f59e0b"
+    },
+    {
+      "id": "midnight",
+      "label": "Meia-Noite",
+      "hex": "#312e81"
+    },
+    {
+      "id": "pumpkin",
+      "label": "Abóbora",
+      "hex": "#c2410c"
+    },
+    {
+      "id": "zombie",
+      "label": "Zumbi",
+      "hex": "#84cc16"
+    },
+    {
+      "id": "aurora",
+      "label": "Aurora",
+      "hex": "#8b5cf6"
+    },
+    {
+      "id": "festive",
+      "label": "Festivo",
+      "hex": "#ef4444"
+    },
+    {
+      "id": "hollygreen",
+      "label": "Verde Azevinho",
+      "hex": "#15803d"
+    },
+    {
+      "id": "peppermint",
+      "label": "Menta",
+      "hex": "#34d399"
+    },
+    {
+      "id": "snowy",
+      "label": "Nevado",
+      "hex": "#f8fafc"
+    },
+    {
+      "id": "winterstar",
+      "label": "Estrela de Inverno",
+      "hex": "#60a5fa"
+    }
+  ],
+  "hairFlowers": [
+    {
+      "id": 0,
+      "label": "Sem Enfeite"
+    },
+    {
+      "id": 1,
+      "label": "Flor Azul"
+    },
+    {
+      "id": 2,
+      "label": "Flor Verde"
+    },
+    {
+      "id": 3,
+      "label": "Flor Rosa"
+    },
+    {
+      "id": 4,
+      "label": "Flor Roxa"
+    },
+    {
+      "id": 5,
+      "label": "Flor Laranja"
+    },
+    {
+      "id": 6,
+      "label": "Flor Amarela"
+    },
+    {
+      "id": 7,
+      "label": "Brinco Argola"
+    },
+    {
+      "id": 8,
+      "label": "Brinco Ouro (Esq.)"
+    },
+    {
+      "id": 9,
+      "label": "Brinco Ouro (Dir.)"
+    },
+    {
+      "id": 10,
+      "label": "Brincos de Ouro"
+    },
+    {
+      "id": 11,
+      "label": "Brincos Brancos"
+    },
+    {
+      "id": 12,
+      "label": "Brincos Azuis"
+    },
+    {
+      "id": 13,
+      "label": "Brincos Verdes"
+    },
+    {
+      "id": 14,
+      "label": "Brincos Vermelhos"
+    },
+    {
+      "id": 15,
+      "label": "Brincos Rosas"
+    },
+    {
+      "id": 16,
+      "label": "Brincos Roxos"
+    }
+  ]
+}

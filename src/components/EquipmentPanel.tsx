@@ -18,12 +18,17 @@ import {
   EquippedGear,
   GearCategory,
   GearSeason,
+  getAppearanceSpritePath,
   getEquipmentById,
   getEquipmentShopIconPath,
+  HAIR_BANGS_OPTIONS,
+  HAIR_BASE_OPTIONS,
   HAIR_COLORS,
+  HAIR_FLOWER_OPTIONS,
   HeroClass,
   SHIRT_OPTIONS,
   SKIN_OPTIONS,
+  SkinGroup,
 } from '@/lib/game/items';
 import {
   ALL_PET_IDS,
@@ -164,6 +169,9 @@ export function EquipmentPanel({
   const [petCategoryFilter, setPetCategoryFilter] = useState<'owned' | 'all' | PetCategory>('owned');
   const [petVisibleLimit, setPetVisibleLimit] = useState<number>(PAGE_SIZE);
   const [petSearch, setPetSearch] = useState('');
+  const [bgSearch, setBgSearch] = useState('');
+  const [bgVisibleLimit, setBgVisibleLimit] = useState<number>(24);
+  const [skinGroupFilter, setSkinGroupFilter] = useState<SkinGroup | 'all'>('all');
 
   if (!mode) return null;
 
@@ -214,6 +222,20 @@ export function EquipmentPanel({
     return true;
   });
   const visiblePetEntries = filteredPetEntries.slice(0, petVisibleLimit);
+
+  const filteredBackgrounds = BACKGROUND_OPTIONS.filter((bg) => {
+    const bq = bgSearch.trim().toLowerCase();
+    if (!bq) return true;
+    return (
+      bg.label.toLowerCase().includes(bq) ||
+      bg.id.toLowerCase().includes(bq) ||
+      (bg.notes ?? '').toLowerCase().includes(bq)
+    );
+  });
+  const visibleBackgrounds = filteredBackgrounds.slice(0, bgVisibleLimit);
+  const filteredSkins = SKIN_OPTIONS.filter(
+    (s) => skinGroupFilter === 'all' || s.group === skinGroupFilter
+  );
 
   return (
     <section className="max-w-7xl w-full mx-auto px-4 pt-4 pb-8 select-none">
@@ -633,8 +655,8 @@ export function EquipmentPanel({
           {/* Sub-aba 3: APARÊNCIA & CENÁRIOS */}
           {invTab === 'appearance' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-              {/* Coluna Esquerda: Palco Preview Ao Vivo */}
-              <div className="lg:col-span-4 bg-[#23202a] border border-[#3a3447] rounded-md p-5 flex flex-col items-center text-center h-fit">
+              {/* Coluna Esquerda: Palco Preview Ao Vivo (Fixo ao rolar) */}
+              <div className="lg:col-span-4 bg-[#23202a] border border-[#3a3447] rounded-md p-5 flex flex-col items-center text-center h-fit lg:sticky lg:top-4">
                 <span className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-3">
                   Preview do Palco Habitica
                 </span>
@@ -652,19 +674,35 @@ export function EquipmentPanel({
                 </p>
               </div>
 
-              {/* Coluna Direita: Seletores Visuais estilo Habitica */}
-              <div className="lg:col-span-8 bg-[#23202a] border border-[#3a3447] rounded-md p-4 space-y-5 text-xs sm:text-sm">
-                {/* 1. Fundos de Cenário com Miniaturas Reais */}
+              {/* Coluna Direita: Seletores Visuais Completos do Habitica */}
+              <div className="lg:col-span-8 bg-[#23202a] border border-[#3a3447] rounded-md p-4 space-y-6 text-xs sm:text-sm">
+                {/* 1. Fundos de Cenário (404 Cenários + Sem Fundo) */}
                 <div>
-                  <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                    Fundo de Cenário (Backgrounds do Habitica)
-                  </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 gap-2">
-                    {BACKGROUND_OPTIONS.map((bg) => {
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                    <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
+                      Fundos de Cenário ({filteredBackgrounds.length} de {BACKGROUND_OPTIONS.length})
+                    </p>
+                    <div className="relative w-full sm:w-64">
+                      <Search className="w-3.5 h-3.5 text-[#8a8299] absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={bgSearch}
+                        onChange={(e) => {
+                          setBgSearch(e.target.value);
+                          setBgVisibleLimit(24);
+                        }}
+                        placeholder="Buscar cenário (ex: Praia, Castelo)..."
+                        className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                    {visibleBackgrounds.map((bg) => {
                       const active = (appearance.background ?? 'none') === bg.id;
                       return (
                         <button
                           key={bg.id}
+                          title={bg.notes || bg.label}
                           onClick={() =>
                             onChangeAppearance({ ...appearance, background: bg.id })
                           }
@@ -677,8 +715,9 @@ export function EquipmentPanel({
                           <div className="w-9 h-9 rounded overflow-hidden bg-[#271b3d] border border-[#432874] shrink-0">
                             {bg.id !== 'none' && (
                               <img
-                                src={`/sprites/background_${bg.id}.png`}
+                                src={getAppearanceSpritePath(`background_${bg.id}.png`)}
                                 alt={bg.label}
+                                loading="lazy"
                                 className="w-full h-full object-cover [image-rendering:pixelated]"
                               />
                             )}
@@ -690,26 +729,64 @@ export function EquipmentPanel({
                       );
                     })}
                   </div>
+                  {visibleBackgrounds.length < filteredBackgrounds.length && (
+                    <div className="mt-3 flex justify-center">
+                      <button
+                        onClick={() => setBgVisibleLimit((v) => v + 24)}
+                        className="px-4 py-1.5 rounded bg-[#36205d] hover:bg-[#4f2a93] border border-[#6133b4] text-white text-xs font-condensed font-bold uppercase tracking-wider transition"
+                      >
+                        Carregar mais cenários ({filteredBackgrounds.length - visibleBackgrounds.length} restantes)
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {/* 2. Pele */}
+                {/* 2. Peles (62 Peles com filtro por coleção) */}
                 <div>
-                  <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                    Cor da Pele
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {SKIN_OPTIONS.map((s) => (
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                    <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
+                      Cor e Textura de Pele ({SKIN_OPTIONS.length})
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      {(
+                        [
+                          { id: 'all', label: 'Todas (62)' },
+                          { id: 'padrao', label: 'Padrão' },
+                          { id: 'arcoiris', label: 'Arco-Íris' },
+                          { id: 'pastel', label: 'Pastel' },
+                          { id: 'animais', label: 'Animais' },
+                          { id: 'sobrenatural', label: 'Sobrenatural' },
+                          { id: 'aquatica', label: 'Aquática' },
+                          { id: 'inverno', label: 'Inverno' },
+                        ] as const
+                      ).map((grp) => (
+                        <button
+                          key={grp.id}
+                          onClick={() => setSkinGroupFilter(grp.id)}
+                          className={`px-2 py-1 rounded text-[11px] font-condensed font-bold transition ${
+                            skinGroupFilter === grp.id
+                              ? 'bg-[#6133b4] text-white'
+                              : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                          }`}
+                        >
+                          {grp.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {filteredSkins.map((s) => (
                       <button
                         key={s.id}
                         onClick={() => onChangeAppearance({ ...appearance, skin: s.id })}
-                        className={`px-3 py-1.5 rounded-md border flex items-center gap-2 font-condensed font-bold ${
+                        className={`px-2.5 py-1.5 rounded-md border flex items-center gap-2 text-xs font-condensed font-bold transition ${
                           appearance.skin === s.id
                             ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
-                            : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
+                            : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
                         }`}
                       >
                         <span
-                          className="w-4 h-4 rounded-full border border-white/25"
+                          className="w-4 h-4 rounded-full border border-white/25 shrink-0"
                           style={{ backgroundColor: s.hex }}
                         />
                         <span>{s.label}</span>
@@ -718,13 +795,13 @@ export function EquipmentPanel({
                   </div>
                 </div>
 
-                {/* 3. Corpo & Camisa */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* 3. Corpo & 17 Camisas */}
+                <div className="space-y-4">
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
                       Tipo de Corpo
                     </p>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 max-w-sm">
                       {[
                         { id: 'broad', label: 'Largo (Broad)' },
                         { id: 'slim', label: 'Fino (Slim)' },
@@ -737,7 +814,7 @@ export function EquipmentPanel({
                               bodySize: b.id as CharacterAppearance['bodySize'],
                             })
                           }
-                          className={`flex-1 py-2 rounded-md border font-condensed font-bold ${
+                          className={`flex-1 py-2 rounded-md border text-xs font-condensed font-bold ${
                             appearance.bodySize === b.id
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
                               : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
@@ -751,7 +828,7 @@ export function EquipmentPanel({
 
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                      Camisa
+                      Camisa ({SHIRT_OPTIONS.length})
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {SHIRT_OPTIONS.map((sh) => (
@@ -760,10 +837,10 @@ export function EquipmentPanel({
                           onClick={() =>
                             onChangeAppearance({ ...appearance, shirt: sh.id })
                           }
-                          className={`px-2.5 py-1.5 rounded-md border text-xs font-condensed font-bold ${
+                          className={`px-2.5 py-1.5 rounded-md border text-xs font-condensed font-bold transition ${
                             appearance.shirt === sh.id
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
-                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
+                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
                           }`}
                         >
                           {sh.label}
@@ -773,24 +850,26 @@ export function EquipmentPanel({
                   </div>
                 </div>
 
-                {/* 4. Cabelo, Franja e Cor */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* 4. Base de Cabelo (21), Franja (5) e Cor do Cabelo (45) */}
+                <div className="space-y-4">
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                      Base de Cabelo
+                      Base de Cabelo ({HAIR_BASE_OPTIONS.length})
                     </p>
-                    <div className="flex gap-1.5">
-                      {[1, 2, 3, 4, 5].map((n) => (
+                    <div className="flex flex-wrap gap-1.5">
+                      {HAIR_BASE_OPTIONS.map((hb) => (
                         <button
-                          key={n}
-                          onClick={() => onChangeAppearance({ ...appearance, hairStyle: n })}
-                          className={`flex-1 py-1.5 rounded border font-condensed font-bold ${
-                            appearance.hairStyle === n
+                          key={hb.id}
+                          onClick={() =>
+                            onChangeAppearance({ ...appearance, hairStyle: hb.id })
+                          }
+                          className={`px-2.5 py-1.5 rounded-md border text-xs font-condensed font-bold transition ${
+                            appearance.hairStyle === hb.id
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
-                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
+                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
                           }`}
                         >
-                          {n}
+                          {hb.label}
                         </button>
                       ))}
                     </div>
@@ -798,20 +877,22 @@ export function EquipmentPanel({
 
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                      Franja
+                      Franja ({HAIR_BANGS_OPTIONS.length})
                     </p>
-                    <div className="flex gap-1.5">
-                      {[1, 2, 3, 4].map((n) => (
+                    <div className="flex flex-wrap gap-1.5">
+                      {HAIR_BANGS_OPTIONS.map((fb) => (
                         <button
-                          key={n}
-                          onClick={() => onChangeAppearance({ ...appearance, hairBangs: n })}
-                          className={`flex-1 py-1.5 rounded border font-condensed font-bold ${
-                            appearance.hairBangs === n
+                          key={fb.id}
+                          onClick={() =>
+                            onChangeAppearance({ ...appearance, hairBangs: fb.id })
+                          }
+                          className={`px-3 py-1.5 rounded-md border text-xs font-condensed font-bold transition ${
+                            appearance.hairBangs === fb.id
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
-                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
+                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
                           }`}
                         >
-                          {n}
+                          {fb.label}
                         </button>
                       ))}
                     </div>
@@ -819,9 +900,9 @@ export function EquipmentPanel({
 
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
-                      Cor do Cabelo / Barba
+                      Cor do Cabelo / Barba ({HAIR_COLORS.length})
                     </p>
-                    <div className="flex gap-1.5">
+                    <div className="flex flex-wrap gap-1.5">
                       {HAIR_COLORS.map((hc) => (
                         <button
                           key={hc.id}
@@ -829,23 +910,48 @@ export function EquipmentPanel({
                             onChangeAppearance({ ...appearance, hairColor: hc.id })
                           }
                           title={hc.label}
-                          className={`w-8 h-8 rounded-md border flex items-center justify-center ${
+                          className={`px-2 py-1 rounded-md border flex items-center gap-1.5 text-[11px] font-condensed font-bold transition ${
                             appearance.hairColor === hc.id
-                              ? 'border-[#925cf3] ring-2 ring-[#925cf3]/40'
-                              : 'border-[#3a3447]'
+                              ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
+                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
                           }`}
-                          style={{ backgroundColor: hc.hex }}
                         >
-                          {appearance.hairColor === hc.id && (
-                            <Sparkles className="w-3.5 h-3.5 text-[#925cf3]" />
-                          )}
+                          <span
+                            className="w-3.5 h-3.5 rounded-full border border-white/25 shrink-0"
+                            style={{ backgroundColor: hc.hex }}
+                          />
+                          <span>{hc.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 5. Flores de Cabelo & Brincos (17) */}
+                  <div>
+                    <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
+                      Flores de Cabelo & Brincos ({HAIR_FLOWER_OPTIONS.length})
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {HAIR_FLOWER_OPTIONS.map((fl) => (
+                        <button
+                          key={fl.id}
+                          onClick={() =>
+                            onChangeAppearance({ ...appearance, hairFlower: fl.id })
+                          }
+                          className={`px-2.5 py-1.5 rounded-md border text-xs font-condensed font-bold transition ${
+                            (appearance.hairFlower ?? 0) === fl.id
+                              ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
+                              : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                          }`}
+                        >
+                          {fl.label}
                         </button>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* 5. Barba e Bigode */}
+                {/* 6. Barba e Bigode */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <p className="font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2">
@@ -856,7 +962,7 @@ export function EquipmentPanel({
                         <button
                           key={n}
                           onClick={() => onChangeAppearance({ ...appearance, hairBeard: n })}
-                          className={`flex-1 py-1.5 rounded border font-condensed font-bold ${
+                          className={`flex-1 py-1.5 rounded border text-xs font-condensed font-bold ${
                             (appearance.hairBeard ?? 0) === n
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
                               : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
@@ -879,7 +985,7 @@ export function EquipmentPanel({
                           onClick={() =>
                             onChangeAppearance({ ...appearance, hairMustache: n })
                           }
-                          className={`flex-1 py-1.5 rounded border font-condensed font-bold ${
+                          className={`flex-1 py-1.5 rounded border text-xs font-condensed font-bold ${
                             (appearance.hairMustache ?? 0) === n
                               ? 'border-[#925cf3] bg-[#36205d]/70 text-white'
                               : 'border-[#3a3447] bg-[#1a181d] text-[#a8a1b5]'
