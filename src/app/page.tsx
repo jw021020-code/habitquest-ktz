@@ -21,6 +21,7 @@ import {
   DEFAULT_INVENTORY,
   EquipmentItem,
   EquippedGear,
+  getEquipmentById,
 } from '@/lib/game/items';
 import {
   CLASS_INFO,
@@ -545,23 +546,48 @@ export default function HomePage() {
     showToast(`🎭 Classe definida: ${CLASS_INFO[nextClass].label}!`);
   };
 
+  const applyGearItem = (prev: EquippedGear, item: EquipmentItem): EquippedGear => {
+    const next: EquippedGear = { ...prev, [item.slot]: item.id };
+    if (item.slot === 'weapon' && item.twoHanded && next.shield) {
+      delete next.shield;
+    } else if (item.slot === 'shield' && getEquipmentById(next.weapon)?.twoHanded) {
+      delete next.weapon;
+    }
+    return next;
+  };
+
   const handleBuyItem = (item: EquipmentItem) => {
     if (stats.gold < item.price || inventory.includes(item.id)) return;
+    const removedOther =
+      (item.slot === 'weapon' && item.twoHanded && Boolean(equipped.shield)) ||
+      (item.slot === 'shield' && Boolean(getEquipmentById(equipped.weapon)?.twoHanded));
+
     setStats((s) => ({ ...s, gold: s.gold - item.price }));
     setInventory((prev) => [...prev, item.id]);
-    setEquipped((prev) => ({ ...prev, [item.slot]: item.id }));
+    setEquipped((prev) => applyGearItem(prev, item));
     pushActionLog(`🛡️ ${heroName} comprou e equipou ${item.name} (-${item.price} GP).`);
-    showToast(`🛡️ Comprou e equipou: ${item.name}!`);
+    showToast(
+      removedOther
+        ? `🛡️ ${item.name} equipado! (Item conflitante de 2 mãos removido)`
+        : `🛡️ Comprou e equipou: ${item.name}!`
+    );
   };
 
   const handleToggleEquip = (item: EquipmentItem) => {
+    if (equipped[item.slot] !== item.id) {
+      if (item.slot === 'weapon' && item.twoHanded && equipped.shield) {
+        showToast(`⚔️ ${item.name} (2 mãos) equipado — escudo removido.`);
+      } else if (item.slot === 'shield' && getEquipmentById(equipped.weapon)?.twoHanded) {
+        showToast(`🛡️ ${item.name} equipado — arma de 2 mãos removida.`);
+      }
+    }
     setEquipped((prev) => {
       if (prev[item.slot] === item.id) {
         const next = { ...prev };
         delete next[item.slot];
         return next;
       }
-      return { ...prev, [item.slot]: item.id };
+      return applyGearItem(prev, item);
     });
   };
 
@@ -627,7 +653,7 @@ export default function HomePage() {
         delete next[item.slot];
         return next;
       }
-      return { ...prev, [item.slot]: item.id };
+      return applyGearItem(prev, item);
     });
   };
 
@@ -933,14 +959,16 @@ export default function HomePage() {
 
   const handleBuyArmoire = () => {
     if (stats.gold < 40) return;
-    const reward = rollArmoireReward();
+    const reward = rollArmoireReward(inventory);
     const armoireRes = grantXpAndResources(stats, totalAttributes, {
       xp: reward.kind === 'xp' ? reward.amount : 0,
       goldDelta: -40,
     });
     setStats(armoireRes.nextStats);
     setMetrics((m) => ({ ...m, armoireOpened: m.armoireOpened + 1 }));
-    if (reward.kind === 'food') {
+    if (reward.kind === 'equipment') {
+      setInventory((prev) => (prev.includes(reward.item.id) ? prev : [...prev, reward.item.id]));
+    } else if (reward.kind === 'food') {
       setStable((prev) => ({ ...prev, foods: prev.foods + reward.amount }));
     } else if (reward.kind === 'egg') {
       setStable((prev) => ({ ...prev, eggs: prev.eggs + 1 }));

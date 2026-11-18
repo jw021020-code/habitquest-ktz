@@ -1,3 +1,5 @@
+import { EQUIPMENT_CATALOG, EquipmentItem } from './items';
+
 export interface HeroMetrics {
   tasksCompleted: number;
   bossesDefeated: number;
@@ -88,20 +90,44 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 ];
 
 export type ArmoireReward =
+  | { kind: 'equipment'; item: EquipmentItem; label: string }
   | { kind: 'xp'; amount: number; label: string }
   | { kind: 'food'; amount: number; label: string }
   | { kind: 'egg'; label: string }
   | { kind: 'potion'; label: string };
 
-export function rollArmoireReward(): ArmoireReward {
+/**
+ * Sorteia recompensa do Armoire Encantado (50% chance de equipamento inédito,
+ * priorizando a coleção oficial Armoire; 50% XP, Ração, Ovo ou Poção).
+ */
+export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
+  const ownedSet = new Set(ownedIds);
+  const unownedArmoire = EQUIPMENT_CATALOG.filter(
+    (item) => item.category === 'armoire' && !ownedSet.has(item.id)
+  );
+  const unownedPool =
+    unownedArmoire.length > 0
+      ? unownedArmoire
+      : EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
+
   const r = Math.random();
-  if (r < 0.35) {
+  if (unownedPool.length > 0 && r < 0.5) {
+    const picked = unownedPool[Math.floor(Math.random() * unownedPool.length)];
+    return {
+      kind: 'equipment',
+      item: picked,
+      label: `Equipamento: ${picked.name}`,
+    };
+  }
+
+  const sub = Math.random();
+  if (sub < 0.35) {
     return { kind: 'xp', amount: 25, label: '+25 XP Encantado' };
   }
-  if (r < 0.65) {
+  if (sub < 0.65) {
     return { kind: 'food', amount: 2, label: '2x Ração de Pet' };
   }
-  if (r < 0.85) {
+  if (sub < 0.85) {
     return { kind: 'egg', label: 'Ovo' };
   }
   return { kind: 'potion', label: 'Poção de Chocar' };

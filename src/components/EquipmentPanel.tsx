@@ -16,8 +16,10 @@ import {
   EquipmentItem,
   EquipmentSlot,
   EquippedGear,
+  GearCategory,
+  GearSeason,
   getEquipmentById,
-  getEquipmentSpritePath,
+  getEquipmentShopIconPath,
   HAIR_COLORS,
   HeroClass,
   SHIRT_OPTIONS,
@@ -67,15 +69,26 @@ interface EquipmentPanelProps {
   onToggleMount: (mountId: string) => void;
 }
 
-const ALL_SLOTS: EquipmentSlot[] = ['weapon', 'shield', 'armor', 'head', 'back', 'eyewear'];
+const ALL_SLOTS: EquipmentSlot[] = [
+  'weapon',
+  'shield',
+  'armor',
+  'head',
+  'headAccessory',
+  'eyewear',
+  'body',
+  'back',
+];
 
 const SLOT_LABEL: Record<EquipmentSlot, string> = {
   weapon: 'Arma',
   shield: 'Escudo',
   armor: 'Armadura',
   head: 'Capacete',
-  back: 'Capa / Costas',
+  headAccessory: 'Acess. Cabeça',
   eyewear: 'Óculos',
+  body: 'Acess. Corpo',
+  back: 'Capa / Costas',
 };
 
 const CLASS_LABEL: Record<HeroClass | 'all', string> = {
@@ -85,8 +98,28 @@ const CLASS_LABEL: Record<HeroClass | 'all', string> = {
   wizard: 'Mago',
   rogue: 'Ladino',
   healer: 'Curandeiro',
-  cosmetic: 'Cosméticos',
+  cosmetic: 'Sem Classe / Visual',
 };
+
+const CATEGORY_OPTIONS: { id: GearCategory | 'all'; label: string }[] = [
+  { id: 'all', label: 'Todos (1.877)' },
+  { id: 'class', label: 'Classes (85)' },
+  { id: 'seasonal', label: 'Sazonais (822)' },
+  { id: 'armoire', label: 'Armoire (472)' },
+  { id: 'mystery', label: 'Mistério (341)' },
+  { id: 'special', label: 'Especiais (157)' },
+];
+
+const SEASON_OPTIONS: { id: GearSeason | 'all'; label: string }[] = [
+  { id: 'all', label: 'Todas as Galas' },
+  { id: 'winter', label: '❄️ Inverno' },
+  { id: 'spring', label: '🌸 Primavera' },
+  { id: 'summer', label: '☀️ Verão' },
+  { id: 'fall', label: '🎃 Outono' },
+];
+
+type ShopSortMode = 'price-asc' | 'price-desc' | 'stats-desc' | 'name-asc';
+const PAGE_SIZE = 48;
 
 function formatStats(stats: Attributes): string {
   const parts: string[] = [];
@@ -129,26 +162,45 @@ export function EquipmentPanel({
   onToggleMount,
 }: EquipmentPanelProps) {
   const [slotFilter, setSlotFilter] = useState<EquipmentSlot | 'all'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<GearCategory | 'all'>('all');
+  const [seasonFilter, setSeasonFilter] = useState<GearSeason | 'all'>('all');
+  const [sortMode, setSortMode] = useState<ShopSortMode>('price-asc');
+  const [visibleLimit, setVisibleLimit] = useState<number>(PAGE_SIZE);
   const [searchQuery, setSearchQuery] = useState('');
   const [showAllPetsCollection, setShowAllPetsCollection] = useState(false);
   const [petSearch, setPetSearch] = useState('');
 
   if (!mode) return null;
 
+  const q = searchQuery.trim().toLowerCase();
+
   const ownedItems = EQUIPMENT_CATALOG.filter(
     (item) =>
       inventory.includes(item.id) &&
       (slotFilter === 'all' || item.slot === slotFilter) &&
-      item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      (!q || item.name.toLowerCase().includes(q) || (item.notes ?? '').toLowerCase().includes(q))
   );
 
-  const shopItems = EQUIPMENT_CATALOG.filter(
+  const filteredShopItems = EQUIPMENT_CATALOG.filter(
     (item) =>
       !inventory.includes(item.id) &&
       (shopFilter === 'all' || item.heroClass === shopFilter) &&
       (slotFilter === 'all' || item.slot === slotFilter) &&
-      item.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
-  );
+      (categoryFilter === 'all' || item.category === categoryFilter) &&
+      (categoryFilter !== 'seasonal' || seasonFilter === 'all' || item.season === seasonFilter) &&
+      (!q || item.name.toLowerCase().includes(q) || (item.notes ?? '').toLowerCase().includes(q))
+  ).sort((a, b) => {
+    if (sortMode === 'price-asc') return a.price - b.price || a.name.localeCompare(b.name);
+    if (sortMode === 'price-desc') return b.price - a.price || a.name.localeCompare(b.name);
+    if (sortMode === 'stats-desc') {
+      const sa = a.stats.str + a.stats.int + a.stats.con + a.stats.per;
+      const sb = b.stats.str + b.stats.int + b.stats.con + b.stats.per;
+      return sb - sa || a.price - b.price;
+    }
+    return a.name.localeCompare(b.name);
+  });
+
+  const visibleShopItems = filteredShopItems.slice(0, visibleLimit);
 
   const ownedPetIds = Object.keys(stable.pets);
   const canHatch =
@@ -185,7 +237,7 @@ export function EquipmentPanel({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     {ALL_SLOTS.map((slot) => {
                       const eq = getEquipmentById(equipped[slot]);
                       return (
@@ -196,7 +248,7 @@ export function EquipmentPanel({
                           <div className="w-12 h-12 rounded bg-[#271b3d] border border-[#432874] flex items-center justify-center mb-1">
                             {eq ? (
                               <img
-                                src={getEquipmentSpritePath(eq.id, appearance.bodySize)}
+                                src={getEquipmentShopIconPath(eq.id)}
                                 alt={eq.name}
                                 className="w-11 h-11 object-contain [image-rendering:pixelated]"
                               />
@@ -240,7 +292,7 @@ export function EquipmentPanel({
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     {ALL_SLOTS.map((slot) => {
                       const eq = getEquipmentById(costume[slot]);
                       return (
@@ -253,7 +305,7 @@ export function EquipmentPanel({
                           <div className="w-12 h-12 rounded bg-[#271b3d] border border-[#432874] flex items-center justify-center mb-1">
                             {eq ? (
                               <img
-                                src={getEquipmentSpritePath(eq.id, appearance.bodySize)}
+                                src={getEquipmentShopIconPath(eq.id)}
                                 alt={eq.name}
                                 className="w-11 h-11 object-contain [image-rendering:pixelated]"
                               />
@@ -328,16 +380,21 @@ export function EquipmentPanel({
                           : 'bg-[#23202a] border-[#3a3447] hover:border-[#6133b4]'
                       }`}
                     >
-                      <div className="p-3 flex flex-col items-center text-center">
+                      <div className="p-3 flex flex-col items-center text-center" title={item.notes}>
                         <div className="relative w-20 h-20 rounded-md bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
                           <img
-                            src={getEquipmentSpritePath(item.id, appearance.bodySize)}
+                            src={getEquipmentShopIconPath(item.id)}
                             alt={item.name}
                             className="w-16 h-16 object-contain [image-rendering:pixelated]"
                           />
                           <span className="absolute top-1 left-1 text-[9px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
                             {SLOT_LABEL[item.slot]}
                           </span>
+                          {item.twoHanded && (
+                            <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
+                              2 Mãos
+                            </span>
+                          )}
                         </div>
                         <p className="text-xs font-condensed font-bold text-white line-clamp-1">
                           {item.name}
@@ -933,6 +990,56 @@ export function EquipmentPanel({
 
               <div>
                 <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
+                  Coleção do Habitica
+                </p>
+                <div className="flex flex-col gap-1">
+                  {CATEGORY_OPTIONS.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setCategoryFilter(cat.id);
+                        setVisibleLimit(PAGE_SIZE);
+                      }}
+                      className={`px-3 py-1.5 rounded text-left text-xs font-condensed font-bold transition ${
+                        categoryFilter === cat.id
+                          ? 'bg-[#6133b4] text-white'
+                          : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {categoryFilter === 'seasonal' && (
+                <div>
+                  <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
+                    Estação (Grande Gala)
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {SEASON_OPTIONS.map((se) => (
+                      <button
+                        key={se.id}
+                        onClick={() => {
+                          setSeasonFilter(se.id);
+                          setVisibleLimit(PAGE_SIZE);
+                        }}
+                        className={`px-2 py-1 rounded text-[11px] font-condensed font-bold ${
+                          seasonFilter === se.id
+                            ? 'bg-[#6133b4] text-white'
+                            : 'bg-[#1a181d] text-[#a8a1b5]'
+                        }`}
+                      >
+                        {se.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
                   Categoria de Classe
                 </p>
                 <div className="flex flex-col gap-1">
@@ -940,7 +1047,10 @@ export function EquipmentPanel({
                     (cls) => (
                       <button
                         key={cls}
-                        onClick={() => onChangeShopFilter(cls)}
+                        onClick={() => {
+                          onChangeShopFilter(cls);
+                          setVisibleLimit(PAGE_SIZE);
+                        }}
                         className={`px-3 py-1.5 rounded text-left text-xs font-condensed font-bold transition ${
                           shopFilter === cls
                             ? 'bg-[#6133b4] text-white'
@@ -960,7 +1070,10 @@ export function EquipmentPanel({
                 </p>
                 <div className="flex flex-wrap gap-1">
                   <button
-                    onClick={() => setSlotFilter('all')}
+                    onClick={() => {
+                      setSlotFilter('all');
+                      setVisibleLimit(PAGE_SIZE);
+                    }}
                     className={`px-2 py-1 rounded text-[11px] font-condensed font-bold ${
                       slotFilter === 'all'
                         ? 'bg-[#6133b4] text-white'
@@ -972,7 +1085,10 @@ export function EquipmentPanel({
                   {ALL_SLOTS.map((slot) => (
                     <button
                       key={slot}
-                      onClick={() => setSlotFilter(slot)}
+                      onClick={() => {
+                        setSlotFilter(slot);
+                        setVisibleLimit(PAGE_SIZE);
+                      }}
                       className={`px-2 py-1 rounded text-[11px] font-condensed font-bold ${
                         slotFilter === slot
                           ? 'bg-[#6133b4] text-white'
@@ -983,6 +1099,22 @@ export function EquipmentPanel({
                     </button>
                   ))}
                 </div>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#a8a1b5] mb-1.5">
+                  Ordenar por
+                </p>
+                <select
+                  value={sortMode}
+                  onChange={(e) => setSortMode(e.target.value as ShopSortMode)}
+                  className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
+                >
+                  <option value="price-asc">Menor Preço</option>
+                  <option value="price-desc">Maior Preço</option>
+                  <option value="stats-desc">Maior Bônus de Atributos</option>
+                  <option value="name-asc">Nome (A-Z)</option>
+                </select>
               </div>
             </div>
 
@@ -1104,7 +1236,9 @@ export function EquipmentPanel({
                       />
                     </div>
                     <p className="text-xs font-condensed font-bold text-white">Armoire Encantado</p>
-                    <p className="text-[11px] text-[#d6c7ff] mt-0.5">Sorteia XP, Ração ou Ovo!</p>
+                    <p className="text-[11px] text-[#d6c7ff] mt-0.5">
+                      Sorteia Equipamentos, XP, Ração ou Ovo!
+                    </p>
                   </div>
                   <button
                     disabled={gold < 40}
@@ -1120,27 +1254,39 @@ export function EquipmentPanel({
 
             {/* Grade de Equipamentos e Cosméticos à Venda */}
             <div>
-              <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
-                Equipamentos & Cosméticos Disponíveis ({shopItems.length})
-              </h3>
+              <div className="flex items-center justify-between mb-2.5">
+                <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
+                  Equipamentos & Cosméticos Disponíveis ({filteredShopItems.length})
+                </h3>
+                <span className="text-[11px] text-[#a8a1b5]">
+                  Exibindo {visibleShopItems.length} de {filteredShopItems.length}
+                </span>
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {shopItems.map((item) => {
+                {visibleShopItems.map((item) => {
                   const canAfford = gold >= item.price;
                   return (
                     <div
                       key={item.id}
+                      title={item.notes}
                       className="bg-[#23202a] border border-[#3a3447] hover:border-[#6133b4] rounded-md flex flex-col justify-between overflow-hidden transition"
                     >
                       <div className="p-3 flex flex-col items-center text-center">
                         <div className="relative w-20 h-20 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
                           <img
-                            src={getEquipmentSpritePath(item.id, appearance.bodySize)}
+                            src={getEquipmentShopIconPath(item.id)}
                             alt={item.name}
+                            loading="lazy"
                             className="w-16 h-16 object-contain [image-rendering:pixelated]"
                           />
                           <span className="absolute top-1 left-1 text-[9px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
                             {CLASS_LABEL[item.heroClass]}
                           </span>
+                          {item.twoHanded && (
+                            <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
+                              2 Mãos
+                            </span>
+                          )}
                         </div>
                         <p className="text-xs font-condensed font-bold text-white line-clamp-1">
                           {item.name}
@@ -1148,6 +1294,11 @@ export function EquipmentPanel({
                         <p className="text-[11px] text-[#24cc8f] font-condensed mt-0.5">
                           {formatStats(item.stats)}
                         </p>
+                        {item.notes && (
+                          <p className="text-[10px] text-[#8a8299] line-clamp-2 mt-1">
+                            {item.notes}
+                          </p>
+                        )}
                       </div>
 
                       <button
@@ -1166,6 +1317,17 @@ export function EquipmentPanel({
                   );
                 })}
               </div>
+
+              {visibleShopItems.length < filteredShopItems.length && (
+                <div className="mt-4 flex justify-center">
+                  <button
+                    onClick={() => setVisibleLimit((v) => v + PAGE_SIZE)}
+                    className="px-5 py-2.5 rounded-md bg-[#36205d] hover:bg-[#4f2a93] border border-[#6133b4] text-white text-xs font-condensed font-bold uppercase tracking-wider transition"
+                  >
+                    Carregar mais ({filteredShopItems.length - visibleShopItems.length} restantes)
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

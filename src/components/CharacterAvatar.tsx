@@ -31,9 +31,10 @@ const SIZE_CLASS: Record<NonNullable<CharacterAvatarProps['size']>, string> = {
 };
 
 /**
- * Renderiza o palco de avatar estilo Habitica (140x140 / 90x90 pixel-art)
- * empilhando Fundo de Cenário, Montaria, Capa/Costas, Corpo, Camisa, Armadura,
- * Cabelo, Franja, Barba, Bigode, Capacete, Óculos, Escudo, Arma e Mascote.
+ * Renderiza o palco de avatar estilo Habitica (140x140 pixel-art)
+ * seguindo a ordem oficial de camadas do Habitica para todos os 8 slots:
+ * Background -> Mount Body -> Back -> Skin -> Shirt -> Armor -> Hair -> Beard/Mustache
+ * -> Body -> Eyewear -> Head -> HeadAccessory -> Shield -> Weapon -> Mount Head -> Pet.
  */
 export function CharacterAvatar({
   appearance,
@@ -103,10 +104,10 @@ export function CharacterAvatar({
     });
   }
 
-  if (visualGear.head) {
+  if (visualGear.body) {
     charLayers.push({
-      key: 'head',
-      src: getEquipmentSpritePath(visualGear.head, bodySize),
+      key: 'body',
+      src: getEquipmentSpritePath(visualGear.body, bodySize),
     });
   }
 
@@ -114,6 +115,20 @@ export function CharacterAvatar({
     charLayers.push({
       key: 'eyewear',
       src: getEquipmentSpritePath(visualGear.eyewear, bodySize),
+    });
+  }
+
+  if (visualGear.head) {
+    charLayers.push({
+      key: 'head',
+      src: getEquipmentSpritePath(visualGear.head, bodySize),
+    });
+  }
+
+  if (visualGear.headAccessory) {
+    charLayers.push({
+      key: 'headAccessory',
+      src: getEquipmentSpritePath(visualGear.headAccessory, bodySize),
     });
   }
 
