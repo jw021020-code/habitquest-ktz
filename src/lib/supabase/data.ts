@@ -160,6 +160,16 @@ export async function sendRemotePartyMessage(
   });
 }
 
+export async function fetchLatestPartyBoss(partyId: string): Promise<RemoteParty | null> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from('parties')
+    .select('*')
+    .eq('id', partyId)
+    .maybeSingle<RemoteParty>();
+  return data ?? null;
+}
+
 export async function updateRemotePartyBoss(
   partyId: string,
   patch: Partial<

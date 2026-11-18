@@ -2,20 +2,32 @@
 
 import React, { useState } from 'react';
 import {
+  AlertTriangle,
+  BookOpen,
   Coins,
+  Crown,
   Heart,
   History,
   MessageSquare,
+  Search,
   Send,
   Shield,
   Sparkles,
   Sword,
   Users,
+  X,
   Zap,
 } from 'lucide-react';
 import { PlayerStats } from '@/lib/game/formulas';
+import { HeroMetrics } from '@/lib/game/achievements';
 import { CharacterAppearance, EquippedGear } from '@/lib/game/items';
-import { CLASS_INFO } from '@/lib/game/skills';
+import {
+  BOSS_CATALOG,
+  BossCategory,
+  CLASS_INFO,
+  getBossAtIndexAndCycle,
+  getBossById,
+} from '@/lib/game/skills';
 import { RemoteParty, RemoteProfile } from '@/lib/supabase/data';
 import { CharacterAvatar } from './CharacterAvatar';
 
@@ -32,6 +44,7 @@ interface PartyPanelProps {
   isOnline: boolean;
   heroName: string;
   heroStats: PlayerStats;
+  heroMetrics: HeroMetrics;
   heroAppearance: CharacterAppearance;
   heroEquipped: EquippedGear;
   heroCostume?: EquippedGear;
@@ -39,6 +52,7 @@ interface PartyPanelProps {
   heroPetId?: string;
   remoteParty: RemoteParty | null;
   remoteMembers: RemoteProfile[];
+  bossId: string;
   bossStage: number;
   bossName: string;
   bossSprite: string;
@@ -49,6 +63,7 @@ interface PartyPanelProps {
   rewardXp: number;
   messages: PartyChatMessage[];
   onSendChat: (text: string) => void;
+  onSelectBossMission: (bossIndex: number, cycle: number) => void;
   onOpenAuth: () => void;
 }
 
@@ -70,6 +85,7 @@ export function PartyPanel({
   isOnline,
   heroName,
   heroStats,
+  heroMetrics,
   heroAppearance,
   heroEquipped,
   heroCostume,
@@ -77,6 +93,7 @@ export function PartyPanel({
   heroPetId,
   remoteParty,
   remoteMembers,
+  bossId,
   bossStage,
   bossName,
   bossSprite,
@@ -87,16 +104,53 @@ export function PartyPanel({
   rewardXp,
   messages,
   onSendChat,
+  onSelectBossMission,
   onOpenAuth,
 }: PartyPanelProps) {
   const [rightTab, setRightTab] = useState<'history' | 'chat'>('history');
   const [chatInput, setChatInput] = useState('');
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [bossCatFilter, setBossCatFilter] = useState<'all' | BossCategory | 'potions'>('all');
+  const [bossSearch, setBossSearch] = useState('');
+  const [selectedCycle, setSelectedCycle] = useState<number>(0);
 
   if (!visible) return null;
 
   const bossPct = Math.max(0, Math.min(100, Math.round((bossHp / bossMaxHp) * 100)));
+  const bossMeta = getBossById(bossId);
+  const bossDropCount = bossMeta?.dropCount ?? 1;
   const historyLogs = messages.filter((m) => m.kind === 'system');
   const chatMessages = messages.filter((m) => m.kind === 'chat');
+
+  const localBossDmg =
+    heroMetrics.currentBossStage === bossStage ? (heroMetrics.currentBossDamage ?? 0) : 0;
+
+  const maxMemberDmg =
+    remoteParty && remoteMembers.length > 0
+      ? Math.max(
+          0,
+          ...remoteMembers.map((m) =>
+            m.metrics?.currentBossStage === bossStage ? (m.metrics?.currentBossDamage ?? 0) : 0
+          )
+        )
+      : localBossDmg;
+
+  const filteredBossCatalog = BOSS_CATALOG.map((b, index) => ({ b, index })).filter(({ b }) => {
+    if (bossCatFilter === 'potions') {
+      if (b.category !== 'hatchingPotion' && b.category !== 'timeTravelers') return false;
+    } else if (bossCatFilter !== 'all' && b.category !== bossCatFilter) {
+      return false;
+    }
+    const q = bossSearch.trim().toLowerCase();
+    if (q) {
+      return (
+        b.name.toLowerCase().includes(q) ||
+        b.questTitle.toLowerCase().includes(q) ||
+        b.lore.toLowerCase().includes(q)
+      );
+    }
+    return true;
+  });
 
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,16 +196,21 @@ export function PartyPanel({
         <div className="lg:col-span-5 space-y-4">
           {/* Pergaminho da Missão de Boss Estilo Habitica */}
           <div className="bg-[#23202a] border border-[#432874] rounded-md overflow-hidden shadow-lg">
-            <div className="bg-[#36205d] border-b border-[#4f2a93] px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-[#ffbe5d]" />
-                <h2 className="font-condensed font-bold text-base uppercase tracking-wide text-white">
-                  KTZ — Missão de Boss #{bossStage}
+            <div className="bg-[#36205d] border-b border-[#4f2a93] px-4 py-3 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <Shield className="w-4 h-4 text-[#ffbe5d] shrink-0" />
+                <h2 className="font-condensed font-bold text-base uppercase tracking-wide text-white truncate">
+                  KTZ — Boss #{bossStage}
                 </h2>
               </div>
-              <span className="text-[11px] font-condensed font-bold px-2 py-0.5 rounded bg-[#271b3d] text-[#ffbe5d] border border-[#6133b4]">
-                Progressivo
-              </span>
+              <button
+                onClick={() => setCatalogOpen(true)}
+                className="px-2.5 py-1 rounded bg-[#6133b4] hover:bg-[#7241cc] border border-[#925cf3] text-white text-[11px] font-condensed font-bold uppercase tracking-wider flex items-center gap-1 shrink-0 transition"
+                title="Explorar e escolher entre todos os 101 Bosses do Habitica"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#ffbe5d]" />
+                Catálogo ({BOSS_CATALOG.length})
+              </button>
             </div>
 
             <div className="p-4 space-y-4">
@@ -169,6 +228,11 @@ export function PartyPanel({
                   <Sword className="w-4 h-4 text-[#ff6165]" />
                   {bossName}
                 </h3>
+                {bossMeta && (
+                  <p className="text-[11px] text-[#a8a1b5] mt-1 line-clamp-2 max-w-sm">
+                    {bossMeta.lore || bossMeta.questTitle}
+                  </p>
+                )}
 
                 {/* Barra Grossa de HP do Boss */}
                 <div className="w-full mt-2.5">
@@ -187,7 +251,7 @@ export function PartyPanel({
                 </div>
               </div>
 
-              {/* Detalhes do Contra-ataque e Recompensas */}
+              {/* Detalhes do Contra-ataque e Recompensas Compartilhadas */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                 <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3">
                   <div className="font-condensed font-bold uppercase text-[#ff8b8e] mb-1">
@@ -201,14 +265,17 @@ export function PartyPanel({
 
                 <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3">
                   <div className="font-condensed font-bold uppercase text-[#ffbe5d] mb-1">
-                    🏆 Recompensa ao Vencer
+                    🏆 Recompensa Compartilhada (KTZ)
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-condensed font-bold">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-condensed font-bold">
                     <span className="flex items-center gap-1 text-[#ffbe5d]">
                       <Coins className="w-3 h-3" />+{rewardGold} GP
                     </span>
                     <span className="flex items-center gap-1 text-[#24cc8f]">
                       <Sparkles className="w-3 h-3" />+{rewardXp} XP
+                    </span>
+                    <span className="text-[#d6c7ff]">
+                      +{bossDropCount} Ovo · +{bossDropCount} Poção
                     </span>
                     <span className="text-[#50b5e9]">100% Reset STA/MP</span>
                   </div>
@@ -217,7 +284,7 @@ export function PartyPanel({
             </div>
           </div>
 
-          {/* Lista de Membros do Clã KTZ */}
+          {/* Lista de Membros do Clã KTZ com Ranking de Dano */}
           <div className="bg-[#23202a] border border-[#3a3447] rounded-md overflow-hidden shadow-lg">
             <div className="bg-[#2c2836] border-b border-[#3a3447] px-4 py-2.5 flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -226,76 +293,128 @@ export function PartyPanel({
                   Membros da KTZ ({remoteParty && remoteMembers.length > 0 ? remoteMembers.length : 1})
                 </h3>
               </div>
+              <span className="text-[10px] font-condensed text-[#a8a1b5] uppercase">
+                Ranking da Luta
+              </span>
             </div>
 
             <div className="p-3 space-y-2.5 max-h-96 overflow-y-auto">
               {remoteParty && remoteMembers.length > 0 ? (
-                remoteMembers.map((member) => {
-                  const mStaPct = Math.max(
-                    0,
-                    Math.min(100, Math.round((member.hp / Math.max(1, member.max_hp)) * 100))
-                  );
-                  const mMpPct = Math.max(
-                    0,
-                    Math.min(100, Math.round((member.mp / Math.max(1, member.max_mp)) * 100))
-                  );
-                  const clsMeta = CLASS_INFO[member.hero_class] ?? CLASS_INFO.warrior;
-                  return (
-                    <div
-                      key={member.id}
-                      className="bg-[#1a181d] border border-[#3a3447] rounded-md p-2.5 flex items-center gap-3"
-                    >
-                      <CharacterAvatar
-                        appearance={member.appearance}
-                        equipped={member.equipped}
-                        costume={member.costume}
-                        useCostume={member.use_costume}
-                        petId={member.stable?.equippedPet}
-                        size="md"
-                      />
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center justify-between gap-1.5">
-                          <span className="text-xs sm:text-sm font-condensed font-bold text-white truncate">
-                            {member.username}
-                          </span>
-                          <span
-                            className={`text-[10px] font-condensed font-bold px-1.5 py-0.2 rounded border ${clsMeta.badgeClass}`}
-                          >
-                            {clsMeta.label} · Nv.{member.level}
-                          </span>
-                        </div>
+                [...remoteMembers]
+                  .sort((a, b) => {
+                    const da =
+                      a.metrics?.currentBossStage === bossStage
+                        ? (a.metrics?.currentBossDamage ?? 0)
+                        : 0;
+                    const db =
+                      b.metrics?.currentBossStage === bossStage
+                        ? (b.metrics?.currentBossDamage ?? 0)
+                        : 0;
+                    return db - da || b.level - a.level;
+                  })
+                  .map((member) => {
+                    const mStaPct = Math.max(
+                      0,
+                      Math.min(100, Math.round((member.hp / Math.max(1, member.max_hp)) * 100))
+                    );
+                    const mMpPct = Math.max(
+                      0,
+                      Math.min(100, Math.round((member.mp / Math.max(1, member.max_mp)) * 100))
+                    );
+                    const clsMeta = CLASS_INFO[member.hero_class] ?? CLASS_INFO.warrior;
+                    const dmg =
+                      member.metrics?.currentBossStage === bossStage
+                        ? (member.metrics?.currentBossDamage ?? 0)
+                        : 0;
+                    const dmgPct =
+                      bossMaxHp > 0 ? Math.min(100, Math.round((dmg / bossMaxHp) * 100)) : 0;
+                    const isMvp = maxMemberDmg > 0 && dmg === maxMemberDmg;
+                    const isExhausted = member.hp <= 0;
 
-                        {/* Barra STA */}
-                        <div className="flex items-center gap-1.5">
-                          <Heart className="w-3 h-3 text-[#ff6165] fill-[#ff6165] shrink-0" />
-                          <div className="flex-1 h-2 bg-[#271b3d] rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#ff6165]"
-                              style={{ width: `${mStaPct}%` }}
-                            />
+                    return (
+                      <div
+                        key={member.id}
+                        className={`rounded-md p-2.5 flex items-center gap-3 border ${
+                          isMvp
+                            ? 'bg-[#2c2240]/60 border-[#ffbe5d]/50'
+                            : 'bg-[#1a181d] border-[#3a3447]'
+                        }`}
+                      >
+                        <CharacterAvatar
+                          appearance={member.appearance}
+                          equipped={member.equipped}
+                          costume={member.costume}
+                          useCostume={member.use_costume}
+                          petId={member.stable?.equippedPet}
+                          size="md"
+                        />
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-1.5">
+                            <span className="text-xs sm:text-sm font-condensed font-bold text-white truncate flex items-center gap-1">
+                              {isMvp && (
+                                <Crown
+                                  className="w-3.5 h-3.5 text-[#ffbe5d] shrink-0"
+                                  aria-label="MVP da Luta"
+                                />
+                              )}
+                              {member.username}
+                            </span>
+                            <div className="flex items-center gap-1 shrink-0">
+                              {isExhausted && (
+                                <span className="text-[9px] font-condensed font-bold px-1 py-0.2 rounded bg-[#ff6165]/20 text-[#ff8b8e] border border-[#ff6165]/40 flex items-center gap-0.5">
+                                  <AlertTriangle className="w-2.5 h-2.5" />
+                                  Exausto
+                                </span>
+                              )}
+                              <span
+                                className={`text-[10px] font-condensed font-bold px-1.5 py-0.2 rounded border ${clsMeta.badgeClass}`}
+                              >
+                                {clsMeta.label} · Nv.{member.level}
+                              </span>
+                            </div>
                           </div>
-                          <span className="text-[10px] text-[#a8a1b5] tabular-nums w-14 text-right">
-                            {member.hp}/{member.max_hp}
-                          </span>
-                        </div>
 
-                        {/* Barra MP */}
-                        <div className="flex items-center gap-1.5">
-                          <Zap className="w-3 h-3 text-[#50b5e9] fill-[#50b5e9] shrink-0" />
-                          <div className="flex-1 h-2 bg-[#271b3d] rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#50b5e9]"
-                              style={{ width: `${mMpPct}%` }}
-                            />
+                          {/* Barra STA */}
+                          <div className="flex items-center gap-1.5">
+                            <Heart className="w-3 h-3 text-[#ff6165] fill-[#ff6165] shrink-0" />
+                            <div className="flex-1 h-2 bg-[#271b3d] rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-[#ff6165]"
+                                style={{ width: `${mStaPct}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] text-[#a8a1b5] tabular-nums w-14 text-right">
+                              {member.hp}/{member.max_hp}
+                            </span>
                           </div>
-                          <span className="text-[10px] text-[#a8a1b5] tabular-nums w-14 text-right">
-                            {member.mp}/{member.max_mp}
-                          </span>
+
+                          {/* Barra MP */}
+                          <div className="flex items-center gap-1.5">
+                            <Zap className="w-3 h-3 text-[#50b5e9] fill-[#50b5e9] shrink-0" />
+                            <div className="flex-1 h-2 bg-[#271b3d] rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-[#50b5e9]"
+                                style={{ width: `${mMpPct}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] text-[#a8a1b5] tabular-nums w-14 text-right">
+                              {member.mp}/{member.max_mp}
+                            </span>
+                          </div>
+
+                          {/* Contribuição na Luta Atual */}
+                          <div className="flex items-center justify-between text-[10px] font-condensed pt-0.5">
+                            <span className="text-[#ffbe5d] font-bold">
+                              ⚔️ {dmg} dano ({dmgPct}%)
+                            </span>
+                            <span className="text-[#8a8299]">
+                              {member.metrics?.bossesDefeated ?? 0} bosses vencidos
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
                 /* Card do Herói Local quando offline */
                 <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-2.5 flex items-center gap-3">
@@ -342,6 +461,17 @@ export function PartyPanel({
                       </div>
                       <span className="text-[10px] text-[#a8a1b5] tabular-nums w-14 text-right">
                         {heroStats.mp}/{heroStats.max_mp}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[10px] font-condensed pt-0.5">
+                      <span className="text-[#ffbe5d] font-bold">
+                        ⚔️ {localBossDmg} dano (
+                        {bossMaxHp > 0 ? Math.min(100, Math.round((localBossDmg / bossMaxHp) * 100)) : 0}
+                        %)
+                      </span>
+                      <span className="text-[#8a8299]">
+                        {heroMetrics.bossesDefeated ?? 0} bosses vencidos
                       </span>
                     </div>
                   </div>
@@ -451,6 +581,150 @@ export function PartyPanel({
           )}
         </div>
       </div>
+
+      {/* Modal: Catálogo Completo dos 101 Bosses do Habitica */}
+      {catalogOpen && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#23202a] border border-[#432874] rounded-md w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="bg-[#432874] px-4 py-3 flex items-center justify-between border-b border-[#36205d]">
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-[#ffbe5d]" />
+                <h2 className="font-condensed font-bold text-base uppercase tracking-wide text-white">
+                  Catálogo de Bosses do Habitica ({BOSS_CATALOG.length} Chefes)
+                </h2>
+              </div>
+              <button
+                onClick={() => setCatalogOpen(false)}
+                className="p-1 rounded hover:bg-black/20 text-white/80 hover:text-white"
+                aria-label="Fechar"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Barra de Filtros, Busca e Ciclo/Dificuldade */}
+            <div className="bg-[#2c2836] border-b border-[#3a3447] p-3 space-y-2.5">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {(
+                  [
+                    { id: 'all', label: `Todos (${BOSS_CATALOG.length})` },
+                    { id: 'unlockable', label: 'História (12)' },
+                    { id: 'pet', label: 'Mascotes (61)' },
+                    { id: 'potions', label: 'Poções & Viajantes (12)' },
+                    { id: 'gold', label: 'Ouro & Masterclass (11)' },
+                    { id: 'world', label: 'Chefes Mundiais (5)' },
+                  ] as const
+                ).map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setBossCatFilter(cat.id)}
+                    className={`px-2.5 py-1 rounded text-xs font-condensed font-bold transition ${
+                      bossCatFilter === cat.id
+                        ? 'bg-[#6133b4] text-white'
+                        : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-condensed font-bold uppercase text-[#d6c7ff]">
+                    Dificuldade:
+                  </span>
+                  <select
+                    value={selectedCycle}
+                    onChange={(e) => setSelectedCycle(Number(e.target.value))}
+                    className="bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
+                  >
+                    <option value={0}>Normal (Ciclo 1 · 1.0x HP)</option>
+                    <option value={1}>Veterano (Ciclo 2 · 1.5x HP)</option>
+                    <option value={2}>Elite (Ciclo 3 · 2.0x HP)</option>
+                    <option value={4}>Pesadelo (Ciclo 5 · 3.0x HP)</option>
+                    <option value={9}>Lendário Late-Game (Ciclo 10 · 5.5x HP)</option>
+                  </select>
+                </div>
+
+                <div className="relative w-full sm:w-72">
+                  <Search className="w-3.5 h-3.5 text-[#8a8299] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={bossSearch}
+                    onChange={(e) => setBossSearch(e.target.value)}
+                    placeholder="Buscar Boss ou Missão..."
+                    className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Grid dos Bosses */}
+            <div className="p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {filteredBossCatalog.map(({ b, index }) => {
+                const scaled = getBossAtIndexAndCycle(index, selectedCycle);
+                const isCurrent = bossId === b.id;
+                return (
+                  <div
+                    key={b.id}
+                    className={`rounded-md border p-3 flex flex-col justify-between gap-3 ${
+                      isCurrent
+                        ? 'bg-[#2c2240] border-[#ffbe5d]'
+                        : 'bg-[#1a181d] border-[#3a3447]'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-16 h-16 rounded bg-[#271b3d] border border-[#432874] flex items-center justify-center shrink-0">
+                        <img
+                          src={scaled.sprite}
+                          alt={scaled.name}
+                          loading="lazy"
+                          className="w-14 h-14 object-contain [image-rendering:pixelated]"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm font-condensed font-bold text-white line-clamp-1">
+                          {scaled.name}
+                        </p>
+                        <p className="text-[11px] text-[#d6c7ff] line-clamp-1">{b.questTitle}</p>
+                        <div className="flex flex-wrap gap-2 mt-1 text-[10px] font-condensed font-bold">
+                          <span className="text-[#ff8b8e]">HP {scaled.maxHp}</span>
+                          <span className="text-[#ffbe5d]">Atq {scaled.attack}</span>
+                          <span className="text-[#24cc8f]">
+                            +{scaled.rewardGold} GP · +{scaled.rewardXp} XP
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {b.lore && (
+                      <p className="text-[11px] text-[#a8a1b5] line-clamp-2 leading-snug">
+                        {b.lore}
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#3a3447]">
+                      <span className="text-[10px] font-condensed text-[#d6c7ff]">
+                        Drop: +{b.dropCount} Ovo · +{b.dropCount} Poção
+                      </span>
+                      <button
+                        onClick={() => {
+                          onSelectBossMission(index, selectedCycle);
+                          setCatalogOpen(false);
+                        }}
+                        className="px-3 py-1.5 rounded bg-[#6133b4] hover:bg-[#7241cc] text-white text-[11px] font-condensed font-bold uppercase tracking-wider transition"
+                      >
+                        {isCurrent ? 'Reiniciar Boss' : '⚔️ Desafiar'}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

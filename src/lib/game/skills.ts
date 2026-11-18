@@ -1,4 +1,13 @@
 import { Attributes, PlayableHeroClass } from './items';
+import bossesCatalogRaw from './bosses-catalog.json';
+
+export type BossCategory =
+  | 'unlockable'
+  | 'pet'
+  | 'hatchingPotion'
+  | 'timeTravelers'
+  | 'gold'
+  | 'world';
 
 export interface ClassSkill {
   id: string;
@@ -12,11 +21,15 @@ export interface ClassSkill {
 export interface BossDefinition {
   id: string;
   name: string;
+  questTitle: string;
+  lore: string;
+  category: BossCategory;
   sprite: string;
   maxHp: number;
   attack: number;
   rewardGold: number;
   rewardXp: number;
+  dropCount: number;
 }
 
 export const CLASS_UNLOCK_LEVEL = 5;
@@ -102,80 +115,41 @@ export const CLASS_SKILLS: Record<PlayableHeroClass, ClassSkill[]> = {
   ],
 };
 
-export const BOSS_CATALOG: BossDefinition[] = [
-  {
-    id: 'dustbunnies',
-    name: 'Coelho da Poeira',
-    sprite: '/sprites/quest_dustbunnies.png',
-    maxHp: 300,
-    attack: 12,
-    rewardGold: 35,
-    rewardXp: 80,
-  },
-  {
-    id: 'basilist',
-    name: 'Basilisco das Tarefas',
-    sprite: '/sprites/quest_basilist.png',
-    maxHp: 450,
-    attack: 15,
-    rewardGold: 50,
-    rewardXp: 120,
-  },
-  {
-    id: 'vice1',
-    name: 'Sombra do Vício I',
-    sprite: '/sprites/quest_vice1.png',
-    maxHp: 600,
-    attack: 18,
-    rewardGold: 75,
-    rewardXp: 160,
-  },
-  {
-    id: 'vice2',
-    name: 'Sombra do Vício II',
-    sprite: '/sprites/quest_vice2.png',
-    maxHp: 800,
-    attack: 22,
-    rewardGold: 100,
-    rewardXp: 220,
-  },
-  {
-    id: 'vice3',
-    name: 'Sombra do Vício III',
-    sprite: '/sprites/quest_vice3.png',
-    maxHp: 1000,
-    attack: 25,
-    rewardGold: 140,
-    rewardXp: 300,
-  },
-  {
-    id: 'atom1',
-    name: 'Átomo Instável',
-    sprite: '/sprites/quest_atom1.png',
-    maxHp: 500,
-    attack: 16,
-    rewardGold: 65,
-    rewardXp: 150,
-  },
-];
+export const BOSS_CATALOG: BossDefinition[] = bossesCatalogRaw as BossDefinition[];
+
+const BOSS_BY_ID = new Map<string, BossDefinition>(
+  BOSS_CATALOG.map((b) => [b.id, b])
+);
+
+export function getBossById(id?: string): BossDefinition | undefined {
+  if (!id) return undefined;
+  return BOSS_BY_ID.get(id);
+}
+
+export function getBossAtIndexAndCycle(idx: number, cycle: number): BossDefinition {
+  const safeIdx = ((idx % BOSS_CATALOG.length) + BOSS_CATALOG.length) % BOSS_CATALOG.length;
+  const safeCycle = Math.max(0, cycle);
+  const base = BOSS_CATALOG[safeIdx];
+  const hpScale = 1 + safeCycle * 0.5;
+  const atkScale = 1 + safeCycle * 0.2;
+  const rewardScale = 1 + safeCycle * 0.35;
+
+  return {
+    ...base,
+    name: safeCycle > 0 ? `${base.name} (Ciclo ${safeCycle + 1})` : base.name,
+    maxHp: Math.round(base.maxHp * hpScale),
+    attack: Math.round(base.attack * atkScale),
+    rewardGold: Math.round(base.rewardGold * rewardScale),
+    rewardXp: Math.round(base.rewardXp * rewardScale),
+  };
+}
 
 /**
- * Retorna o Boss progressivo para o estágio atual (1, 2, 3...).
- * Ao completar todos os 6 Bosses, reinicia o ciclo com HP e recompensas escalados.
+ * Retorna o Boss progressivo para o estágio atual (1..101 no Ciclo 1, depois Ciclo 2, etc.).
  */
 export function getProgressiveBoss(stage: number): BossDefinition {
   const safeStage = Math.max(1, stage);
   const idx = (safeStage - 1) % BOSS_CATALOG.length;
   const cycle = Math.floor((safeStage - 1) / BOSS_CATALOG.length);
-  const base = BOSS_CATALOG[idx];
-  const scale = 1 + cycle * 0.35;
-
-  return {
-    ...base,
-    name: cycle > 0 ? `${base.name} (Ciclo ${cycle + 1})` : base.name,
-    maxHp: Math.round(base.maxHp * scale),
-    attack: Math.round(base.attack * (1 + cycle * 0.2)),
-    rewardGold: Math.round(base.rewardGold * (1 + cycle * 0.25)),
-    rewardXp: Math.round(base.rewardXp * (1 + cycle * 0.25)),
-  };
+  return getBossAtIndexAndCycle(idx, cycle);
 }

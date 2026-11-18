@@ -6,6 +6,10 @@ export interface HeroMetrics {
   criticalHits: number;
   totalGoldEarned: number;
   armoireOpened: number;
+  currentBossStage?: number;
+  currentBossDamage?: number;
+  totalBossDamage?: number;
+  lastClaimedBossStage?: number;
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -14,6 +18,10 @@ export const DEFAULT_METRICS: HeroMetrics = {
   criticalHits: 0,
   totalGoldEarned: 0,
   armoireOpened: 0,
+  currentBossStage: 1,
+  currentBossDamage: 0,
+  totalBossDamage: 0,
+  lastClaimedBossStage: 1,
 };
 
 export interface AchievementCheckContext {

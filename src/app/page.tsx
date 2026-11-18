@@ -25,9 +25,12 @@ import {
   getEquipmentById,
 } from '@/lib/game/items';
 import {
+  BOSS_CATALOG,
   CLASS_INFO,
   CLASS_UNLOCK_LEVEL,
   ClassSkill,
+  getBossAtIndexAndCycle,
+  getBossById,
   getProgressiveBoss,
 } from '@/lib/game/skills';
 import {
@@ -45,6 +48,7 @@ import {
 } from '@/lib/game/achievements';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import {
+  fetchLatestPartyBoss,
   fetchUserBundle,
   joinOrCreateKtzParty,
   RemoteParty,
@@ -277,10 +281,12 @@ export default function HomePage() {
     nextLevel?: number;
   } => {
     const currentStage = remoteParty ? (remoteParty.boss_stage ?? 1) : party.bossStage;
+    const currentBossId = remoteParty ? remoteParty.boss_id : party.bossId;
     const currentHp = remoteParty ? remoteParty.boss_hp : party.bossHp;
     const bName = remoteParty ? remoteParty.boss_name : party.bossName;
     const rGold = remoteParty ? remoteParty.reward_gold : party.rewardGold;
     const rXp = remoteParty ? remoteParty.reward_xp : party.rewardXp;
+    const dropCount = getBossById(currentBossId)?.dropCount ?? 1;
 
     if (damage <= 0) {
       return { defeated: false, bossName: bName };
@@ -292,7 +298,7 @@ export default function HomePage() {
       const nextStage = currentStage + 1;
       const nextBoss = getProgressiveBoss(nextStage);
 
-      // Ao derrotar um Boss: recompensa (com checagem de Level-Up) + reset 100% STA/MP + reset buffs!
+      // Ao derrotar um Boss: recompensa (com checagem de Level-Up) + drops garantidos + reset 100% STA/MP + reset buffs!
       const victoryRes = grantXpAndResources(latestStats, totalAttributes, {
         xp: rXp,
         goldDelta: rGold,
@@ -301,10 +307,19 @@ export default function HomePage() {
       });
 
       setStats(victoryRes.nextStats);
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + dropCount,
+        potions: prev.potions + dropCount,
+      }));
       setMetrics((m) => ({
         ...m,
         bossesDefeated: m.bossesDefeated + 1,
         totalGoldEarned: m.totalGoldEarned + rGold,
+        totalBossDamage: (m.totalBossDamage ?? 0) + damage,
+        currentBossStage: nextStage,
+        currentBossDamage: 0,
+        lastClaimedBossStage: currentStage,
       }));
 
       if (remoteParty) {
@@ -335,7 +350,7 @@ export default function HomePage() {
       }
 
       pushActionLog(
-        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, Estamina/Mana 100%! Próximo: #${nextStage} ${nextBoss.name}.`
+        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção, STA/MP 100%! Próximo: #${nextStage} ${nextBoss.name}.`
       );
       if (victoryRes.leveledUp) {
         pushActionLog(`🎉 ${heroName} alcançou o Nível ${victoryRes.nextStats.level}!`);
@@ -351,8 +366,21 @@ export default function HomePage() {
     }
 
     const nextHp = Math.max(0, currentHp - damage);
+    setMetrics((m) => ({
+      ...m,
+      totalBossDamage: (m.totalBossDamage ?? 0) + damage,
+      currentBossStage: currentStage,
+      currentBossDamage:
+        (m.currentBossStage === currentStage ? (m.currentBossDamage ?? 0) : 0) + damage,
+    }));
+
     if (remoteParty) {
-      updateRemotePartyBoss(remoteParty.id, { boss_hp: nextHp });
+      // Leitura fresca do HP no Supabase antes de subtrair para evitar sobrescrita em ataques simultâneos
+      fetchLatestPartyBoss(remoteParty.id).then((fresh) => {
+        if (!fresh || (fresh.boss_stage ?? 1) !== currentStage) return;
+        const safeNextHp = Math.max(1, fresh.boss_hp - damage);
+        updateRemotePartyBoss(remoteParty.id, { boss_hp: safeNextHp });
+      });
     } else {
       setParty((p) => ({ ...p, bossHp: nextHp }));
     }
@@ -1049,6 +1077,88 @@ export default function HomePage() {
     };
   }, [remoteParty?.id]);
 
+  // Recompensa compartilhada automática para membros da KTZ que participaram do Boss derrotado por outro aliado
+  useEffect(() => {
+    if (!hydrated || !remoteParty) return;
+    const partyStage = remoteParty.boss_stage ?? 1;
+    const prevStage = partyStage - 1;
+    if (
+      prevStage >= 1 &&
+      metrics.currentBossStage === prevStage &&
+      (metrics.currentBossDamage ?? 0) > 0 &&
+      (metrics.lastClaimedBossStage ?? 0) < prevStage
+    ) {
+      const prevBoss = getProgressiveBoss(prevStage);
+      const victoryRes = grantXpAndResources(stats, totalAttributes, {
+        xp: prevBoss.rewardXp,
+        goldDelta: prevBoss.rewardGold,
+        fullRestore: true,
+        resetBuffs: true,
+      });
+      setStats(victoryRes.nextStats);
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + prevBoss.dropCount,
+        potions: prev.potions + prevBoss.dropCount,
+      }));
+      setMetrics((m) => ({
+        ...m,
+        bossesDefeated: m.bossesDefeated + 1,
+        totalGoldEarned: m.totalGoldEarned + prevBoss.rewardGold,
+        currentBossStage: partyStage,
+        currentBossDamage: 0,
+        lastClaimedBossStage: prevStage,
+      }));
+      showToast(
+        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção e STA/MP 100%!`
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remoteParty?.boss_stage, hydrated]);
+
+  const handleSelectBossMission = (bossIndex: number, cycle: number) => {
+    const targetStage = cycle * BOSS_CATALOG.length + bossIndex + 1;
+    const chosen = getBossAtIndexAndCycle(bossIndex, cycle);
+
+    setMetrics((m) => ({
+      ...m,
+      currentBossStage: targetStage,
+      currentBossDamage: 0,
+    }));
+
+    if (remoteParty) {
+      updateRemotePartyBoss(remoteParty.id, {
+        boss_stage: targetStage,
+        boss_id: chosen.id,
+        boss_name: chosen.name,
+        boss_sprite: chosen.sprite,
+        boss_hp: chosen.maxHp,
+        boss_max_hp: chosen.maxHp,
+        boss_attack: chosen.attack,
+        reward_gold: chosen.rewardGold,
+        reward_xp: chosen.rewardXp,
+      });
+    } else {
+      setParty((p) => ({
+        ...p,
+        bossStage: targetStage,
+        bossId: chosen.id,
+        bossName: chosen.name,
+        bossSprite: chosen.sprite,
+        bossHp: chosen.maxHp,
+        bossMaxHp: chosen.maxHp,
+        bossAttack: chosen.attack,
+        rewardGold: chosen.rewardGold,
+        rewardXp: chosen.rewardXp,
+      }));
+    }
+
+    pushActionLog(
+      `📜 ${heroName} iniciou a missão: ${chosen.name} (${chosen.maxHp} HP)!`
+    );
+    showToast(`📜 Missão iniciada: ${chosen.name} (${chosen.maxHp} HP)!`);
+  };
+
   const handleBuyArmoire = (count = 1) => {
     const cost = 40 * count;
     if (stats.gold < cost) return;
@@ -1319,6 +1429,7 @@ export default function HomePage() {
         isOnline={Boolean(userId)}
         heroName={heroName}
         heroStats={stats}
+        heroMetrics={metrics}
         heroAppearance={appearance}
         heroEquipped={equipped}
         heroCostume={costume}
@@ -1326,6 +1437,7 @@ export default function HomePage() {
         heroPetId={stable.equippedPet}
         remoteParty={remoteParty}
         remoteMembers={remoteMembers}
+        bossId={remoteParty ? remoteParty.boss_id : party.bossId}
         bossStage={activeBossStage}
         bossName={activeBossName}
         bossSprite={activeBossSprite}
@@ -1336,6 +1448,7 @@ export default function HomePage() {
         rewardXp={activeRewardXp}
         messages={messages}
         onSendChat={handleSendChat}
+        onSelectBossMission={handleSelectBossMission}
         onOpenAuth={() => setAuthOpen(true)}
       />
 
