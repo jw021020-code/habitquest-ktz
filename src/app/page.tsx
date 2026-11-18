@@ -20,6 +20,7 @@ import {
   DEFAULT_EQUIPPED,
   DEFAULT_INVENTORY,
   EquipmentItem,
+  EquipmentSlot,
   EquippedGear,
   getEquipmentById,
 } from '@/lib/game/items';
@@ -552,21 +553,60 @@ export default function HomePage() {
     return next;
   };
 
-  const handleBuyItem = (item: EquipmentItem) => {
+  const handleBuyItem = (
+    item: EquipmentItem,
+    afterBuy: 'bag' | 'equip' | 'costume' = 'bag'
+  ) => {
     if (stats.gold < item.price || inventory.includes(item.id)) return;
-    const removedOther =
-      (item.slot === 'weapon' && item.twoHanded && Boolean(equipped.shield)) ||
-      (item.slot === 'shield' && Boolean(getEquipmentById(equipped.weapon)?.twoHanded));
-
     setStats((s) => ({ ...s, gold: s.gold - item.price }));
     setInventory((prev) => [...prev, item.id]);
-    setEquipped((prev) => applyGearItem(prev, item));
-    pushActionLog(`🛡️ ${heroName} comprou e equipou ${item.name} (-${item.price} GP).`);
-    showToast(
-      removedOther
-        ? `🛡️ ${item.name} equipado! (Item conflitante de 2 mãos removido)`
-        : `🛡️ Comprou e equipou: ${item.name}!`
+
+    if (afterBuy === 'equip') {
+      const removedOther =
+        (item.slot === 'weapon' && item.twoHanded && Boolean(equipped.shield)) ||
+        (item.slot === 'shield' && Boolean(getEquipmentById(equipped.weapon)?.twoHanded));
+      setEquipped((prev) => applyGearItem(prev, item));
+      pushActionLog(`🛡️ ${heroName} comprou e equipou ${item.name} (-${item.price} GP).`);
+      showToast(
+        removedOther
+          ? `🛡️ ${item.name} equipado! (Item conflitante de 2 mãos removido)`
+          : `🛡️ Comprou e equipou: ${item.name}!`
+      );
+    } else if (afterBuy === 'costume') {
+      setCostume((prev) => applyGearItem(prev, item));
+      pushActionLog(`🎭 ${heroName} comprou ${item.name} para Fantasia (-${item.price} GP).`);
+      showToast(`🎭 Comprou e vestiu na Fantasia: ${item.name}!`);
+    } else {
+      pushActionLog(`🛍️ ${heroName} comprou ${item.name} (-${item.price} GP).`);
+      showToast(`🛍️ Guardado na mochila: ${item.name}!`);
+    }
+  };
+
+  const handleBuyBatchItems = (items: EquipmentItem[]) => {
+    const buyable = items.filter((it) => !inventory.includes(it.id));
+    if (buyable.length === 0) return;
+
+    let remainingGold = stats.gold;
+    const bought: EquipmentItem[] = [];
+    for (const it of buyable) {
+      if (remainingGold >= it.price) {
+        remainingGold -= it.price;
+        bought.push(it);
+      }
+    }
+    if (bought.length === 0) {
+      showToast('🪙 Ouro insuficiente para comprar estes itens.');
+      return;
+    }
+
+    const totalCost = stats.gold - remainingGold;
+    const boughtIds = bought.map((it) => it.id);
+    setStats((s) => ({ ...s, gold: remainingGold }));
+    setInventory((prev) => [...prev, ...boughtIds.filter((id) => !prev.includes(id))]);
+    pushActionLog(
+      `🛍️ ${heroName} comprou ${bought.length} itens em lote (-${totalCost} GP).`
     );
+    showToast(`🛍️ ${bought.length} itens comprados (-${totalCost} GP)!`);
   };
 
   const handleToggleEquip = (item: EquipmentItem) => {
@@ -585,6 +625,102 @@ export default function HomePage() {
       }
       return applyGearItem(prev, item);
     });
+  };
+
+  const handleUnequipSlot = (slot: EquipmentSlot) => {
+    if (!equipped[slot]) return;
+    setEquipped((prev) => {
+      const next = { ...prev };
+      delete next[slot];
+      return next;
+    });
+  };
+
+  const handleClearAllEquipped = () => {
+    setEquipped({});
+    showToast('🧹 Equipamento de Batalha limpo.');
+  };
+
+  const handleAutoEquipBest = () => {
+    const ownedItems = inventory
+      .map((id) => getEquipmentById(id))
+      .filter((it): it is EquipmentItem => Boolean(it));
+
+    if (ownedItems.length === 0) {
+      showToast('Você ainda não possui equipamentos no inventário.');
+      return;
+    }
+
+    const statSum = (it: EquipmentItem) =>
+      it.stats.str + it.stats.int + it.stats.con + it.stats.per;
+
+    const bestForSlot = (slot: EquipmentSlot): EquipmentItem | undefined => {
+      const candidates = ownedItems.filter((it) => it.slot === slot);
+      if (candidates.length === 0) return undefined;
+      return candidates.sort((a, b) => statSum(b) - statSum(a) || b.price - a.price)[0];
+    };
+
+    const next: EquippedGear = {};
+    const armor = bestForSlot('armor');
+    const head = bestForSlot('head');
+    const headAcc = bestForSlot('headAccessory');
+    const eyewear = bestForSlot('eyewear');
+    const body = bestForSlot('body');
+    const back = bestForSlot('back');
+
+    if (armor && statSum(armor) > 0) next.armor = armor.id;
+    if (head && statSum(head) > 0) next.head = head.id;
+    if (headAcc && statSum(headAcc) > 0) next.headAccessory = headAcc.id;
+    if (eyewear && statSum(eyewear) > 0) next.eyewear = eyewear.id;
+    if (body && statSum(body) > 0) next.body = body.id;
+    if (back && statSum(back) > 0) next.back = back.id;
+
+    // Comparar melhor Arma de 2 mãos vs melhor Arma de 1 mão + melhor Escudo
+    const weapons2H = ownedItems
+      .filter((it) => it.slot === 'weapon' && it.twoHanded)
+      .sort((a, b) => statSum(b) - statSum(a));
+    const weapons1H = ownedItems
+      .filter((it) => it.slot === 'weapon' && !it.twoHanded)
+      .sort((a, b) => statSum(b) - statSum(a));
+    const bestShield = bestForSlot('shield');
+
+    const best2H = weapons2H[0];
+    const best1H = weapons1H[0];
+    const score2H = best2H ? statSum(best2H) : -1;
+    const score1HPlusShield =
+      (best1H ? statSum(best1H) : 0) + (bestShield ? statSum(bestShield) : 0);
+
+    if (score2H > score1HPlusShield && best2H && score2H > 0) {
+      next.weapon = best2H.id;
+    } else {
+      if (best1H && statSum(best1H) > 0) next.weapon = best1H.id;
+      if (bestShield && statSum(bestShield) > 0) next.shield = bestShield.id;
+    }
+
+    setEquipped(next);
+    const total = computeTotalAttributes(next);
+    showToast(
+      `⚡ Melhores itens equipados! (STR ${total.str} · INT ${total.int} · CON ${total.con} · PER ${total.per})`
+    );
+  };
+
+  const handleUnequipCostumeSlot = (slot: EquipmentSlot) => {
+    if (!costume[slot]) return;
+    setCostume((prev) => {
+      const next = { ...prev };
+      delete next[slot];
+      return next;
+    });
+  };
+
+  const handleClearCostume = () => {
+    setCostume({});
+    showToast('🧹 Fantasia limpa.');
+  };
+
+  const handleCopyBattleToCostume = () => {
+    setCostume({ ...equipped });
+    showToast('🎭 Equipamento de Batalha copiado para Fantasia!');
   };
 
   const handleHatchEgg = () => {
@@ -667,15 +803,16 @@ export default function HomePage() {
     showToast('🧪 Tônico de Estamina usado (+30 STA)!');
   };
 
-  const handleBuyHatchPotion = () => {
-    if (stats.gold < 25) return;
-    setStats((s) => ({ ...s, gold: s.gold - 25 }));
+  const handleBuyHatchPotion = (count = 1) => {
+    const cost = 25 * count;
+    if (stats.gold < cost) return;
+    setStats((s) => ({ ...s, gold: s.gold - cost }));
     setStable((prev) => ({
       ...prev,
-      potions: prev.potions + 1,
+      potions: prev.potions + count,
     }));
-    pushActionLog(`🧪 ${heroName} comprou Poção de Chocar (-25 GP).`);
-    showToast('🧪 Comprou +1 Poção de Chocar!');
+    pushActionLog(`🧪 ${heroName} comprou ${count}x Poção de Chocar (-${cost} GP).`);
+    showToast(`🧪 Comprou +${count} Poção de Chocar!`);
   };
 
   const handleSellEgg = () => {
@@ -912,28 +1049,68 @@ export default function HomePage() {
     };
   }, [remoteParty?.id]);
 
-  const handleBuyArmoire = () => {
-    if (stats.gold < 40) return;
-    const reward = rollArmoireReward(inventory);
+  const handleBuyArmoire = (count = 1) => {
+    const cost = 40 * count;
+    if (stats.gold < cost) return;
+
+    let simInventory = [...inventory];
+    let totalXp = 0;
+    let totalEggs = 0;
+    let totalPotions = 0;
+    const newEquipNames: string[] = [];
+    let lastSingleLabel = '';
+
+    for (let i = 0; i < count; i++) {
+      const reward = rollArmoireReward(simInventory);
+      lastSingleLabel = reward.label;
+      if (reward.kind === 'equipment') {
+        if (!simInventory.includes(reward.item.id)) {
+          simInventory.push(reward.item.id);
+        }
+        newEquipNames.push(reward.item.name);
+      } else if (reward.kind === 'xp') {
+        totalXp += reward.amount;
+      } else if (reward.kind === 'egg') {
+        totalEggs += 1;
+      } else if (reward.kind === 'potion') {
+        totalPotions += 1;
+      }
+    }
+
     const armoireRes = grantXpAndResources(stats, totalAttributes, {
-      xp: reward.kind === 'xp' ? reward.amount : 0,
-      goldDelta: -40,
+      xp: totalXp,
+      goldDelta: -cost,
     });
     setStats(armoireRes.nextStats);
-    setMetrics((m) => ({ ...m, armoireOpened: m.armoireOpened + 1 }));
-    if (reward.kind === 'equipment') {
-      setInventory((prev) => (prev.includes(reward.item.id) ? prev : [...prev, reward.item.id]));
-    } else if (reward.kind === 'egg') {
-      setStable((prev) => ({ ...prev, eggs: prev.eggs + 1 }));
-    } else if (reward.kind === 'potion') {
-      setStable((prev) => ({ ...prev, potions: prev.potions + 1 }));
+    setMetrics((m) => ({ ...m, armoireOpened: m.armoireOpened + count }));
+    if (simInventory.length > inventory.length) {
+      setInventory(simInventory);
     }
-    pushActionLog(`🎁 ${heroName} abriu o Armoire Encantado e ganhou: ${reward.label}!`);
-    if (armoireRes.leveledUp) {
-      pushActionLog(`🎉 ${heroName} alcançou o Nível ${armoireRes.nextStats.level}!`);
-      showToast(`🎁 Armoire: ${reward.label} · 🎉 Nível ${armoireRes.nextStats.level}!`);
+    if (totalEggs > 0 || totalPotions > 0) {
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + totalEggs,
+        potions: prev.potions + totalPotions,
+      }));
+    }
+
+    if (count === 1) {
+      pushActionLog(`🎁 ${heroName} abriu o Armoire Encantado e ganhou: ${lastSingleLabel}!`);
+      if (armoireRes.leveledUp) {
+        pushActionLog(`🎉 ${heroName} alcançou o Nível ${armoireRes.nextStats.level}!`);
+        showToast(`🎁 Armoire: ${lastSingleLabel} · 🎉 Nível ${armoireRes.nextStats.level}!`);
+      } else {
+        showToast(`🎁 Armoire Encantado: ${lastSingleLabel}!`);
+      }
     } else {
-      showToast(`🎁 Armoire Encantado: ${reward.label}!`);
+      const parts: string[] = [];
+      if (newEquipNames.length > 0) parts.push(`${newEquipNames.length} equips`);
+      if (totalXp > 0) parts.push(`+${totalXp} XP`);
+      if (totalEggs > 0) parts.push(`${totalEggs} Ovos`);
+      if (totalPotions > 0) parts.push(`${totalPotions} Poções`);
+      const summary = parts.join(', ');
+      pushActionLog(`🎁 ${heroName} abriu ${count}x o Armoire Encantado: ${summary}!`);
+      showToast(`🎁 ${count}x Armoire: ${summary}!`);
     }
   };
 
@@ -1117,13 +1294,20 @@ export default function HomePage() {
         totalAttributes={totalAttributes}
         onChangeAppearance={setAppearance}
         onBuyItem={handleBuyItem}
+        onBuyBatchItems={handleBuyBatchItems}
         onBuyPotion={handleBuyPotion}
         onBuyArmoire={handleBuyArmoire}
         onBuyHatchPotion={handleBuyHatchPotion}
         onSellEgg={handleSellEgg}
         onSellPotion={handleSellPotion}
         onToggleEquip={handleToggleEquip}
+        onUnequipSlot={handleUnequipSlot}
+        onClearAllEquipped={handleClearAllEquipped}
+        onAutoEquipBest={handleAutoEquipBest}
         onToggleCostumeEquip={handleToggleCostumeEquip}
+        onUnequipCostumeSlot={handleUnequipCostumeSlot}
+        onClearCostume={handleClearCostume}
+        onCopyBattleToCostume={handleCopyBattleToCostume}
         onToggleUseCostume={() => setUseCostume((v) => !v)}
         onHatchEgg={handleHatchEgg}
         onTogglePet={handleTogglePet}
