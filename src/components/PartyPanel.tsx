@@ -37,7 +37,6 @@ interface PartyPanelProps {
   heroCostume?: EquippedGear;
   heroUseCostume?: boolean;
   heroPetId?: string;
-  heroMountId?: string;
   remoteParty: RemoteParty | null;
   remoteMembers: RemoteProfile[];
   bossStage: number;
@@ -76,7 +75,6 @@ export function PartyPanel({
   heroCostume,
   heroUseCostume,
   heroPetId,
-  heroMountId,
   remoteParty,
   remoteMembers,
   bossStage,
@@ -253,7 +251,6 @@ export function PartyPanel({
                         costume={member.costume}
                         useCostume={member.use_costume}
                         petId={member.stable?.equippedPet}
-                        mountId={member.stable?.equippedMount}
                         size="md"
                       />
                       <div className="flex-1 min-w-0 space-y-1">
@@ -308,7 +305,6 @@ export function PartyPanel({
                     costume={heroCostume}
                     useCostume={heroUseCostume}
                     petId={heroPetId}
-                    mountId={heroMountId}
                     size="md"
                   />
                   <div className="flex-1 min-w-0 space-y-1">

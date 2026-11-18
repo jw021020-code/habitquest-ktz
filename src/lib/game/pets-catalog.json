@@ -1,0 +1,8738 @@
+[
+  {
+    "id": "Cactus-Base",
+    "name": "Cacto (Base)",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Base"
+  },
+  {
+    "id": "Cactus-CottonCandyBlue",
+    "name": "Cacto Azul Algodão-Doce",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Cactus-Red",
+    "name": "Cacto Escarlate",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Red"
+  },
+  {
+    "id": "Cactus-Skeleton",
+    "name": "Cacto Esqueleto",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Cactus-CottonCandyPink",
+    "name": "Cacto Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Cactus-Zombie",
+    "name": "Cacto Zombie",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Cactus-White",
+    "name": "Cacto das Neves",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "White"
+  },
+  {
+    "id": "Cactus-Shade",
+    "name": "Cacto das Trevas",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Shade"
+  },
+  {
+    "id": "Cactus-Golden",
+    "name": "Cacto de Ouro",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Golden"
+  },
+  {
+    "id": "Cactus-Desert",
+    "name": "Cacto do Deserto",
+    "category": "drop",
+    "species": "Cactus",
+    "potion": "Desert"
+  },
+  {
+    "id": "Dragon-Base",
+    "name": "Dragão (Base)",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Base"
+  },
+  {
+    "id": "Dragon-CottonCandyBlue",
+    "name": "Dragão Azul Algodão-Doce",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Dragon-Red",
+    "name": "Dragão Escarlate",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Red"
+  },
+  {
+    "id": "Dragon-Skeleton",
+    "name": "Dragão Esqueleto",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Dragon-CottonCandyPink",
+    "name": "Dragão Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Dragon-Zombie",
+    "name": "Dragão Zombie",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Dragon-White",
+    "name": "Dragão das Neves",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "White"
+  },
+  {
+    "id": "Dragon-Shade",
+    "name": "Dragão das Trevas",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Shade"
+  },
+  {
+    "id": "Dragon-Golden",
+    "name": "Dragão de Ouro",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Golden"
+  },
+  {
+    "id": "Dragon-Desert",
+    "name": "Dragão do Deserto",
+    "category": "drop",
+    "species": "Dragon",
+    "potion": "Desert"
+  },
+  {
+    "id": "LionCub-Base",
+    "name": "Leão Bebé (Base)",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Base"
+  },
+  {
+    "id": "LionCub-CottonCandyBlue",
+    "name": "Leão Bebé Azul Algodão-Doce",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "LionCub-Red",
+    "name": "Leão Bebé Escarlate",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Red"
+  },
+  {
+    "id": "LionCub-Skeleton",
+    "name": "Leão Bebé Esqueleto",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "LionCub-CottonCandyPink",
+    "name": "Leão Bebé Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "LionCub-Zombie",
+    "name": "Leão Bebé Zombie",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Zombie"
+  },
+  {
+    "id": "LionCub-White",
+    "name": "Leão Bebé das Neves",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "White"
+  },
+  {
+    "id": "LionCub-Shade",
+    "name": "Leão Bebé das Trevas",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Shade"
+  },
+  {
+    "id": "LionCub-Golden",
+    "name": "Leão Bebé de Ouro",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Golden"
+  },
+  {
+    "id": "LionCub-Desert",
+    "name": "Leão Bebé do Deserto",
+    "category": "drop",
+    "species": "LionCub",
+    "potion": "Desert"
+  },
+  {
+    "id": "Wolf-Base",
+    "name": "Lobo (Base)",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Base"
+  },
+  {
+    "id": "Wolf-CottonCandyBlue",
+    "name": "Lobo Azul Algodão-Doce",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Wolf-Red",
+    "name": "Lobo Escarlate",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Red"
+  },
+  {
+    "id": "Wolf-Skeleton",
+    "name": "Lobo Esqueleto",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Wolf-CottonCandyPink",
+    "name": "Lobo Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Wolf-Zombie",
+    "name": "Lobo Zombie",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Wolf-White",
+    "name": "Lobo das Neves",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "White"
+  },
+  {
+    "id": "Wolf-Shade",
+    "name": "Lobo das Trevas",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Shade"
+  },
+  {
+    "id": "Wolf-Golden",
+    "name": "Lobo de Ouro",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Golden"
+  },
+  {
+    "id": "Wolf-Desert",
+    "name": "Lobo do Deserto",
+    "category": "drop",
+    "species": "Wolf",
+    "potion": "Desert"
+  },
+  {
+    "id": "PandaCub-Base",
+    "name": "Panda Bebé (Base)",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Base"
+  },
+  {
+    "id": "PandaCub-CottonCandyBlue",
+    "name": "Panda Bebé Azul Algodão-Doce",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "PandaCub-Red",
+    "name": "Panda Bebé Escarlate",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Red"
+  },
+  {
+    "id": "PandaCub-Skeleton",
+    "name": "Panda Bebé Esqueleto",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "PandaCub-CottonCandyPink",
+    "name": "Panda Bebé Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "PandaCub-Zombie",
+    "name": "Panda Bebé Zombie",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Zombie"
+  },
+  {
+    "id": "PandaCub-White",
+    "name": "Panda Bebé das Neves",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "White"
+  },
+  {
+    "id": "PandaCub-Shade",
+    "name": "Panda Bebé das Trevas",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Shade"
+  },
+  {
+    "id": "PandaCub-Golden",
+    "name": "Panda Bebé de Ouro",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Golden"
+  },
+  {
+    "id": "PandaCub-Desert",
+    "name": "Panda Bebé do Deserto",
+    "category": "drop",
+    "species": "PandaCub",
+    "potion": "Desert"
+  },
+  {
+    "id": "FlyingPig-Base",
+    "name": "Porco Voador (Base)",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Base"
+  },
+  {
+    "id": "FlyingPig-CottonCandyBlue",
+    "name": "Porco Voador Azul Algodão-Doce",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "FlyingPig-Red",
+    "name": "Porco Voador Escarlate",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Red"
+  },
+  {
+    "id": "FlyingPig-Skeleton",
+    "name": "Porco Voador Esqueleto",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "FlyingPig-CottonCandyPink",
+    "name": "Porco Voador Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "FlyingPig-Zombie",
+    "name": "Porco Voador Zombie",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Zombie"
+  },
+  {
+    "id": "FlyingPig-White",
+    "name": "Porco Voador das Neves",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "White"
+  },
+  {
+    "id": "FlyingPig-Shade",
+    "name": "Porco Voador das Trevas",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Shade"
+  },
+  {
+    "id": "FlyingPig-Golden",
+    "name": "Porco Voador de Ouro",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Golden"
+  },
+  {
+    "id": "FlyingPig-Desert",
+    "name": "Porco Voador do Deserto",
+    "category": "drop",
+    "species": "FlyingPig",
+    "potion": "Desert"
+  },
+  {
+    "id": "Fox-Base",
+    "name": "Raposa (Base)",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Base"
+  },
+  {
+    "id": "Fox-CottonCandyBlue",
+    "name": "Raposa Azul Algodão-Doce",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Fox-Red",
+    "name": "Raposa Escarlate",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Red"
+  },
+  {
+    "id": "Fox-Skeleton",
+    "name": "Raposa Esqueleto",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Fox-CottonCandyPink",
+    "name": "Raposa Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Fox-Zombie",
+    "name": "Raposa Zombie",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Fox-White",
+    "name": "Raposa das Neves",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "White"
+  },
+  {
+    "id": "Fox-Shade",
+    "name": "Raposa das Trevas",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Shade"
+  },
+  {
+    "id": "Fox-Golden",
+    "name": "Raposa de Ouro",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Golden"
+  },
+  {
+    "id": "Fox-Desert",
+    "name": "Raposa do Deserto",
+    "category": "drop",
+    "species": "Fox",
+    "potion": "Desert"
+  },
+  {
+    "id": "TigerCub-Base",
+    "name": "Tigre Bebé (Base)",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Base"
+  },
+  {
+    "id": "TigerCub-CottonCandyBlue",
+    "name": "Tigre Bebé Azul Algodão-Doce",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "TigerCub-Red",
+    "name": "Tigre Bebé Escarlate",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Red"
+  },
+  {
+    "id": "TigerCub-Skeleton",
+    "name": "Tigre Bebé Esqueleto",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "TigerCub-CottonCandyPink",
+    "name": "Tigre Bebé Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "TigerCub-Zombie",
+    "name": "Tigre Bebé Zombie",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Zombie"
+  },
+  {
+    "id": "TigerCub-White",
+    "name": "Tigre Bebé das Neves",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "White"
+  },
+  {
+    "id": "TigerCub-Shade",
+    "name": "Tigre Bebé das Trevas",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Shade"
+  },
+  {
+    "id": "TigerCub-Golden",
+    "name": "Tigre Bebé de Ouro",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Golden"
+  },
+  {
+    "id": "TigerCub-Desert",
+    "name": "Tigre Bebé do Deserto",
+    "category": "drop",
+    "species": "TigerCub",
+    "potion": "Desert"
+  },
+  {
+    "id": "BearCub-Base",
+    "name": "Urso Bebé (Base)",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Base"
+  },
+  {
+    "id": "BearCub-CottonCandyBlue",
+    "name": "Urso Bebé Azul Algodão-Doce",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "BearCub-Red",
+    "name": "Urso Bebé Escarlate",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Red"
+  },
+  {
+    "id": "BearCub-Skeleton",
+    "name": "Urso Bebé Esqueleto",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "BearCub-CottonCandyPink",
+    "name": "Urso Bebé Rosa Algodão-Doce",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "BearCub-Zombie",
+    "name": "Urso Bebé Zombie",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Zombie"
+  },
+  {
+    "id": "BearCub-White",
+    "name": "Urso Bebé das Neves",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "White"
+  },
+  {
+    "id": "BearCub-Shade",
+    "name": "Urso Bebé das Trevas",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Shade"
+  },
+  {
+    "id": "BearCub-Golden",
+    "name": "Urso Bebé de Ouro",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Golden"
+  },
+  {
+    "id": "BearCub-Desert",
+    "name": "Urso Bebé do Deserto",
+    "category": "drop",
+    "species": "BearCub",
+    "potion": "Desert"
+  },
+  {
+    "id": "Alpaca-Base",
+    "name": "Alpaca (Base)",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Base"
+  },
+  {
+    "id": "Alpaca-CottonCandyBlue",
+    "name": "Alpaca Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Alpaca-Red",
+    "name": "Alpaca Escarlate",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Red"
+  },
+  {
+    "id": "Alpaca-Skeleton",
+    "name": "Alpaca Esqueleto",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Alpaca-CottonCandyPink",
+    "name": "Alpaca Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Alpaca-Zombie",
+    "name": "Alpaca Zombie",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Alpaca-White",
+    "name": "Alpaca das Neves",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "White"
+  },
+  {
+    "id": "Alpaca-Shade",
+    "name": "Alpaca das Trevas",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Shade"
+  },
+  {
+    "id": "Alpaca-Golden",
+    "name": "Alpaca de Ouro",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Golden"
+  },
+  {
+    "id": "Alpaca-Desert",
+    "name": "Alpaca do Deserto",
+    "category": "quest",
+    "species": "Alpaca",
+    "potion": "Desert"
+  },
+  {
+    "id": "Spider-Base",
+    "name": "Aranha (Base)",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Base"
+  },
+  {
+    "id": "Spider-CottonCandyBlue",
+    "name": "Aranha Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Spider-Red",
+    "name": "Aranha Escarlate",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Red"
+  },
+  {
+    "id": "Spider-Skeleton",
+    "name": "Aranha Esqueleto",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Spider-CottonCandyPink",
+    "name": "Aranha Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Spider-Zombie",
+    "name": "Aranha Zombie",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Spider-White",
+    "name": "Aranha das Neves",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "White"
+  },
+  {
+    "id": "Spider-Shade",
+    "name": "Aranha das Trevas",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Shade"
+  },
+  {
+    "id": "Spider-Golden",
+    "name": "Aranha de Ouro",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Golden"
+  },
+  {
+    "id": "Spider-Desert",
+    "name": "Aranha do Deserto",
+    "category": "quest",
+    "species": "Spider",
+    "potion": "Desert"
+  },
+  {
+    "id": "Axolotl-Base",
+    "name": "Axolote (Base)",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Base"
+  },
+  {
+    "id": "Axolotl-CottonCandyBlue",
+    "name": "Axolote Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Axolotl-Red",
+    "name": "Axolote Escarlate",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Red"
+  },
+  {
+    "id": "Axolotl-Skeleton",
+    "name": "Axolote Esqueleto",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Axolotl-CottonCandyPink",
+    "name": "Axolote Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Axolotl-Zombie",
+    "name": "Axolote Zombie",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Axolotl-White",
+    "name": "Axolote das Neves",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "White"
+  },
+  {
+    "id": "Axolotl-Shade",
+    "name": "Axolote das Trevas",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Shade"
+  },
+  {
+    "id": "Axolotl-Golden",
+    "name": "Axolote de Ouro",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Golden"
+  },
+  {
+    "id": "Axolotl-Desert",
+    "name": "Axolote do Deserto",
+    "category": "quest",
+    "species": "Axolotl",
+    "potion": "Desert"
+  },
+  {
+    "id": "Whale-Base",
+    "name": "Baleia (Base)",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Base"
+  },
+  {
+    "id": "Whale-CottonCandyBlue",
+    "name": "Baleia Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Whale-Red",
+    "name": "Baleia Escarlate",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Red"
+  },
+  {
+    "id": "Whale-Skeleton",
+    "name": "Baleia Esqueleto",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Whale-CottonCandyPink",
+    "name": "Baleia Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Whale-Zombie",
+    "name": "Baleia Zombie",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Whale-White",
+    "name": "Baleia das Neves",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "White"
+  },
+  {
+    "id": "Whale-Shade",
+    "name": "Baleia das Trevas",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Shade"
+  },
+  {
+    "id": "Whale-Golden",
+    "name": "Baleia de Ouro",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Golden"
+  },
+  {
+    "id": "Whale-Desert",
+    "name": "Baleia do Deserto",
+    "category": "quest",
+    "species": "Whale",
+    "potion": "Desert"
+  },
+  {
+    "id": "Beetle-Base",
+    "name": "Besouro (Base)",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Base"
+  },
+  {
+    "id": "Beetle-CottonCandyBlue",
+    "name": "Besouro Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Beetle-Red",
+    "name": "Besouro Escarlate",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Red"
+  },
+  {
+    "id": "Beetle-Skeleton",
+    "name": "Besouro Esqueleto",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Beetle-CottonCandyPink",
+    "name": "Besouro Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Beetle-Zombie",
+    "name": "Besouro Zombie",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Beetle-White",
+    "name": "Besouro das Neves",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "White"
+  },
+  {
+    "id": "Beetle-Shade",
+    "name": "Besouro das Trevas",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Shade"
+  },
+  {
+    "id": "Beetle-Golden",
+    "name": "Besouro de Ouro",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Golden"
+  },
+  {
+    "id": "Beetle-Desert",
+    "name": "Besouro do Deserto",
+    "category": "quest",
+    "species": "Beetle",
+    "potion": "Desert"
+  },
+  {
+    "id": "Dog-Base",
+    "name": "Cachorro (Base)",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Base"
+  },
+  {
+    "id": "Dog-CottonCandyBlue",
+    "name": "Cachorro Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Dog-Red",
+    "name": "Cachorro Escarlate",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Red"
+  },
+  {
+    "id": "Dog-Skeleton",
+    "name": "Cachorro Esqueleto",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Dog-CottonCandyPink",
+    "name": "Cachorro Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Dog-Zombie",
+    "name": "Cachorro Zombie",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Dog-White",
+    "name": "Cachorro das Neves",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "White"
+  },
+  {
+    "id": "Dog-Shade",
+    "name": "Cachorro das Trevas",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Shade"
+  },
+  {
+    "id": "Dog-Golden",
+    "name": "Cachorro de Ouro",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Golden"
+  },
+  {
+    "id": "Dog-Desert",
+    "name": "Cachorro do Deserto",
+    "category": "quest",
+    "species": "Dog",
+    "potion": "Desert"
+  },
+  {
+    "id": "Chameleon-Base",
+    "name": "Camaleão (Base)",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Base"
+  },
+  {
+    "id": "Chameleon-CottonCandyBlue",
+    "name": "Camaleão Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Chameleon-Red",
+    "name": "Camaleão Escarlate",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Red"
+  },
+  {
+    "id": "Chameleon-Skeleton",
+    "name": "Camaleão Esqueleto",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Chameleon-CottonCandyPink",
+    "name": "Camaleão Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Chameleon-Zombie",
+    "name": "Camaleão Zombie",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Chameleon-White",
+    "name": "Camaleão das Neves",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "White"
+  },
+  {
+    "id": "Chameleon-Shade",
+    "name": "Camaleão das Trevas",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Shade"
+  },
+  {
+    "id": "Chameleon-Golden",
+    "name": "Camaleão de Ouro",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Golden"
+  },
+  {
+    "id": "Chameleon-Desert",
+    "name": "Camaleão do Deserto",
+    "category": "quest",
+    "species": "Chameleon",
+    "potion": "Desert"
+  },
+  {
+    "id": "Kangaroo-Base",
+    "name": "Canguru (Base)",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Base"
+  },
+  {
+    "id": "Kangaroo-CottonCandyBlue",
+    "name": "Canguru Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Kangaroo-Red",
+    "name": "Canguru Escarlate",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Red"
+  },
+  {
+    "id": "Kangaroo-Skeleton",
+    "name": "Canguru Esqueleto",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Kangaroo-CottonCandyPink",
+    "name": "Canguru Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Kangaroo-Zombie",
+    "name": "Canguru Zombie",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Kangaroo-White",
+    "name": "Canguru das Neves",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "White"
+  },
+  {
+    "id": "Kangaroo-Shade",
+    "name": "Canguru das Trevas",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Shade"
+  },
+  {
+    "id": "Kangaroo-Golden",
+    "name": "Canguru de Ouro",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Golden"
+  },
+  {
+    "id": "Kangaroo-Desert",
+    "name": "Canguru do Deserto",
+    "category": "quest",
+    "species": "Kangaroo",
+    "potion": "Desert"
+  },
+  {
+    "id": "Snail-Base",
+    "name": "Caracol (Base)",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Base"
+  },
+  {
+    "id": "Snail-CottonCandyBlue",
+    "name": "Caracol Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Snail-Red",
+    "name": "Caracol Escarlate",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Red"
+  },
+  {
+    "id": "Snail-Skeleton",
+    "name": "Caracol Esqueleto",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Snail-CottonCandyPink",
+    "name": "Caracol Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Snail-Zombie",
+    "name": "Caracol Zombie",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Snail-White",
+    "name": "Caracol das Neves",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "White"
+  },
+  {
+    "id": "Snail-Shade",
+    "name": "Caracol das Trevas",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Shade"
+  },
+  {
+    "id": "Snail-Golden",
+    "name": "Caracol de Ouro",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Golden"
+  },
+  {
+    "id": "Snail-Desert",
+    "name": "Caracol do Deserto",
+    "category": "quest",
+    "species": "Snail",
+    "potion": "Desert"
+  },
+  {
+    "id": "Crab-Base",
+    "name": "Caranguejo (Base)",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Base"
+  },
+  {
+    "id": "Crab-CottonCandyBlue",
+    "name": "Caranguejo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Crab-Red",
+    "name": "Caranguejo Escarlate",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Red"
+  },
+  {
+    "id": "Crab-Skeleton",
+    "name": "Caranguejo Esqueleto",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Crab-CottonCandyPink",
+    "name": "Caranguejo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Crab-Zombie",
+    "name": "Caranguejo Zombie",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Crab-White",
+    "name": "Caranguejo das Neves",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "White"
+  },
+  {
+    "id": "Crab-Shade",
+    "name": "Caranguejo das Trevas",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Shade"
+  },
+  {
+    "id": "Crab-Golden",
+    "name": "Caranguejo de Ouro",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Golden"
+  },
+  {
+    "id": "Crab-Desert",
+    "name": "Caranguejo do Deserto",
+    "category": "quest",
+    "species": "Crab",
+    "potion": "Desert"
+  },
+  {
+    "id": "Horse-Base",
+    "name": "Cavalo (Base)",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Base"
+  },
+  {
+    "id": "Horse-CottonCandyBlue",
+    "name": "Cavalo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Horse-Red",
+    "name": "Cavalo Escarlate",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Red"
+  },
+  {
+    "id": "Horse-Skeleton",
+    "name": "Cavalo Esqueleto",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Horse-CottonCandyPink",
+    "name": "Cavalo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Horse-Zombie",
+    "name": "Cavalo Zombie",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Horse-White",
+    "name": "Cavalo das Neves",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "White"
+  },
+  {
+    "id": "Horse-Shade",
+    "name": "Cavalo das Trevas",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Shade"
+  },
+  {
+    "id": "Horse-Golden",
+    "name": "Cavalo de Ouro",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Golden"
+  },
+  {
+    "id": "Horse-Desert",
+    "name": "Cavalo do Deserto",
+    "category": "quest",
+    "species": "Horse",
+    "potion": "Desert"
+  },
+  {
+    "id": "Seahorse-Base",
+    "name": "Cavalo-Marinho (Base)",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Base"
+  },
+  {
+    "id": "Seahorse-CottonCandyBlue",
+    "name": "Cavalo-Marinho Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Seahorse-Red",
+    "name": "Cavalo-Marinho Escarlate",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Red"
+  },
+  {
+    "id": "Seahorse-Skeleton",
+    "name": "Cavalo-Marinho Esqueleto",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Seahorse-CottonCandyPink",
+    "name": "Cavalo-Marinho Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Seahorse-Zombie",
+    "name": "Cavalo-Marinho Zombie",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Seahorse-White",
+    "name": "Cavalo-Marinho das Neves",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "White"
+  },
+  {
+    "id": "Seahorse-Shade",
+    "name": "Cavalo-Marinho das Trevas",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Shade"
+  },
+  {
+    "id": "Seahorse-Golden",
+    "name": "Cavalo-Marinho de Ouro",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Golden"
+  },
+  {
+    "id": "Seahorse-Desert",
+    "name": "Cavalo-Marinho do Deserto",
+    "category": "quest",
+    "species": "Seahorse",
+    "potion": "Desert"
+  },
+  {
+    "id": "Cheetah-Base",
+    "name": "Chita (Base)",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Base"
+  },
+  {
+    "id": "Cheetah-CottonCandyBlue",
+    "name": "Chita Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Cheetah-Red",
+    "name": "Chita Escarlate",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Red"
+  },
+  {
+    "id": "Cheetah-Skeleton",
+    "name": "Chita Esqueleto",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Cheetah-CottonCandyPink",
+    "name": "Chita Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Cheetah-Zombie",
+    "name": "Chita Zombie",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Cheetah-White",
+    "name": "Chita das Neves",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "White"
+  },
+  {
+    "id": "Cheetah-Shade",
+    "name": "Chita das Trevas",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Shade"
+  },
+  {
+    "id": "Cheetah-Golden",
+    "name": "Chita de Ouro",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Golden"
+  },
+  {
+    "id": "Cheetah-Desert",
+    "name": "Chita do Deserto",
+    "category": "quest",
+    "species": "Cheetah",
+    "potion": "Desert"
+  },
+  {
+    "id": "Snake-Base",
+    "name": "Cobra (Base)",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Base"
+  },
+  {
+    "id": "Snake-CottonCandyBlue",
+    "name": "Cobra Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Snake-Red",
+    "name": "Cobra Escarlate",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Red"
+  },
+  {
+    "id": "Snake-Skeleton",
+    "name": "Cobra Esqueleto",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Snake-CottonCandyPink",
+    "name": "Cobra Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Snake-Zombie",
+    "name": "Cobra Zombie",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Snake-White",
+    "name": "Cobra das Neves",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "White"
+  },
+  {
+    "id": "Snake-Shade",
+    "name": "Cobra das Trevas",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Shade"
+  },
+  {
+    "id": "Snake-Golden",
+    "name": "Cobra de Ouro",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Golden"
+  },
+  {
+    "id": "Snake-Desert",
+    "name": "Cobra do Deserto",
+    "category": "quest",
+    "species": "Snake",
+    "potion": "Desert"
+  },
+  {
+    "id": "Bunny-Base",
+    "name": "Coelhinho (Base)",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Base"
+  },
+  {
+    "id": "Bunny-CottonCandyBlue",
+    "name": "Coelhinho Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Bunny-Red",
+    "name": "Coelhinho Escarlate",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Red"
+  },
+  {
+    "id": "Bunny-Skeleton",
+    "name": "Coelhinho Esqueleto",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Bunny-CottonCandyPink",
+    "name": "Coelhinho Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Bunny-Zombie",
+    "name": "Coelhinho Zombie",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Bunny-White",
+    "name": "Coelhinho das Neves",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "White"
+  },
+  {
+    "id": "Bunny-Shade",
+    "name": "Coelhinho das Trevas",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Shade"
+  },
+  {
+    "id": "Bunny-Golden",
+    "name": "Coelhinho de Ouro",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Golden"
+  },
+  {
+    "id": "Bunny-Desert",
+    "name": "Coelhinho do Deserto",
+    "category": "quest",
+    "species": "Bunny",
+    "potion": "Desert"
+  },
+  {
+    "id": "Owl-Base",
+    "name": "Coruja (Base)",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Base"
+  },
+  {
+    "id": "Owl-CottonCandyBlue",
+    "name": "Coruja Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Owl-Red",
+    "name": "Coruja Escarlate",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Red"
+  },
+  {
+    "id": "Owl-Skeleton",
+    "name": "Coruja Esqueleto",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Owl-CottonCandyPink",
+    "name": "Coruja Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Owl-Zombie",
+    "name": "Coruja Zombie",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Owl-White",
+    "name": "Coruja das Neves",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "White"
+  },
+  {
+    "id": "Owl-Shade",
+    "name": "Coruja das Trevas",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Shade"
+  },
+  {
+    "id": "Owl-Golden",
+    "name": "Coruja de Ouro",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Golden"
+  },
+  {
+    "id": "Owl-Desert",
+    "name": "Coruja do Deserto",
+    "category": "quest",
+    "species": "Owl",
+    "potion": "Desert"
+  },
+  {
+    "id": "Squirrel-Base",
+    "name": "Esquilo (Base)",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Base"
+  },
+  {
+    "id": "Squirrel-CottonCandyBlue",
+    "name": "Esquilo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Squirrel-Red",
+    "name": "Esquilo Escarlate",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Red"
+  },
+  {
+    "id": "Squirrel-Skeleton",
+    "name": "Esquilo Esqueleto",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Squirrel-CottonCandyPink",
+    "name": "Esquilo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Squirrel-Zombie",
+    "name": "Esquilo Zombie",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Squirrel-White",
+    "name": "Esquilo das Neves",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "White"
+  },
+  {
+    "id": "Squirrel-Shade",
+    "name": "Esquilo das Trevas",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Shade"
+  },
+  {
+    "id": "Squirrel-Golden",
+    "name": "Esquilo de Ouro",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Golden"
+  },
+  {
+    "id": "Squirrel-Desert",
+    "name": "Esquilo do Deserto",
+    "category": "quest",
+    "species": "Squirrel",
+    "potion": "Desert"
+  },
+  {
+    "id": "Falcon-Base",
+    "name": "Falcão (Base)",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Base"
+  },
+  {
+    "id": "Falcon-CottonCandyBlue",
+    "name": "Falcão Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Falcon-Red",
+    "name": "Falcão Escarlate",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Red"
+  },
+  {
+    "id": "Falcon-Skeleton",
+    "name": "Falcão Esqueleto",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Falcon-CottonCandyPink",
+    "name": "Falcão Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Falcon-Zombie",
+    "name": "Falcão Zombie",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Falcon-White",
+    "name": "Falcão das Neves",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "White"
+  },
+  {
+    "id": "Falcon-Shade",
+    "name": "Falcão das Trevas",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Shade"
+  },
+  {
+    "id": "Falcon-Golden",
+    "name": "Falcão de Ouro",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Golden"
+  },
+  {
+    "id": "Falcon-Desert",
+    "name": "Falcão do Deserto",
+    "category": "quest",
+    "species": "Falcon",
+    "potion": "Desert"
+  },
+  {
+    "id": "Yarn-Base",
+    "name": "Fio de Lã (Base)",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Base"
+  },
+  {
+    "id": "Yarn-CottonCandyBlue",
+    "name": "Fio de Lã Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Yarn-Red",
+    "name": "Fio de Lã Escarlate",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Red"
+  },
+  {
+    "id": "Yarn-Skeleton",
+    "name": "Fio de Lã Esqueleto",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Yarn-CottonCandyPink",
+    "name": "Fio de Lã Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Yarn-Zombie",
+    "name": "Fio de Lã Zombie",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Yarn-White",
+    "name": "Fio de Lã das Neves",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "White"
+  },
+  {
+    "id": "Yarn-Shade",
+    "name": "Fio de Lã das Trevas",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Shade"
+  },
+  {
+    "id": "Yarn-Golden",
+    "name": "Fio de Lã de Ouro",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Golden"
+  },
+  {
+    "id": "Yarn-Desert",
+    "name": "Fio de Lã do Deserto",
+    "category": "quest",
+    "species": "Yarn",
+    "potion": "Desert"
+  },
+  {
+    "id": "Ferret-Base",
+    "name": "Furão (Base)",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Base"
+  },
+  {
+    "id": "Ferret-CottonCandyBlue",
+    "name": "Furão Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Ferret-Red",
+    "name": "Furão Escarlate",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Red"
+  },
+  {
+    "id": "Ferret-Skeleton",
+    "name": "Furão Esqueleto",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Ferret-CottonCandyPink",
+    "name": "Furão Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Ferret-Zombie",
+    "name": "Furão Zombie",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Ferret-White",
+    "name": "Furão das Neves",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "White"
+  },
+  {
+    "id": "Ferret-Shade",
+    "name": "Furão das Trevas",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Shade"
+  },
+  {
+    "id": "Ferret-Golden",
+    "name": "Furão de Ouro",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Golden"
+  },
+  {
+    "id": "Ferret-Desert",
+    "name": "Furão do Deserto",
+    "category": "quest",
+    "species": "Ferret",
+    "potion": "Desert"
+  },
+  {
+    "id": "Rooster-Base",
+    "name": "Galo (Base)",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Base"
+  },
+  {
+    "id": "Rooster-CottonCandyBlue",
+    "name": "Galo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Rooster-Red",
+    "name": "Galo Escarlate",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Red"
+  },
+  {
+    "id": "Rooster-Skeleton",
+    "name": "Galo Esqueleto",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Rooster-CottonCandyPink",
+    "name": "Galo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Rooster-Zombie",
+    "name": "Galo Zombie",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Rooster-White",
+    "name": "Galo das Neves",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "White"
+  },
+  {
+    "id": "Rooster-Shade",
+    "name": "Galo das Trevas",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Shade"
+  },
+  {
+    "id": "Rooster-Golden",
+    "name": "Galo de Ouro",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Golden"
+  },
+  {
+    "id": "Rooster-Desert",
+    "name": "Galo do Deserto",
+    "category": "quest",
+    "species": "Rooster",
+    "potion": "Desert"
+  },
+  {
+    "id": "Cat-Base",
+    "name": "Gatinho (Base)",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Base"
+  },
+  {
+    "id": "Cat-CottonCandyBlue",
+    "name": "Gatinho Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Cat-Red",
+    "name": "Gatinho Escarlate",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Red"
+  },
+  {
+    "id": "Cat-Skeleton",
+    "name": "Gatinho Esqueleto",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Cat-CottonCandyPink",
+    "name": "Gatinho Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Cat-Zombie",
+    "name": "Gatinho Zombie",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Cat-White",
+    "name": "Gatinho das Neves",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "White"
+  },
+  {
+    "id": "Cat-Shade",
+    "name": "Gatinho das Trevas",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Shade"
+  },
+  {
+    "id": "Cat-Golden",
+    "name": "Gatinho de Ouro",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Golden"
+  },
+  {
+    "id": "Cat-Desert",
+    "name": "Gatinho do Deserto",
+    "category": "quest",
+    "species": "Cat",
+    "potion": "Desert"
+  },
+  {
+    "id": "Giraffe-Base",
+    "name": "Girafa (Base)",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Base"
+  },
+  {
+    "id": "Giraffe-CottonCandyBlue",
+    "name": "Girafa Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Giraffe-Red",
+    "name": "Girafa Escarlate",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Red"
+  },
+  {
+    "id": "Giraffe-Skeleton",
+    "name": "Girafa Esqueleto",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Giraffe-CottonCandyPink",
+    "name": "Girafa Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Giraffe-Zombie",
+    "name": "Girafa Zombie",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Giraffe-White",
+    "name": "Girafa das Neves",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "White"
+  },
+  {
+    "id": "Giraffe-Shade",
+    "name": "Girafa das Trevas",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Shade"
+  },
+  {
+    "id": "Giraffe-Golden",
+    "name": "Girafa de Ouro",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Golden"
+  },
+  {
+    "id": "Giraffe-Desert",
+    "name": "Girafa do Deserto",
+    "category": "quest",
+    "species": "Giraffe",
+    "potion": "Desert"
+  },
+  {
+    "id": "Dolphin-Base",
+    "name": "Golfinho (Base)",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Base"
+  },
+  {
+    "id": "Dolphin-CottonCandyBlue",
+    "name": "Golfinho Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Dolphin-Red",
+    "name": "Golfinho Escarlate",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Red"
+  },
+  {
+    "id": "Dolphin-Skeleton",
+    "name": "Golfinho Esqueleto",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Dolphin-CottonCandyPink",
+    "name": "Golfinho Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Dolphin-Zombie",
+    "name": "Golfinho Zombie",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Dolphin-White",
+    "name": "Golfinho das Neves",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "White"
+  },
+  {
+    "id": "Dolphin-Shade",
+    "name": "Golfinho das Trevas",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Shade"
+  },
+  {
+    "id": "Dolphin-Golden",
+    "name": "Golfinho de Ouro",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Golden"
+  },
+  {
+    "id": "Dolphin-Desert",
+    "name": "Golfinho do Deserto",
+    "category": "quest",
+    "species": "Dolphin",
+    "potion": "Desert"
+  },
+  {
+    "id": "Slime-Base",
+    "name": "Gosma de Marshmallow (Base)",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Base"
+  },
+  {
+    "id": "Slime-CottonCandyBlue",
+    "name": "Gosma de Marshmallow Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Slime-Red",
+    "name": "Gosma de Marshmallow Escarlate",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Red"
+  },
+  {
+    "id": "Slime-Skeleton",
+    "name": "Gosma de Marshmallow Esqueleto",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Slime-CottonCandyPink",
+    "name": "Gosma de Marshmallow Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Slime-Zombie",
+    "name": "Gosma de Marshmallow Zombie",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Slime-White",
+    "name": "Gosma de Marshmallow das Neves",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "White"
+  },
+  {
+    "id": "Slime-Shade",
+    "name": "Gosma de Marshmallow das Trevas",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Shade"
+  },
+  {
+    "id": "Slime-Golden",
+    "name": "Gosma de Marshmallow de Ouro",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Golden"
+  },
+  {
+    "id": "Slime-Desert",
+    "name": "Gosma de Marshmallow do Deserto",
+    "category": "quest",
+    "species": "Slime",
+    "potion": "Desert"
+  },
+  {
+    "id": "Gryphon-Base",
+    "name": "Grifo (Base)",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Base"
+  },
+  {
+    "id": "Gryphon-CottonCandyBlue",
+    "name": "Grifo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Gryphon-Red",
+    "name": "Grifo Escarlate",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Red"
+  },
+  {
+    "id": "Gryphon-Skeleton",
+    "name": "Grifo Esqueleto",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Gryphon-CottonCandyPink",
+    "name": "Grifo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Gryphon-Zombie",
+    "name": "Grifo Zombie",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Gryphon-White",
+    "name": "Grifo das Neves",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "White"
+  },
+  {
+    "id": "Gryphon-Shade",
+    "name": "Grifo das Trevas",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Shade"
+  },
+  {
+    "id": "Gryphon-Golden",
+    "name": "Grifo de Ouro",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Golden"
+  },
+  {
+    "id": "Gryphon-Desert",
+    "name": "Grifo do Deserto",
+    "category": "quest",
+    "species": "Gryphon",
+    "potion": "Desert"
+  },
+  {
+    "id": "Raccoon-Base",
+    "name": "Guaxinim (Base)",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Base"
+  },
+  {
+    "id": "Raccoon-CottonCandyBlue",
+    "name": "Guaxinim Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Raccoon-Red",
+    "name": "Guaxinim Escarlate",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Red"
+  },
+  {
+    "id": "Raccoon-Skeleton",
+    "name": "Guaxinim Esqueleto",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Raccoon-CottonCandyPink",
+    "name": "Guaxinim Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Raccoon-Zombie",
+    "name": "Guaxinim Zombie",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Raccoon-White",
+    "name": "Guaxinim das Neves",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "White"
+  },
+  {
+    "id": "Raccoon-Shade",
+    "name": "Guaxinim das Trevas",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Shade"
+  },
+  {
+    "id": "Raccoon-Golden",
+    "name": "Guaxinim de Ouro",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Golden"
+  },
+  {
+    "id": "Raccoon-Desert",
+    "name": "Guaxinim do Deserto",
+    "category": "quest",
+    "species": "Raccoon",
+    "potion": "Desert"
+  },
+  {
+    "id": "Hippo-Base",
+    "name": "Hipopótamo (Base)",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Base"
+  },
+  {
+    "id": "Hippo-CottonCandyBlue",
+    "name": "Hipopótamo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Hippo-Red",
+    "name": "Hipopótamo Escarlate",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Red"
+  },
+  {
+    "id": "Hippo-Skeleton",
+    "name": "Hipopótamo Esqueleto",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Hippo-CottonCandyPink",
+    "name": "Hipopótamo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Hippo-Zombie",
+    "name": "Hipopótamo Zombie",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Hippo-White",
+    "name": "Hipopótamo das Neves",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "White"
+  },
+  {
+    "id": "Hippo-Shade",
+    "name": "Hipopótamo das Trevas",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Shade"
+  },
+  {
+    "id": "Hippo-Golden",
+    "name": "Hipopótamo de Ouro",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Golden"
+  },
+  {
+    "id": "Hippo-Desert",
+    "name": "Hipopótamo do Deserto",
+    "category": "quest",
+    "species": "Hippo",
+    "potion": "Desert"
+  },
+  {
+    "id": "Alligator-Base",
+    "name": "Jacaré (Base)",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Base"
+  },
+  {
+    "id": "Alligator-CottonCandyBlue",
+    "name": "Jacaré Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Alligator-Red",
+    "name": "Jacaré Escarlate",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Red"
+  },
+  {
+    "id": "Alligator-Skeleton",
+    "name": "Jacaré Esqueleto",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Alligator-CottonCandyPink",
+    "name": "Jacaré Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Alligator-Zombie",
+    "name": "Jacaré Zombie",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Alligator-White",
+    "name": "Jacaré das Neves",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "White"
+  },
+  {
+    "id": "Alligator-Shade",
+    "name": "Jacaré das Trevas",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Shade"
+  },
+  {
+    "id": "Alligator-Golden",
+    "name": "Jacaré de Ouro",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Golden"
+  },
+  {
+    "id": "Alligator-Desert",
+    "name": "Jacaré do Deserto",
+    "category": "quest",
+    "species": "Alligator",
+    "potion": "Desert"
+  },
+  {
+    "id": "Butterfly-Base",
+    "name": "Lagarta (Base)",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Base"
+  },
+  {
+    "id": "Butterfly-CottonCandyBlue",
+    "name": "Lagarta Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Butterfly-Red",
+    "name": "Lagarta Escarlate",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Red"
+  },
+  {
+    "id": "Butterfly-Skeleton",
+    "name": "Lagarta Esqueleto",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Butterfly-CottonCandyPink",
+    "name": "Lagarta Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Butterfly-Zombie",
+    "name": "Lagarta Zombie",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Butterfly-White",
+    "name": "Lagarta das Neves",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "White"
+  },
+  {
+    "id": "Butterfly-Shade",
+    "name": "Lagarta das Trevas",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Shade"
+  },
+  {
+    "id": "Butterfly-Golden",
+    "name": "Lagarta de Ouro",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Golden"
+  },
+  {
+    "id": "Butterfly-Desert",
+    "name": "Lagarta do Deserto",
+    "category": "quest",
+    "species": "Butterfly",
+    "potion": "Desert"
+  },
+  {
+    "id": "Otter-Base",
+    "name": "Lontra (Base)",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Base"
+  },
+  {
+    "id": "Otter-CottonCandyBlue",
+    "name": "Lontra Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Otter-Red",
+    "name": "Lontra Escarlate",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Red"
+  },
+  {
+    "id": "Otter-Skeleton",
+    "name": "Lontra Esqueleto",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Otter-CottonCandyPink",
+    "name": "Lontra Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Otter-Zombie",
+    "name": "Lontra Zombie",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Otter-White",
+    "name": "Lontra das Neves",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "White"
+  },
+  {
+    "id": "Otter-Shade",
+    "name": "Lontra das Trevas",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Shade"
+  },
+  {
+    "id": "Otter-Golden",
+    "name": "Lontra de Ouro",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Golden"
+  },
+  {
+    "id": "Otter-Desert",
+    "name": "Lontra do Deserto",
+    "category": "quest",
+    "species": "Otter",
+    "potion": "Desert"
+  },
+  {
+    "id": "Cuttlefish-Base",
+    "name": "Lula (Base)",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Base"
+  },
+  {
+    "id": "Cuttlefish-CottonCandyBlue",
+    "name": "Lula Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Cuttlefish-Red",
+    "name": "Lula Escarlate",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Red"
+  },
+  {
+    "id": "Cuttlefish-Skeleton",
+    "name": "Lula Esqueleto",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Cuttlefish-CottonCandyPink",
+    "name": "Lula Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Cuttlefish-Zombie",
+    "name": "Lula Zombie",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Cuttlefish-White",
+    "name": "Lula das Neves",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "White"
+  },
+  {
+    "id": "Cuttlefish-Shade",
+    "name": "Lula das Trevas",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Shade"
+  },
+  {
+    "id": "Cuttlefish-Golden",
+    "name": "Lula de Ouro",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Golden"
+  },
+  {
+    "id": "Cuttlefish-Desert",
+    "name": "Lula do Deserto",
+    "category": "quest",
+    "species": "Cuttlefish",
+    "potion": "Desert"
+  },
+  {
+    "id": "Monkey-Base",
+    "name": "Macaco (Base)",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Base"
+  },
+  {
+    "id": "Monkey-CottonCandyBlue",
+    "name": "Macaco Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Monkey-Red",
+    "name": "Macaco Escarlate",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Red"
+  },
+  {
+    "id": "Monkey-Skeleton",
+    "name": "Macaco Esqueleto",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Monkey-CottonCandyPink",
+    "name": "Macaco Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Monkey-Zombie",
+    "name": "Macaco Zombie",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Monkey-White",
+    "name": "Macaco das Neves",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "White"
+  },
+  {
+    "id": "Monkey-Shade",
+    "name": "Macaco das Trevas",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Shade"
+  },
+  {
+    "id": "Monkey-Golden",
+    "name": "Macaco de Ouro",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Golden"
+  },
+  {
+    "id": "Monkey-Desert",
+    "name": "Macaco do Deserto",
+    "category": "quest",
+    "species": "Monkey",
+    "potion": "Desert"
+  },
+  {
+    "id": "Nudibranch-Base",
+    "name": "Nudibrânquio (Base)",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Base"
+  },
+  {
+    "id": "Nudibranch-CottonCandyBlue",
+    "name": "Nudibrânquio Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Nudibranch-Red",
+    "name": "Nudibrânquio Escarlate",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Red"
+  },
+  {
+    "id": "Nudibranch-Skeleton",
+    "name": "Nudibrânquio Esqueleto",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Nudibranch-CottonCandyPink",
+    "name": "Nudibrânquio Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Nudibranch-Zombie",
+    "name": "Nudibrânquio Zombie",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Nudibranch-White",
+    "name": "Nudibrânquio das Neves",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "White"
+  },
+  {
+    "id": "Nudibranch-Shade",
+    "name": "Nudibrânquio das Trevas",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Shade"
+  },
+  {
+    "id": "Nudibranch-Golden",
+    "name": "Nudibrânquio de Ouro",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Golden"
+  },
+  {
+    "id": "Nudibranch-Desert",
+    "name": "Nudibrânquio do Deserto",
+    "category": "quest",
+    "species": "Nudibranch",
+    "potion": "Desert"
+  },
+  {
+    "id": "Platypus-Base",
+    "name": "Ornitorrinco (Base)",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Base"
+  },
+  {
+    "id": "Platypus-CottonCandyBlue",
+    "name": "Ornitorrinco Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Platypus-Red",
+    "name": "Ornitorrinco Escarlate",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Red"
+  },
+  {
+    "id": "Platypus-Skeleton",
+    "name": "Ornitorrinco Esqueleto",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Platypus-CottonCandyPink",
+    "name": "Ornitorrinco Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Platypus-Zombie",
+    "name": "Ornitorrinco Zombie",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Platypus-White",
+    "name": "Ornitorrinco das Neves",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "White"
+  },
+  {
+    "id": "Platypus-Shade",
+    "name": "Ornitorrinco das Trevas",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Shade"
+  },
+  {
+    "id": "Platypus-Golden",
+    "name": "Ornitorrinco de Ouro",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Golden"
+  },
+  {
+    "id": "Platypus-Desert",
+    "name": "Ornitorrinco do Deserto",
+    "category": "quest",
+    "species": "Platypus",
+    "potion": "Desert"
+  },
+  {
+    "id": "Hedgehog-Base",
+    "name": "Ouriço-Cacheiro (Base)",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Base"
+  },
+  {
+    "id": "Hedgehog-CottonCandyBlue",
+    "name": "Ouriço-Cacheiro Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Hedgehog-Red",
+    "name": "Ouriço-Cacheiro Escarlate",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Red"
+  },
+  {
+    "id": "Hedgehog-Skeleton",
+    "name": "Ouriço-Cacheiro Esqueleto",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Hedgehog-CottonCandyPink",
+    "name": "Ouriço-Cacheiro Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Hedgehog-Zombie",
+    "name": "Ouriço-Cacheiro Zombie",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Hedgehog-White",
+    "name": "Ouriço-Cacheiro das Neves",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "White"
+  },
+  {
+    "id": "Hedgehog-Shade",
+    "name": "Ouriço-Cacheiro das Trevas",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Shade"
+  },
+  {
+    "id": "Hedgehog-Golden",
+    "name": "Ouriço-Cacheiro de Ouro",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Golden"
+  },
+  {
+    "id": "Hedgehog-Desert",
+    "name": "Ouriço-Cacheiro do Deserto",
+    "category": "quest",
+    "species": "Hedgehog",
+    "potion": "Desert"
+  },
+  {
+    "id": "Sheep-Base",
+    "name": "Ovelha (Base)",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Base"
+  },
+  {
+    "id": "Sheep-CottonCandyBlue",
+    "name": "Ovelha Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Sheep-Red",
+    "name": "Ovelha Escarlate",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Red"
+  },
+  {
+    "id": "Sheep-Skeleton",
+    "name": "Ovelha Esqueleto",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Sheep-CottonCandyPink",
+    "name": "Ovelha Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Sheep-Zombie",
+    "name": "Ovelha Zombie",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Sheep-White",
+    "name": "Ovelha das Neves",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "White"
+  },
+  {
+    "id": "Sheep-Shade",
+    "name": "Ovelha das Trevas",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Shade"
+  },
+  {
+    "id": "Sheep-Golden",
+    "name": "Ovelha de Ouro",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Golden"
+  },
+  {
+    "id": "Sheep-Desert",
+    "name": "Ovelha do Deserto",
+    "category": "quest",
+    "species": "Sheep",
+    "potion": "Desert"
+  },
+  {
+    "id": "Egg-Base",
+    "name": "Ovo (Base)",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Base"
+  },
+  {
+    "id": "Egg-CottonCandyBlue",
+    "name": "Ovo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Egg-Red",
+    "name": "Ovo Escarlate",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Red"
+  },
+  {
+    "id": "Egg-Skeleton",
+    "name": "Ovo Esqueleto",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Egg-CottonCandyPink",
+    "name": "Ovo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Egg-Zombie",
+    "name": "Ovo Zombie",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Egg-White",
+    "name": "Ovo das Neves",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "White"
+  },
+  {
+    "id": "Egg-Shade",
+    "name": "Ovo das Trevas",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Shade"
+  },
+  {
+    "id": "Egg-Golden",
+    "name": "Ovo de Ouro",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Golden"
+  },
+  {
+    "id": "Egg-Desert",
+    "name": "Ovo do Deserto",
+    "category": "quest",
+    "species": "Egg",
+    "potion": "Desert"
+  },
+  {
+    "id": "Parrot-Base",
+    "name": "Papagaio (Base)",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Base"
+  },
+  {
+    "id": "Parrot-CottonCandyBlue",
+    "name": "Papagaio Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Parrot-Red",
+    "name": "Papagaio Escarlate",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Red"
+  },
+  {
+    "id": "Parrot-Skeleton",
+    "name": "Papagaio Esqueleto",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Parrot-CottonCandyPink",
+    "name": "Papagaio Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Parrot-Zombie",
+    "name": "Papagaio Zombie",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Parrot-White",
+    "name": "Papagaio das Neves",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "White"
+  },
+  {
+    "id": "Parrot-Shade",
+    "name": "Papagaio das Trevas",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Shade"
+  },
+  {
+    "id": "Parrot-Golden",
+    "name": "Papagaio de Ouro",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Golden"
+  },
+  {
+    "id": "Parrot-Desert",
+    "name": "Papagaio do Deserto",
+    "category": "quest",
+    "species": "Parrot",
+    "potion": "Desert"
+  },
+  {
+    "id": "Peacock-Base",
+    "name": "Pavão (Base)",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Base"
+  },
+  {
+    "id": "Peacock-CottonCandyBlue",
+    "name": "Pavão Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Peacock-Red",
+    "name": "Pavão Escarlate",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Red"
+  },
+  {
+    "id": "Peacock-Skeleton",
+    "name": "Pavão Esqueleto",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Peacock-CottonCandyPink",
+    "name": "Pavão Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Peacock-Zombie",
+    "name": "Pavão Zombie",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Peacock-White",
+    "name": "Pavão das Neves",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "White"
+  },
+  {
+    "id": "Peacock-Shade",
+    "name": "Pavão das Trevas",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Shade"
+  },
+  {
+    "id": "Peacock-Golden",
+    "name": "Pavão de Ouro",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Golden"
+  },
+  {
+    "id": "Peacock-Desert",
+    "name": "Pavão do Deserto",
+    "category": "quest",
+    "species": "Peacock",
+    "potion": "Desert"
+  },
+  {
+    "id": "Rock-Base",
+    "name": "Pedra (Base)",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Base"
+  },
+  {
+    "id": "Rock-CottonCandyBlue",
+    "name": "Pedra Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Rock-Red",
+    "name": "Pedra Escarlate",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Red"
+  },
+  {
+    "id": "Rock-Skeleton",
+    "name": "Pedra Esqueleto",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Rock-CottonCandyPink",
+    "name": "Pedra Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Rock-Zombie",
+    "name": "Pedra Zombie",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Rock-White",
+    "name": "Pedra das Neves",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "White"
+  },
+  {
+    "id": "Rock-Shade",
+    "name": "Pedra das Trevas",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Shade"
+  },
+  {
+    "id": "Rock-Golden",
+    "name": "Pedra de Ouro",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Golden"
+  },
+  {
+    "id": "Rock-Desert",
+    "name": "Pedra do Deserto",
+    "category": "quest",
+    "species": "Rock",
+    "potion": "Desert"
+  },
+  {
+    "id": "Penguin-Base",
+    "name": "Pinguim (Base)",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Base"
+  },
+  {
+    "id": "Penguin-CottonCandyBlue",
+    "name": "Pinguim Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Penguin-Red",
+    "name": "Pinguim Escarlate",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Red"
+  },
+  {
+    "id": "Penguin-Skeleton",
+    "name": "Pinguim Esqueleto",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Penguin-CottonCandyPink",
+    "name": "Pinguim Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Penguin-Zombie",
+    "name": "Pinguim Zombie",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Penguin-White",
+    "name": "Pinguim das Neves",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "White"
+  },
+  {
+    "id": "Penguin-Shade",
+    "name": "Pinguim das Trevas",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Shade"
+  },
+  {
+    "id": "Penguin-Golden",
+    "name": "Pinguim de Ouro",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Golden"
+  },
+  {
+    "id": "Penguin-Desert",
+    "name": "Pinguim do Deserto",
+    "category": "quest",
+    "species": "Penguin",
+    "potion": "Desert"
+  },
+  {
+    "id": "Octopus-Base",
+    "name": "Polvo (Base)",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Base"
+  },
+  {
+    "id": "Octopus-CottonCandyBlue",
+    "name": "Polvo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Octopus-Red",
+    "name": "Polvo Escarlate",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Red"
+  },
+  {
+    "id": "Octopus-Skeleton",
+    "name": "Polvo Esqueleto",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Octopus-CottonCandyPink",
+    "name": "Polvo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Octopus-Zombie",
+    "name": "Polvo Zombie",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Octopus-White",
+    "name": "Polvo das Neves",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "White"
+  },
+  {
+    "id": "Octopus-Shade",
+    "name": "Polvo das Trevas",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Shade"
+  },
+  {
+    "id": "Octopus-Golden",
+    "name": "Polvo de Ouro",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Golden"
+  },
+  {
+    "id": "Octopus-Desert",
+    "name": "Polvo do Deserto",
+    "category": "quest",
+    "species": "Octopus",
+    "potion": "Desert"
+  },
+  {
+    "id": "GuineaPig-Base",
+    "name": "Porquinho-da-Índia (Base)",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Base"
+  },
+  {
+    "id": "GuineaPig-CottonCandyBlue",
+    "name": "Porquinho-da-Índia Azul Algodão-Doce",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "GuineaPig-Red",
+    "name": "Porquinho-da-Índia Escarlate",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Red"
+  },
+  {
+    "id": "GuineaPig-Skeleton",
+    "name": "Porquinho-da-Índia Esqueleto",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "GuineaPig-CottonCandyPink",
+    "name": "Porquinho-da-Índia Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "GuineaPig-Zombie",
+    "name": "Porquinho-da-Índia Zombie",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Zombie"
+  },
+  {
+    "id": "GuineaPig-White",
+    "name": "Porquinho-da-Índia das Neves",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "White"
+  },
+  {
+    "id": "GuineaPig-Shade",
+    "name": "Porquinho-da-Índia das Trevas",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Shade"
+  },
+  {
+    "id": "GuineaPig-Golden",
+    "name": "Porquinho-da-Índia de Ouro",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Golden"
+  },
+  {
+    "id": "GuineaPig-Desert",
+    "name": "Porquinho-da-Índia do Deserto",
+    "category": "quest",
+    "species": "GuineaPig",
+    "potion": "Desert"
+  },
+  {
+    "id": "Sloth-Base",
+    "name": "Preguiça (Base)",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Base"
+  },
+  {
+    "id": "Sloth-CottonCandyBlue",
+    "name": "Preguiça Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Sloth-Red",
+    "name": "Preguiça Escarlate",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Red"
+  },
+  {
+    "id": "Sloth-Skeleton",
+    "name": "Preguiça Esqueleto",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Sloth-CottonCandyPink",
+    "name": "Preguiça Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Sloth-Zombie",
+    "name": "Preguiça Zombie",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Sloth-White",
+    "name": "Preguiça das Neves",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "White"
+  },
+  {
+    "id": "Sloth-Shade",
+    "name": "Preguiça das Trevas",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Shade"
+  },
+  {
+    "id": "Sloth-Golden",
+    "name": "Preguiça de Ouro",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Golden"
+  },
+  {
+    "id": "Sloth-Desert",
+    "name": "Preguiça do Deserto",
+    "category": "quest",
+    "species": "Sloth",
+    "potion": "Desert"
+  },
+  {
+    "id": "Pterodactyl-Base",
+    "name": "Pterodáctilo (Base)",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Base"
+  },
+  {
+    "id": "Pterodactyl-CottonCandyBlue",
+    "name": "Pterodáctilo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Pterodactyl-Red",
+    "name": "Pterodáctilo Escarlate",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Red"
+  },
+  {
+    "id": "Pterodactyl-Skeleton",
+    "name": "Pterodáctilo Esqueleto",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Pterodactyl-CottonCandyPink",
+    "name": "Pterodáctilo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Pterodactyl-Zombie",
+    "name": "Pterodáctilo Zombie",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Pterodactyl-White",
+    "name": "Pterodáctilo das Neves",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "White"
+  },
+  {
+    "id": "Pterodactyl-Shade",
+    "name": "Pterodáctilo das Trevas",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Shade"
+  },
+  {
+    "id": "Pterodactyl-Golden",
+    "name": "Pterodáctilo de Ouro",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Golden"
+  },
+  {
+    "id": "Pterodactyl-Desert",
+    "name": "Pterodáctilo do Deserto",
+    "category": "quest",
+    "species": "Pterodactyl",
+    "potion": "Desert"
+  },
+  {
+    "id": "Rat-Base",
+    "name": "Rato (Base)",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Base"
+  },
+  {
+    "id": "Rat-CottonCandyBlue",
+    "name": "Rato Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Rat-Red",
+    "name": "Rato Escarlate",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Red"
+  },
+  {
+    "id": "Rat-Skeleton",
+    "name": "Rato Esqueleto",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Rat-CottonCandyPink",
+    "name": "Rato Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Rat-Zombie",
+    "name": "Rato Zombie",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Rat-White",
+    "name": "Rato das Neves",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "White"
+  },
+  {
+    "id": "Rat-Shade",
+    "name": "Rato das Trevas",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Shade"
+  },
+  {
+    "id": "Rat-Golden",
+    "name": "Rato de Ouro",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Golden"
+  },
+  {
+    "id": "Rat-Desert",
+    "name": "Rato do Deserto",
+    "category": "quest",
+    "species": "Rat",
+    "potion": "Desert"
+  },
+  {
+    "id": "Treeling-Base",
+    "name": "Rebento de Árvore (Base)",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Base"
+  },
+  {
+    "id": "Treeling-CottonCandyBlue",
+    "name": "Rebento de Árvore Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Treeling-Red",
+    "name": "Rebento de Árvore Escarlate",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Red"
+  },
+  {
+    "id": "Treeling-Skeleton",
+    "name": "Rebento de Árvore Esqueleto",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Treeling-CottonCandyPink",
+    "name": "Rebento de Árvore Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Treeling-Zombie",
+    "name": "Rebento de Árvore Zombie",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Treeling-White",
+    "name": "Rebento de Árvore das Neves",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "White"
+  },
+  {
+    "id": "Treeling-Shade",
+    "name": "Rebento de Árvore das Trevas",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Shade"
+  },
+  {
+    "id": "Treeling-Golden",
+    "name": "Rebento de Árvore de Ouro",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Golden"
+  },
+  {
+    "id": "Treeling-Desert",
+    "name": "Rebento de Árvore do Deserto",
+    "category": "quest",
+    "species": "Treeling",
+    "potion": "Desert"
+  },
+  {
+    "id": "Robot-Base",
+    "name": "Robô (Base)",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Base"
+  },
+  {
+    "id": "Robot-CottonCandyBlue",
+    "name": "Robô Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Robot-Red",
+    "name": "Robô Escarlate",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Red"
+  },
+  {
+    "id": "Robot-Skeleton",
+    "name": "Robô Esqueleto",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Robot-CottonCandyPink",
+    "name": "Robô Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Robot-Zombie",
+    "name": "Robô Zombie",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Robot-White",
+    "name": "Robô das Neves",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "White"
+  },
+  {
+    "id": "Robot-Shade",
+    "name": "Robô das Trevas",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Shade"
+  },
+  {
+    "id": "Robot-Golden",
+    "name": "Robô de Ouro",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Golden"
+  },
+  {
+    "id": "Robot-Desert",
+    "name": "Robô do Deserto",
+    "category": "quest",
+    "species": "Robot",
+    "potion": "Desert"
+  },
+  {
+    "id": "Frog-Base",
+    "name": "Sapo (Base)",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Base"
+  },
+  {
+    "id": "Frog-CottonCandyBlue",
+    "name": "Sapo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Frog-Red",
+    "name": "Sapo Escarlate",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Red"
+  },
+  {
+    "id": "Frog-Skeleton",
+    "name": "Sapo Esqueleto",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Frog-CottonCandyPink",
+    "name": "Sapo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Frog-Zombie",
+    "name": "Sapo Zombie",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Frog-White",
+    "name": "Sapo das Neves",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "White"
+  },
+  {
+    "id": "Frog-Shade",
+    "name": "Sapo das Trevas",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Shade"
+  },
+  {
+    "id": "Frog-Golden",
+    "name": "Sapo de Ouro",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Golden"
+  },
+  {
+    "id": "Frog-Desert",
+    "name": "Sapo do Deserto",
+    "category": "quest",
+    "species": "Frog",
+    "potion": "Desert"
+  },
+  {
+    "id": "SeaSerpent-Base",
+    "name": "Serpente Marinha (Base)",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Base"
+  },
+  {
+    "id": "SeaSerpent-CottonCandyBlue",
+    "name": "Serpente Marinha Azul Algodão-Doce",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "SeaSerpent-Red",
+    "name": "Serpente Marinha Escarlate",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Red"
+  },
+  {
+    "id": "SeaSerpent-Skeleton",
+    "name": "Serpente Marinha Esqueleto",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "SeaSerpent-CottonCandyPink",
+    "name": "Serpente Marinha Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "SeaSerpent-Zombie",
+    "name": "Serpente Marinha Zombie",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Zombie"
+  },
+  {
+    "id": "SeaSerpent-White",
+    "name": "Serpente Marinha das Neves",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "White"
+  },
+  {
+    "id": "SeaSerpent-Shade",
+    "name": "Serpente Marinha das Trevas",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Shade"
+  },
+  {
+    "id": "SeaSerpent-Golden",
+    "name": "Serpente Marinha de Ouro",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Golden"
+  },
+  {
+    "id": "SeaSerpent-Desert",
+    "name": "Serpente Marinha do Deserto",
+    "category": "quest",
+    "species": "SeaSerpent",
+    "potion": "Desert"
+  },
+  {
+    "id": "Turtle-Base",
+    "name": "Tartaruga (Base)",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Base"
+  },
+  {
+    "id": "Turtle-CottonCandyBlue",
+    "name": "Tartaruga Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Turtle-Red",
+    "name": "Tartaruga Escarlate",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Red"
+  },
+  {
+    "id": "Turtle-Skeleton",
+    "name": "Tartaruga Esqueleto",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Turtle-CottonCandyPink",
+    "name": "Tartaruga Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Turtle-Zombie",
+    "name": "Tartaruga Zombie",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Turtle-White",
+    "name": "Tartaruga das Neves",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "White"
+  },
+  {
+    "id": "Turtle-Shade",
+    "name": "Tartaruga das Trevas",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Shade"
+  },
+  {
+    "id": "Turtle-Golden",
+    "name": "Tartaruga de Ouro",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Golden"
+  },
+  {
+    "id": "Turtle-Desert",
+    "name": "Tartaruga do Deserto",
+    "category": "quest",
+    "species": "Turtle",
+    "potion": "Desert"
+  },
+  {
+    "id": "Armadillo-Base",
+    "name": "Tatu (Base)",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Base"
+  },
+  {
+    "id": "Armadillo-CottonCandyBlue",
+    "name": "Tatu Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Armadillo-Red",
+    "name": "Tatu Escarlate",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Red"
+  },
+  {
+    "id": "Armadillo-Skeleton",
+    "name": "Tatu Esqueleto",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Armadillo-CottonCandyPink",
+    "name": "Tatu Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Armadillo-Zombie",
+    "name": "Tatu Zombie",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Armadillo-White",
+    "name": "Tatu das Neves",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "White"
+  },
+  {
+    "id": "Armadillo-Shade",
+    "name": "Tatu das Trevas",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Shade"
+  },
+  {
+    "id": "Armadillo-Golden",
+    "name": "Tatu de Ouro",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Golden"
+  },
+  {
+    "id": "Armadillo-Desert",
+    "name": "Tatu do Deserto",
+    "category": "quest",
+    "species": "Armadillo",
+    "potion": "Desert"
+  },
+  {
+    "id": "Badger-Base",
+    "name": "Texugo (Base)",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Base"
+  },
+  {
+    "id": "Badger-CottonCandyBlue",
+    "name": "Texugo Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Badger-Red",
+    "name": "Texugo Escarlate",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Red"
+  },
+  {
+    "id": "Badger-Skeleton",
+    "name": "Texugo Esqueleto",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Badger-CottonCandyPink",
+    "name": "Texugo Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Badger-Zombie",
+    "name": "Texugo Zombie",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Badger-White",
+    "name": "Texugo das Neves",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "White"
+  },
+  {
+    "id": "Badger-Shade",
+    "name": "Texugo das Trevas",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Shade"
+  },
+  {
+    "id": "Badger-Golden",
+    "name": "Texugo de Ouro",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Golden"
+  },
+  {
+    "id": "Badger-Desert",
+    "name": "Texugo do Deserto",
+    "category": "quest",
+    "species": "Badger",
+    "potion": "Desert"
+  },
+  {
+    "id": "Sabretooth-Base",
+    "name": "Tigre Dentes-de-Sabre (Base)",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Base"
+  },
+  {
+    "id": "Sabretooth-CottonCandyBlue",
+    "name": "Tigre Dentes-de-Sabre Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Sabretooth-Red",
+    "name": "Tigre Dentes-de-Sabre Escarlate",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Red"
+  },
+  {
+    "id": "Sabretooth-Skeleton",
+    "name": "Tigre Dentes-de-Sabre Esqueleto",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Sabretooth-CottonCandyPink",
+    "name": "Tigre Dentes-de-Sabre Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Sabretooth-Zombie",
+    "name": "Tigre Dentes-de-Sabre Zombie",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Sabretooth-White",
+    "name": "Tigre Dentes-de-Sabre das Neves",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "White"
+  },
+  {
+    "id": "Sabretooth-Shade",
+    "name": "Tigre Dentes-de-Sabre das Trevas",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Shade"
+  },
+  {
+    "id": "Sabretooth-Golden",
+    "name": "Tigre Dentes-de-Sabre de Ouro",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Golden"
+  },
+  {
+    "id": "Sabretooth-Desert",
+    "name": "Tigre Dentes-de-Sabre do Deserto",
+    "category": "quest",
+    "species": "Sabretooth",
+    "potion": "Desert"
+  },
+  {
+    "id": "TRex-Base",
+    "name": "Tiranossauro (Base)",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Base"
+  },
+  {
+    "id": "TRex-CottonCandyBlue",
+    "name": "Tiranossauro Azul Algodão-Doce",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "TRex-Red",
+    "name": "Tiranossauro Escarlate",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Red"
+  },
+  {
+    "id": "TRex-Skeleton",
+    "name": "Tiranossauro Esqueleto",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "TRex-CottonCandyPink",
+    "name": "Tiranossauro Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "TRex-Zombie",
+    "name": "Tiranossauro Zombie",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Zombie"
+  },
+  {
+    "id": "TRex-White",
+    "name": "Tiranossauro das Neves",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "White"
+  },
+  {
+    "id": "TRex-Shade",
+    "name": "Tiranossauro das Trevas",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Shade"
+  },
+  {
+    "id": "TRex-Golden",
+    "name": "Tiranossauro de Ouro",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Golden"
+  },
+  {
+    "id": "TRex-Desert",
+    "name": "Tiranossauro do Deserto",
+    "category": "quest",
+    "species": "TRex",
+    "potion": "Desert"
+  },
+  {
+    "id": "Triceratops-Base",
+    "name": "Triceratops (Base)",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Base"
+  },
+  {
+    "id": "Triceratops-CottonCandyBlue",
+    "name": "Triceratops Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Triceratops-Red",
+    "name": "Triceratops Escarlate",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Red"
+  },
+  {
+    "id": "Triceratops-Skeleton",
+    "name": "Triceratops Esqueleto",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Triceratops-CottonCandyPink",
+    "name": "Triceratops Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Triceratops-Zombie",
+    "name": "Triceratops Zombie",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Triceratops-White",
+    "name": "Triceratops das Neves",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "White"
+  },
+  {
+    "id": "Triceratops-Shade",
+    "name": "Triceratops das Trevas",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Shade"
+  },
+  {
+    "id": "Triceratops-Golden",
+    "name": "Triceratops de Ouro",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Golden"
+  },
+  {
+    "id": "Triceratops-Desert",
+    "name": "Triceratops do Deserto",
+    "category": "quest",
+    "species": "Triceratops",
+    "potion": "Desert"
+  },
+  {
+    "id": "Unicorn-Base",
+    "name": "Unicórnio (Base)",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Base"
+  },
+  {
+    "id": "Unicorn-CottonCandyBlue",
+    "name": "Unicórnio Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Unicorn-Red",
+    "name": "Unicórnio Escarlate",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Red"
+  },
+  {
+    "id": "Unicorn-Skeleton",
+    "name": "Unicórnio Esqueleto",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Unicorn-CottonCandyPink",
+    "name": "Unicórnio Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Unicorn-Zombie",
+    "name": "Unicórnio Zombie",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Unicorn-White",
+    "name": "Unicórnio das Neves",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "White"
+  },
+  {
+    "id": "Unicorn-Shade",
+    "name": "Unicórnio das Trevas",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Shade"
+  },
+  {
+    "id": "Unicorn-Golden",
+    "name": "Unicórnio de Ouro",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Golden"
+  },
+  {
+    "id": "Unicorn-Desert",
+    "name": "Unicórnio do Deserto",
+    "category": "quest",
+    "species": "Unicorn",
+    "potion": "Desert"
+  },
+  {
+    "id": "Cow-Base",
+    "name": "Vaca (Base)",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Base"
+  },
+  {
+    "id": "Cow-CottonCandyBlue",
+    "name": "Vaca Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Cow-Red",
+    "name": "Vaca Escarlate",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Red"
+  },
+  {
+    "id": "Cow-Skeleton",
+    "name": "Vaca Esqueleto",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Cow-CottonCandyPink",
+    "name": "Vaca Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Cow-Zombie",
+    "name": "Vaca Zombie",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Cow-White",
+    "name": "Vaca das Neves",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "White"
+  },
+  {
+    "id": "Cow-Shade",
+    "name": "Vaca das Trevas",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Shade"
+  },
+  {
+    "id": "Cow-Golden",
+    "name": "Vaca de Ouro",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Golden"
+  },
+  {
+    "id": "Cow-Desert",
+    "name": "Vaca do Deserto",
+    "category": "quest",
+    "species": "Cow",
+    "potion": "Desert"
+  },
+  {
+    "id": "Deer-Base",
+    "name": "Veado (Base)",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Base"
+  },
+  {
+    "id": "Deer-CottonCandyBlue",
+    "name": "Veado Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Deer-Red",
+    "name": "Veado Escarlate",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Red"
+  },
+  {
+    "id": "Deer-Skeleton",
+    "name": "Veado Esqueleto",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Deer-CottonCandyPink",
+    "name": "Veado Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Deer-Zombie",
+    "name": "Veado Zombie",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Deer-White",
+    "name": "Veado das Neves",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "White"
+  },
+  {
+    "id": "Deer-Shade",
+    "name": "Veado das Trevas",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Shade"
+  },
+  {
+    "id": "Deer-Golden",
+    "name": "Veado de Ouro",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Golden"
+  },
+  {
+    "id": "Deer-Desert",
+    "name": "Veado do Deserto",
+    "category": "quest",
+    "species": "Deer",
+    "potion": "Desert"
+  },
+  {
+    "id": "Velociraptor-Base",
+    "name": "Velociraptor (Base)",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Base"
+  },
+  {
+    "id": "Velociraptor-CottonCandyBlue",
+    "name": "Velociraptor Azul Algodão-Doce",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "CottonCandyBlue"
+  },
+  {
+    "id": "Velociraptor-Red",
+    "name": "Velociraptor Escarlate",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Red"
+  },
+  {
+    "id": "Velociraptor-Skeleton",
+    "name": "Velociraptor Esqueleto",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Skeleton"
+  },
+  {
+    "id": "Velociraptor-CottonCandyPink",
+    "name": "Velociraptor Rosa Algodão-Doce",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "CottonCandyPink"
+  },
+  {
+    "id": "Velociraptor-Zombie",
+    "name": "Velociraptor Zombie",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Zombie"
+  },
+  {
+    "id": "Velociraptor-White",
+    "name": "Velociraptor das Neves",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "White"
+  },
+  {
+    "id": "Velociraptor-Shade",
+    "name": "Velociraptor das Trevas",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Shade"
+  },
+  {
+    "id": "Velociraptor-Golden",
+    "name": "Velociraptor de Ouro",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Golden"
+  },
+  {
+    "id": "Velociraptor-Desert",
+    "name": "Velociraptor do Deserto",
+    "category": "quest",
+    "species": "Velociraptor",
+    "potion": "Desert"
+  },
+  {
+    "id": "Cactus-Rainbow",
+    "name": "Cacto Arco-Íris",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "Cactus-Spooky",
+    "name": "Cacto Arrepiante",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Spooky"
+  },
+  {
+    "id": "Cactus-Aurora",
+    "name": "Cacto Aurora",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Aurora"
+  },
+  {
+    "id": "Cactus-Balloon",
+    "name": "Cacto Balão",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Balloon"
+  },
+  {
+    "id": "Cactus-Celestial",
+    "name": "Cacto Celeste",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Celestial"
+  },
+  {
+    "id": "Cactus-Shimmer",
+    "name": "Cacto Cintilante",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "Cactus-Sunset",
+    "name": "Cacto Crepuscular",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Sunset"
+  },
+  {
+    "id": "Cactus-Cupid",
+    "name": "Cacto Cupido",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Cupid"
+  },
+  {
+    "id": "Cactus-StarryNight",
+    "name": "Cacto Estelar",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "Cactus-Fairy",
+    "name": "Cacto Fada",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Fairy"
+  },
+  {
+    "id": "Cactus-Ghost",
+    "name": "Cacto Fantasma",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Ghost"
+  },
+  {
+    "id": "Cactus-Ember",
+    "name": "Cacto Flamejante",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Ember"
+  },
+  {
+    "id": "Cactus-Floral",
+    "name": "Cacto Floral",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Floral"
+  },
+  {
+    "id": "Cactus-Glow",
+    "name": "Cacto Fluorescente",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Glow"
+  },
+  {
+    "id": "Cactus-IcySnow",
+    "name": "Cacto Glacial",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "Cactus-Koi",
+    "name": "Cacto Koi",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Koi"
+  },
+  {
+    "id": "Cactus-Moonglow",
+    "name": "Cacto Lunar",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "Cactus-SolarSystem",
+    "name": "Cacto Orbital",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "Cactus-AutumnLeaf",
+    "name": "Cacto Outonal",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "Cactus-BlackPearl",
+    "name": "Cacto Pérola Negra",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "Cactus-RoyalPurple",
+    "name": "Cacto Púrpura Real",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Cactus-Sunshine",
+    "name": "Cacto Radiante",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "Cactus-Peppermint",
+    "name": "Cacto Rebuçado de Menta",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "Cactus-Turquoise",
+    "name": "Cacto Turquesa",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "Cactus-Vampire",
+    "name": "Cacto Vampiro",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Vampire"
+  },
+  {
+    "id": "Cactus-StainedGlass",
+    "name": "Cacto Vitral",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "Cactus-Frost",
+    "name": "Cacto da Geada",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Frost"
+  },
+  {
+    "id": "Cactus-Thunderstorm",
+    "name": "Cacto da Trovoada",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "Cactus-Shadow",
+    "name": "Cacto das Sombras",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Shadow"
+  },
+  {
+    "id": "Cactus-SandSculpture",
+    "name": "Cacto de Areia",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "Cactus-Holly",
+    "name": "Cacto de Azevinho",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Holly"
+  },
+  {
+    "id": "Cactus-Bronze",
+    "name": "Cacto de Bronze",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Bronze"
+  },
+  {
+    "id": "Cactus-BirchBark",
+    "name": "Cacto de Bétula",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "Cactus-Windup",
+    "name": "Cacto de Corda",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Windup"
+  },
+  {
+    "id": "Cactus-Fluorite",
+    "name": "Cacto de Fluorite",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "Cactus-Gingerbread",
+    "name": "Cacto de Gengibre",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "Cactus-Jade",
+    "name": "Cacto de Jade",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Jade"
+  },
+  {
+    "id": "Cactus-MossyStone",
+    "name": "Cacto de Musgo",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "Cactus-PinkMarble",
+    "name": "Cacto de Mármore Rosa",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "Cactus-Opal",
+    "name": "Cacto de Opala",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Opal"
+  },
+  {
+    "id": "Cactus-RoseGold",
+    "name": "Cacto de Ouro Rosa",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "Cactus-Porcelain",
+    "name": "Cacto de Porcelana",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "Cactus-Silver",
+    "name": "Cacto de Prata",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Silver"
+  },
+  {
+    "id": "Cactus-RoseQuartz",
+    "name": "Cacto de Quartzo Rosa",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "Cactus-Ruby",
+    "name": "Cacto de Rubi",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Ruby"
+  },
+  {
+    "id": "Cactus-Glass",
+    "name": "Cacto de Vidro",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Glass"
+  },
+  {
+    "id": "Cactus-Watery",
+    "name": "Cacto de Água",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Watery"
+  },
+  {
+    "id": "Cactus-Amber",
+    "name": "Cacto de Âmbar",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Amber"
+  },
+  {
+    "id": "Cactus-Onyx",
+    "name": "Cacto de Ónix",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Onyx"
+  },
+  {
+    "id": "Cactus-Aquatic",
+    "name": "Cacto do Mar",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "Cactus-PolkaDot",
+    "name": "Cacto às Bolinhas",
+    "category": "premium",
+    "species": "Cactus",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "Dragon-Rainbow",
+    "name": "Dragão Arco-Íris",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "Dragon-Spooky",
+    "name": "Dragão Arrepiante",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Spooky"
+  },
+  {
+    "id": "Dragon-Aurora",
+    "name": "Dragão Aurora",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Aurora"
+  },
+  {
+    "id": "Dragon-Balloon",
+    "name": "Dragão Balão",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Balloon"
+  },
+  {
+    "id": "Dragon-Celestial",
+    "name": "Dragão Celeste",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Celestial"
+  },
+  {
+    "id": "Dragon-Shimmer",
+    "name": "Dragão Cintilante",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "Dragon-Sunset",
+    "name": "Dragão Crepuscular",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Sunset"
+  },
+  {
+    "id": "Dragon-Cupid",
+    "name": "Dragão Cupido",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Cupid"
+  },
+  {
+    "id": "Dragon-StarryNight",
+    "name": "Dragão Estelar",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "Dragon-Fairy",
+    "name": "Dragão Fada",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Fairy"
+  },
+  {
+    "id": "Dragon-Ghost",
+    "name": "Dragão Fantasma",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Ghost"
+  },
+  {
+    "id": "Dragon-Ember",
+    "name": "Dragão Flamejante",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Ember"
+  },
+  {
+    "id": "Dragon-Floral",
+    "name": "Dragão Floral",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Floral"
+  },
+  {
+    "id": "Dragon-Glow",
+    "name": "Dragão Fluorescente",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Glow"
+  },
+  {
+    "id": "Dragon-IcySnow",
+    "name": "Dragão Glacial",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "Dragon-Koi",
+    "name": "Dragão Koi",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Koi"
+  },
+  {
+    "id": "Dragon-Moonglow",
+    "name": "Dragão Lunar",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "Dragon-SolarSystem",
+    "name": "Dragão Orbital",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "Dragon-AutumnLeaf",
+    "name": "Dragão Outonal",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "Dragon-BlackPearl",
+    "name": "Dragão Pérola Negra",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "Dragon-RoyalPurple",
+    "name": "Dragão Púrpura Real",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Dragon-Sunshine",
+    "name": "Dragão Radiante",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "Dragon-Peppermint",
+    "name": "Dragão Rebuçado de Menta",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "Dragon-Turquoise",
+    "name": "Dragão Turquesa",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "Dragon-Vampire",
+    "name": "Dragão Vampiro",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Vampire"
+  },
+  {
+    "id": "Dragon-StainedGlass",
+    "name": "Dragão Vitral",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "Dragon-Frost",
+    "name": "Dragão da Geada",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Frost"
+  },
+  {
+    "id": "Dragon-Thunderstorm",
+    "name": "Dragão da Trovoada",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "Dragon-Shadow",
+    "name": "Dragão das Sombras",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Shadow"
+  },
+  {
+    "id": "Dragon-SandSculpture",
+    "name": "Dragão de Areia",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "Dragon-Holly",
+    "name": "Dragão de Azevinho",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Holly"
+  },
+  {
+    "id": "Dragon-Bronze",
+    "name": "Dragão de Bronze",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Bronze"
+  },
+  {
+    "id": "Dragon-BirchBark",
+    "name": "Dragão de Bétula",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "Dragon-Windup",
+    "name": "Dragão de Corda",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Windup"
+  },
+  {
+    "id": "Dragon-Fluorite",
+    "name": "Dragão de Fluorite",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "Dragon-Gingerbread",
+    "name": "Dragão de Gengibre",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "Dragon-Jade",
+    "name": "Dragão de Jade",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Jade"
+  },
+  {
+    "id": "Dragon-MossyStone",
+    "name": "Dragão de Musgo",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "Dragon-PinkMarble",
+    "name": "Dragão de Mármore Rosa",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "Dragon-Opal",
+    "name": "Dragão de Opala",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Opal"
+  },
+  {
+    "id": "Dragon-RoseGold",
+    "name": "Dragão de Ouro Rosa",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "Dragon-Porcelain",
+    "name": "Dragão de Porcelana",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "Dragon-Silver",
+    "name": "Dragão de Prata",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Silver"
+  },
+  {
+    "id": "Dragon-RoseQuartz",
+    "name": "Dragão de Quartzo Rosa",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "Dragon-Ruby",
+    "name": "Dragão de Rubi",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Ruby"
+  },
+  {
+    "id": "Dragon-Glass",
+    "name": "Dragão de Vidro",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Glass"
+  },
+  {
+    "id": "Dragon-Watery",
+    "name": "Dragão de Água",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Watery"
+  },
+  {
+    "id": "Dragon-Amber",
+    "name": "Dragão de Âmbar",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Amber"
+  },
+  {
+    "id": "Dragon-Onyx",
+    "name": "Dragão de Ónix",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Onyx"
+  },
+  {
+    "id": "Dragon-Aquatic",
+    "name": "Dragão do Mar",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "Dragon-PolkaDot",
+    "name": "Dragão às Bolinhas",
+    "category": "premium",
+    "species": "Dragon",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "LionCub-Rainbow",
+    "name": "Leão Bebé Arco-Íris",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "LionCub-Spooky",
+    "name": "Leão Bebé Arrepiante",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Spooky"
+  },
+  {
+    "id": "LionCub-Aurora",
+    "name": "Leão Bebé Aurora",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Aurora"
+  },
+  {
+    "id": "LionCub-Balloon",
+    "name": "Leão Bebé Balão",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Balloon"
+  },
+  {
+    "id": "LionCub-Celestial",
+    "name": "Leão Bebé Celeste",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Celestial"
+  },
+  {
+    "id": "LionCub-Shimmer",
+    "name": "Leão Bebé Cintilante",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "LionCub-Sunset",
+    "name": "Leão Bebé Crepuscular",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Sunset"
+  },
+  {
+    "id": "LionCub-Cupid",
+    "name": "Leão Bebé Cupido",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Cupid"
+  },
+  {
+    "id": "LionCub-StarryNight",
+    "name": "Leão Bebé Estelar",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "LionCub-Fairy",
+    "name": "Leão Bebé Fada",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Fairy"
+  },
+  {
+    "id": "LionCub-Ghost",
+    "name": "Leão Bebé Fantasma",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Ghost"
+  },
+  {
+    "id": "LionCub-Ember",
+    "name": "Leão Bebé Flamejante",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Ember"
+  },
+  {
+    "id": "LionCub-Floral",
+    "name": "Leão Bebé Floral",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Floral"
+  },
+  {
+    "id": "LionCub-Glow",
+    "name": "Leão Bebé Fluorescente",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Glow"
+  },
+  {
+    "id": "LionCub-IcySnow",
+    "name": "Leão Bebé Glacial",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "LionCub-Koi",
+    "name": "Leão Bebé Koi",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Koi"
+  },
+  {
+    "id": "LionCub-Moonglow",
+    "name": "Leão Bebé Lunar",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "LionCub-SolarSystem",
+    "name": "Leão Bebé Orbital",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "LionCub-AutumnLeaf",
+    "name": "Leão Bebé Outonal",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "LionCub-BlackPearl",
+    "name": "Leão Bebé Pérola Negra",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "LionCub-RoyalPurple",
+    "name": "Leão Bebé Púrpura Real",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "LionCub-Sunshine",
+    "name": "Leão Bebé Radiante",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "LionCub-Peppermint",
+    "name": "Leão Bebé Rebuçado de Menta",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "LionCub-Turquoise",
+    "name": "Leão Bebé Turquesa",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "LionCub-Vampire",
+    "name": "Leão Bebé Vampiro",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Vampire"
+  },
+  {
+    "id": "LionCub-StainedGlass",
+    "name": "Leão Bebé Vitral",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "LionCub-Frost",
+    "name": "Leão Bebé da Geada",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Frost"
+  },
+  {
+    "id": "LionCub-Thunderstorm",
+    "name": "Leão Bebé da Trovoada",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "LionCub-Shadow",
+    "name": "Leão Bebé das Sombras",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Shadow"
+  },
+  {
+    "id": "LionCub-SandSculpture",
+    "name": "Leão Bebé de Areia",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "LionCub-Holly",
+    "name": "Leão Bebé de Azevinho",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Holly"
+  },
+  {
+    "id": "LionCub-Bronze",
+    "name": "Leão Bebé de Bronze",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Bronze"
+  },
+  {
+    "id": "LionCub-BirchBark",
+    "name": "Leão Bebé de Bétula",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "LionCub-Windup",
+    "name": "Leão Bebé de Corda",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Windup"
+  },
+  {
+    "id": "LionCub-Fluorite",
+    "name": "Leão Bebé de Fluorite",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "LionCub-Gingerbread",
+    "name": "Leão Bebé de Gengibre",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "LionCub-Jade",
+    "name": "Leão Bebé de Jade",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Jade"
+  },
+  {
+    "id": "LionCub-MossyStone",
+    "name": "Leão Bebé de Musgo",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "LionCub-PinkMarble",
+    "name": "Leão Bebé de Mármore Rosa",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "LionCub-Opal",
+    "name": "Leão Bebé de Opala",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Opal"
+  },
+  {
+    "id": "LionCub-RoseGold",
+    "name": "Leão Bebé de Ouro Rosa",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "LionCub-Porcelain",
+    "name": "Leão Bebé de Porcelana",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "LionCub-Silver",
+    "name": "Leão Bebé de Prata",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Silver"
+  },
+  {
+    "id": "LionCub-RoseQuartz",
+    "name": "Leão Bebé de Quartzo Rosa",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "LionCub-Ruby",
+    "name": "Leão Bebé de Rubi",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Ruby"
+  },
+  {
+    "id": "LionCub-Glass",
+    "name": "Leão Bebé de Vidro",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Glass"
+  },
+  {
+    "id": "LionCub-Watery",
+    "name": "Leão Bebé de Água",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Watery"
+  },
+  {
+    "id": "LionCub-Amber",
+    "name": "Leão Bebé de Âmbar",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Amber"
+  },
+  {
+    "id": "LionCub-Onyx",
+    "name": "Leão Bebé de Ónix",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Onyx"
+  },
+  {
+    "id": "LionCub-Aquatic",
+    "name": "Leão Bebé do Mar",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "LionCub-PolkaDot",
+    "name": "Leão Bebé às Bolinhas",
+    "category": "premium",
+    "species": "LionCub",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "Wolf-Rainbow",
+    "name": "Lobo Arco-Íris",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "Wolf-Spooky",
+    "name": "Lobo Arrepiante",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Spooky"
+  },
+  {
+    "id": "Wolf-Aurora",
+    "name": "Lobo Aurora",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Aurora"
+  },
+  {
+    "id": "Wolf-Balloon",
+    "name": "Lobo Balão",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Balloon"
+  },
+  {
+    "id": "Wolf-Celestial",
+    "name": "Lobo Celeste",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Celestial"
+  },
+  {
+    "id": "Wolf-Shimmer",
+    "name": "Lobo Cintilante",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "Wolf-Sunset",
+    "name": "Lobo Crepuscular",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Sunset"
+  },
+  {
+    "id": "Wolf-Cupid",
+    "name": "Lobo Cupido",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Cupid"
+  },
+  {
+    "id": "Wolf-StarryNight",
+    "name": "Lobo Estelar",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "Wolf-Fairy",
+    "name": "Lobo Fada",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Fairy"
+  },
+  {
+    "id": "Wolf-Ghost",
+    "name": "Lobo Fantasma",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Ghost"
+  },
+  {
+    "id": "Wolf-Ember",
+    "name": "Lobo Flamejante",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Ember"
+  },
+  {
+    "id": "Wolf-Floral",
+    "name": "Lobo Floral",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Floral"
+  },
+  {
+    "id": "Wolf-Glow",
+    "name": "Lobo Fluorescente",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Glow"
+  },
+  {
+    "id": "Wolf-IcySnow",
+    "name": "Lobo Glacial",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "Wolf-Koi",
+    "name": "Lobo Koi",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Koi"
+  },
+  {
+    "id": "Wolf-Moonglow",
+    "name": "Lobo Lunar",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "Wolf-SolarSystem",
+    "name": "Lobo Orbital",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "Wolf-AutumnLeaf",
+    "name": "Lobo Outonal",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "Wolf-BlackPearl",
+    "name": "Lobo Pérola Negra",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "Wolf-RoyalPurple",
+    "name": "Lobo Púrpura Real",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Wolf-Sunshine",
+    "name": "Lobo Radiante",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "Wolf-Peppermint",
+    "name": "Lobo Rebuçado de Menta",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "Wolf-Turquoise",
+    "name": "Lobo Turquesa",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "Wolf-Vampire",
+    "name": "Lobo Vampiro",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Vampire"
+  },
+  {
+    "id": "Wolf-StainedGlass",
+    "name": "Lobo Vitral",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "Wolf-Frost",
+    "name": "Lobo da Geada",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Frost"
+  },
+  {
+    "id": "Wolf-Thunderstorm",
+    "name": "Lobo da Trovoada",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "Wolf-Shadow",
+    "name": "Lobo das Sombras",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Shadow"
+  },
+  {
+    "id": "Wolf-SandSculpture",
+    "name": "Lobo de Areia",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "Wolf-Holly",
+    "name": "Lobo de Azevinho",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Holly"
+  },
+  {
+    "id": "Wolf-Bronze",
+    "name": "Lobo de Bronze",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Bronze"
+  },
+  {
+    "id": "Wolf-BirchBark",
+    "name": "Lobo de Bétula",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "Wolf-Windup",
+    "name": "Lobo de Corda",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Windup"
+  },
+  {
+    "id": "Wolf-Fluorite",
+    "name": "Lobo de Fluorite",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "Wolf-Gingerbread",
+    "name": "Lobo de Gengibre",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "Wolf-Jade",
+    "name": "Lobo de Jade",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Jade"
+  },
+  {
+    "id": "Wolf-MossyStone",
+    "name": "Lobo de Musgo",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "Wolf-PinkMarble",
+    "name": "Lobo de Mármore Rosa",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "Wolf-Opal",
+    "name": "Lobo de Opala",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Opal"
+  },
+  {
+    "id": "Wolf-RoseGold",
+    "name": "Lobo de Ouro Rosa",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "Wolf-Porcelain",
+    "name": "Lobo de Porcelana",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "Wolf-Silver",
+    "name": "Lobo de Prata",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Silver"
+  },
+  {
+    "id": "Wolf-RoseQuartz",
+    "name": "Lobo de Quartzo Rosa",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "Wolf-Ruby",
+    "name": "Lobo de Rubi",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Ruby"
+  },
+  {
+    "id": "Wolf-Glass",
+    "name": "Lobo de Vidro",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Glass"
+  },
+  {
+    "id": "Wolf-Watery",
+    "name": "Lobo de Água",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Watery"
+  },
+  {
+    "id": "Wolf-Amber",
+    "name": "Lobo de Âmbar",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Amber"
+  },
+  {
+    "id": "Wolf-Onyx",
+    "name": "Lobo de Ónix",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Onyx"
+  },
+  {
+    "id": "Wolf-Aquatic",
+    "name": "Lobo do Mar",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "Wolf-PolkaDot",
+    "name": "Lobo às Bolinhas",
+    "category": "premium",
+    "species": "Wolf",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "PandaCub-Rainbow",
+    "name": "Panda Bebé Arco-Íris",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "PandaCub-Spooky",
+    "name": "Panda Bebé Arrepiante",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Spooky"
+  },
+  {
+    "id": "PandaCub-Aurora",
+    "name": "Panda Bebé Aurora",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Aurora"
+  },
+  {
+    "id": "PandaCub-Balloon",
+    "name": "Panda Bebé Balão",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Balloon"
+  },
+  {
+    "id": "PandaCub-Celestial",
+    "name": "Panda Bebé Celeste",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Celestial"
+  },
+  {
+    "id": "PandaCub-Shimmer",
+    "name": "Panda Bebé Cintilante",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "PandaCub-Sunset",
+    "name": "Panda Bebé Crepuscular",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Sunset"
+  },
+  {
+    "id": "PandaCub-Cupid",
+    "name": "Panda Bebé Cupido",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Cupid"
+  },
+  {
+    "id": "PandaCub-StarryNight",
+    "name": "Panda Bebé Estelar",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "PandaCub-Fairy",
+    "name": "Panda Bebé Fada",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Fairy"
+  },
+  {
+    "id": "PandaCub-Ghost",
+    "name": "Panda Bebé Fantasma",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Ghost"
+  },
+  {
+    "id": "PandaCub-Ember",
+    "name": "Panda Bebé Flamejante",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Ember"
+  },
+  {
+    "id": "PandaCub-Floral",
+    "name": "Panda Bebé Floral",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Floral"
+  },
+  {
+    "id": "PandaCub-Glow",
+    "name": "Panda Bebé Fluorescente",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Glow"
+  },
+  {
+    "id": "PandaCub-IcySnow",
+    "name": "Panda Bebé Glacial",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "PandaCub-Koi",
+    "name": "Panda Bebé Koi",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Koi"
+  },
+  {
+    "id": "PandaCub-Moonglow",
+    "name": "Panda Bebé Lunar",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "PandaCub-SolarSystem",
+    "name": "Panda Bebé Orbital",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "PandaCub-AutumnLeaf",
+    "name": "Panda Bebé Outonal",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "PandaCub-BlackPearl",
+    "name": "Panda Bebé Pérola Negra",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "PandaCub-RoyalPurple",
+    "name": "Panda Bebé Púrpura Real",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "PandaCub-Sunshine",
+    "name": "Panda Bebé Radiante",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "PandaCub-Peppermint",
+    "name": "Panda Bebé Rebuçado de Menta",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "PandaCub-Turquoise",
+    "name": "Panda Bebé Turquesa",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "PandaCub-Vampire",
+    "name": "Panda Bebé Vampiro",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Vampire"
+  },
+  {
+    "id": "PandaCub-StainedGlass",
+    "name": "Panda Bebé Vitral",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "PandaCub-Frost",
+    "name": "Panda Bebé da Geada",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Frost"
+  },
+  {
+    "id": "PandaCub-Thunderstorm",
+    "name": "Panda Bebé da Trovoada",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "PandaCub-Shadow",
+    "name": "Panda Bebé das Sombras",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Shadow"
+  },
+  {
+    "id": "PandaCub-SandSculpture",
+    "name": "Panda Bebé de Areia",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "PandaCub-Holly",
+    "name": "Panda Bebé de Azevinho",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Holly"
+  },
+  {
+    "id": "PandaCub-Bronze",
+    "name": "Panda Bebé de Bronze",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Bronze"
+  },
+  {
+    "id": "PandaCub-BirchBark",
+    "name": "Panda Bebé de Bétula",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "PandaCub-Windup",
+    "name": "Panda Bebé de Corda",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Windup"
+  },
+  {
+    "id": "PandaCub-Fluorite",
+    "name": "Panda Bebé de Fluorite",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "PandaCub-Gingerbread",
+    "name": "Panda Bebé de Gengibre",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "PandaCub-Jade",
+    "name": "Panda Bebé de Jade",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Jade"
+  },
+  {
+    "id": "PandaCub-MossyStone",
+    "name": "Panda Bebé de Musgo",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "PandaCub-PinkMarble",
+    "name": "Panda Bebé de Mármore Rosa",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "PandaCub-Opal",
+    "name": "Panda Bebé de Opala",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Opal"
+  },
+  {
+    "id": "PandaCub-RoseGold",
+    "name": "Panda Bebé de Ouro Rosa",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "PandaCub-Porcelain",
+    "name": "Panda Bebé de Porcelana",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "PandaCub-Silver",
+    "name": "Panda Bebé de Prata",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Silver"
+  },
+  {
+    "id": "PandaCub-RoseQuartz",
+    "name": "Panda Bebé de Quartzo Rosa",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "PandaCub-Ruby",
+    "name": "Panda Bebé de Rubi",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Ruby"
+  },
+  {
+    "id": "PandaCub-Glass",
+    "name": "Panda Bebé de Vidro",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Glass"
+  },
+  {
+    "id": "PandaCub-Watery",
+    "name": "Panda Bebé de Água",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Watery"
+  },
+  {
+    "id": "PandaCub-Amber",
+    "name": "Panda Bebé de Âmbar",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Amber"
+  },
+  {
+    "id": "PandaCub-Onyx",
+    "name": "Panda Bebé de Ónix",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Onyx"
+  },
+  {
+    "id": "PandaCub-Aquatic",
+    "name": "Panda Bebé do Mar",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "PandaCub-PolkaDot",
+    "name": "Panda Bebé às Bolinhas",
+    "category": "premium",
+    "species": "PandaCub",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "FlyingPig-Rainbow",
+    "name": "Porco Voador Arco-Íris",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "FlyingPig-Spooky",
+    "name": "Porco Voador Arrepiante",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Spooky"
+  },
+  {
+    "id": "FlyingPig-Aurora",
+    "name": "Porco Voador Aurora",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Aurora"
+  },
+  {
+    "id": "FlyingPig-Balloon",
+    "name": "Porco Voador Balão",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Balloon"
+  },
+  {
+    "id": "FlyingPig-Celestial",
+    "name": "Porco Voador Celeste",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Celestial"
+  },
+  {
+    "id": "FlyingPig-Shimmer",
+    "name": "Porco Voador Cintilante",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "FlyingPig-Sunset",
+    "name": "Porco Voador Crepuscular",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Sunset"
+  },
+  {
+    "id": "FlyingPig-Cupid",
+    "name": "Porco Voador Cupido",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Cupid"
+  },
+  {
+    "id": "FlyingPig-StarryNight",
+    "name": "Porco Voador Estelar",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "FlyingPig-Fairy",
+    "name": "Porco Voador Fada",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Fairy"
+  },
+  {
+    "id": "FlyingPig-Ghost",
+    "name": "Porco Voador Fantasma",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Ghost"
+  },
+  {
+    "id": "FlyingPig-Ember",
+    "name": "Porco Voador Flamejante",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Ember"
+  },
+  {
+    "id": "FlyingPig-Floral",
+    "name": "Porco Voador Floral",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Floral"
+  },
+  {
+    "id": "FlyingPig-Glow",
+    "name": "Porco Voador Fluorescente",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Glow"
+  },
+  {
+    "id": "FlyingPig-IcySnow",
+    "name": "Porco Voador Glacial",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "FlyingPig-Koi",
+    "name": "Porco Voador Koi",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Koi"
+  },
+  {
+    "id": "FlyingPig-Moonglow",
+    "name": "Porco Voador Lunar",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "FlyingPig-SolarSystem",
+    "name": "Porco Voador Orbital",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "FlyingPig-AutumnLeaf",
+    "name": "Porco Voador Outonal",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "FlyingPig-BlackPearl",
+    "name": "Porco Voador Pérola Negra",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "FlyingPig-RoyalPurple",
+    "name": "Porco Voador Púrpura Real",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "FlyingPig-Sunshine",
+    "name": "Porco Voador Radiante",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "FlyingPig-Peppermint",
+    "name": "Porco Voador Rebuçado de Menta",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "FlyingPig-Turquoise",
+    "name": "Porco Voador Turquesa",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "FlyingPig-Vampire",
+    "name": "Porco Voador Vampiro",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Vampire"
+  },
+  {
+    "id": "FlyingPig-StainedGlass",
+    "name": "Porco Voador Vitral",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "FlyingPig-Frost",
+    "name": "Porco Voador da Geada",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Frost"
+  },
+  {
+    "id": "FlyingPig-Thunderstorm",
+    "name": "Porco Voador da Trovoada",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "FlyingPig-Shadow",
+    "name": "Porco Voador das Sombras",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Shadow"
+  },
+  {
+    "id": "FlyingPig-SandSculpture",
+    "name": "Porco Voador de Areia",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "FlyingPig-Holly",
+    "name": "Porco Voador de Azevinho",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Holly"
+  },
+  {
+    "id": "FlyingPig-Bronze",
+    "name": "Porco Voador de Bronze",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Bronze"
+  },
+  {
+    "id": "FlyingPig-BirchBark",
+    "name": "Porco Voador de Bétula",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "FlyingPig-Windup",
+    "name": "Porco Voador de Corda",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Windup"
+  },
+  {
+    "id": "FlyingPig-Fluorite",
+    "name": "Porco Voador de Fluorite",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "FlyingPig-Gingerbread",
+    "name": "Porco Voador de Gengibre",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "FlyingPig-Jade",
+    "name": "Porco Voador de Jade",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Jade"
+  },
+  {
+    "id": "FlyingPig-MossyStone",
+    "name": "Porco Voador de Musgo",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "FlyingPig-PinkMarble",
+    "name": "Porco Voador de Mármore Rosa",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "FlyingPig-Opal",
+    "name": "Porco Voador de Opala",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Opal"
+  },
+  {
+    "id": "FlyingPig-RoseGold",
+    "name": "Porco Voador de Ouro Rosa",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "FlyingPig-Porcelain",
+    "name": "Porco Voador de Porcelana",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "FlyingPig-Silver",
+    "name": "Porco Voador de Prata",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Silver"
+  },
+  {
+    "id": "FlyingPig-RoseQuartz",
+    "name": "Porco Voador de Quartzo Rosa",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "FlyingPig-Ruby",
+    "name": "Porco Voador de Rubi",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Ruby"
+  },
+  {
+    "id": "FlyingPig-Glass",
+    "name": "Porco Voador de Vidro",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Glass"
+  },
+  {
+    "id": "FlyingPig-Watery",
+    "name": "Porco Voador de Água",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Watery"
+  },
+  {
+    "id": "FlyingPig-Amber",
+    "name": "Porco Voador de Âmbar",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Amber"
+  },
+  {
+    "id": "FlyingPig-Onyx",
+    "name": "Porco Voador de Ónix",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Onyx"
+  },
+  {
+    "id": "FlyingPig-Aquatic",
+    "name": "Porco Voador do Mar",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "FlyingPig-PolkaDot",
+    "name": "Porco Voador às Bolinhas",
+    "category": "premium",
+    "species": "FlyingPig",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "Fox-Rainbow",
+    "name": "Raposa Arco-Íris",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "Fox-Spooky",
+    "name": "Raposa Arrepiante",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Spooky"
+  },
+  {
+    "id": "Fox-Aurora",
+    "name": "Raposa Aurora",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Aurora"
+  },
+  {
+    "id": "Fox-Balloon",
+    "name": "Raposa Balão",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Balloon"
+  },
+  {
+    "id": "Fox-Celestial",
+    "name": "Raposa Celeste",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Celestial"
+  },
+  {
+    "id": "Fox-Shimmer",
+    "name": "Raposa Cintilante",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "Fox-Sunset",
+    "name": "Raposa Crepuscular",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Sunset"
+  },
+  {
+    "id": "Fox-Cupid",
+    "name": "Raposa Cupido",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Cupid"
+  },
+  {
+    "id": "Fox-StarryNight",
+    "name": "Raposa Estelar",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "Fox-Fairy",
+    "name": "Raposa Fada",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Fairy"
+  },
+  {
+    "id": "Fox-Ghost",
+    "name": "Raposa Fantasma",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Ghost"
+  },
+  {
+    "id": "Fox-Ember",
+    "name": "Raposa Flamejante",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Ember"
+  },
+  {
+    "id": "Fox-Floral",
+    "name": "Raposa Floral",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Floral"
+  },
+  {
+    "id": "Fox-Glow",
+    "name": "Raposa Fluorescente",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Glow"
+  },
+  {
+    "id": "Fox-IcySnow",
+    "name": "Raposa Glacial",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "Fox-Koi",
+    "name": "Raposa Koi",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Koi"
+  },
+  {
+    "id": "Fox-Moonglow",
+    "name": "Raposa Lunar",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "Fox-SolarSystem",
+    "name": "Raposa Orbital",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "Fox-AutumnLeaf",
+    "name": "Raposa Outonal",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "Fox-BlackPearl",
+    "name": "Raposa Pérola Negra",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "Fox-RoyalPurple",
+    "name": "Raposa Púrpura Real",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Fox-Sunshine",
+    "name": "Raposa Radiante",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "Fox-Peppermint",
+    "name": "Raposa Rebuçado de Menta",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "Fox-Turquoise",
+    "name": "Raposa Turquesa",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "Fox-Vampire",
+    "name": "Raposa Vampiro",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Vampire"
+  },
+  {
+    "id": "Fox-StainedGlass",
+    "name": "Raposa Vitral",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "Fox-Frost",
+    "name": "Raposa da Geada",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Frost"
+  },
+  {
+    "id": "Fox-Thunderstorm",
+    "name": "Raposa da Trovoada",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "Fox-Shadow",
+    "name": "Raposa das Sombras",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Shadow"
+  },
+  {
+    "id": "Fox-SandSculpture",
+    "name": "Raposa de Areia",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "Fox-Holly",
+    "name": "Raposa de Azevinho",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Holly"
+  },
+  {
+    "id": "Fox-Bronze",
+    "name": "Raposa de Bronze",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Bronze"
+  },
+  {
+    "id": "Fox-BirchBark",
+    "name": "Raposa de Bétula",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "Fox-Windup",
+    "name": "Raposa de Corda",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Windup"
+  },
+  {
+    "id": "Fox-Fluorite",
+    "name": "Raposa de Fluorite",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "Fox-Gingerbread",
+    "name": "Raposa de Gengibre",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "Fox-Jade",
+    "name": "Raposa de Jade",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Jade"
+  },
+  {
+    "id": "Fox-MossyStone",
+    "name": "Raposa de Musgo",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "Fox-PinkMarble",
+    "name": "Raposa de Mármore Rosa",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "Fox-Opal",
+    "name": "Raposa de Opala",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Opal"
+  },
+  {
+    "id": "Fox-RoseGold",
+    "name": "Raposa de Ouro Rosa",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "Fox-Porcelain",
+    "name": "Raposa de Porcelana",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "Fox-Silver",
+    "name": "Raposa de Prata",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Silver"
+  },
+  {
+    "id": "Fox-RoseQuartz",
+    "name": "Raposa de Quartzo Rosa",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "Fox-Ruby",
+    "name": "Raposa de Rubi",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Ruby"
+  },
+  {
+    "id": "Fox-Glass",
+    "name": "Raposa de Vidro",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Glass"
+  },
+  {
+    "id": "Fox-Watery",
+    "name": "Raposa de Água",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Watery"
+  },
+  {
+    "id": "Fox-Amber",
+    "name": "Raposa de Âmbar",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Amber"
+  },
+  {
+    "id": "Fox-Onyx",
+    "name": "Raposa de Ónix",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Onyx"
+  },
+  {
+    "id": "Fox-Aquatic",
+    "name": "Raposa do Mar",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "Fox-PolkaDot",
+    "name": "Raposa às Bolinhas",
+    "category": "premium",
+    "species": "Fox",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "TigerCub-Rainbow",
+    "name": "Tigre Bebé Arco-Íris",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "TigerCub-Spooky",
+    "name": "Tigre Bebé Arrepiante",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Spooky"
+  },
+  {
+    "id": "TigerCub-Aurora",
+    "name": "Tigre Bebé Aurora",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Aurora"
+  },
+  {
+    "id": "TigerCub-Balloon",
+    "name": "Tigre Bebé Balão",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Balloon"
+  },
+  {
+    "id": "TigerCub-Celestial",
+    "name": "Tigre Bebé Celeste",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Celestial"
+  },
+  {
+    "id": "TigerCub-Shimmer",
+    "name": "Tigre Bebé Cintilante",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "TigerCub-Sunset",
+    "name": "Tigre Bebé Crepuscular",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Sunset"
+  },
+  {
+    "id": "TigerCub-Cupid",
+    "name": "Tigre Bebé Cupido",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Cupid"
+  },
+  {
+    "id": "TigerCub-StarryNight",
+    "name": "Tigre Bebé Estelar",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "TigerCub-Fairy",
+    "name": "Tigre Bebé Fada",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Fairy"
+  },
+  {
+    "id": "TigerCub-Ghost",
+    "name": "Tigre Bebé Fantasma",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Ghost"
+  },
+  {
+    "id": "TigerCub-Ember",
+    "name": "Tigre Bebé Flamejante",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Ember"
+  },
+  {
+    "id": "TigerCub-Floral",
+    "name": "Tigre Bebé Floral",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Floral"
+  },
+  {
+    "id": "TigerCub-Glow",
+    "name": "Tigre Bebé Fluorescente",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Glow"
+  },
+  {
+    "id": "TigerCub-IcySnow",
+    "name": "Tigre Bebé Glacial",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "TigerCub-Koi",
+    "name": "Tigre Bebé Koi",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Koi"
+  },
+  {
+    "id": "TigerCub-Moonglow",
+    "name": "Tigre Bebé Lunar",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "TigerCub-SolarSystem",
+    "name": "Tigre Bebé Orbital",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "TigerCub-AutumnLeaf",
+    "name": "Tigre Bebé Outonal",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "TigerCub-BlackPearl",
+    "name": "Tigre Bebé Pérola Negra",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "TigerCub-RoyalPurple",
+    "name": "Tigre Bebé Púrpura Real",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "TigerCub-Sunshine",
+    "name": "Tigre Bebé Radiante",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "TigerCub-Peppermint",
+    "name": "Tigre Bebé Rebuçado de Menta",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "TigerCub-Turquoise",
+    "name": "Tigre Bebé Turquesa",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "TigerCub-Vampire",
+    "name": "Tigre Bebé Vampiro",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Vampire"
+  },
+  {
+    "id": "TigerCub-StainedGlass",
+    "name": "Tigre Bebé Vitral",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "TigerCub-Frost",
+    "name": "Tigre Bebé da Geada",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Frost"
+  },
+  {
+    "id": "TigerCub-Thunderstorm",
+    "name": "Tigre Bebé da Trovoada",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "TigerCub-Shadow",
+    "name": "Tigre Bebé das Sombras",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Shadow"
+  },
+  {
+    "id": "TigerCub-SandSculpture",
+    "name": "Tigre Bebé de Areia",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "TigerCub-Holly",
+    "name": "Tigre Bebé de Azevinho",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Holly"
+  },
+  {
+    "id": "TigerCub-Bronze",
+    "name": "Tigre Bebé de Bronze",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Bronze"
+  },
+  {
+    "id": "TigerCub-BirchBark",
+    "name": "Tigre Bebé de Bétula",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "TigerCub-Windup",
+    "name": "Tigre Bebé de Corda",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Windup"
+  },
+  {
+    "id": "TigerCub-Fluorite",
+    "name": "Tigre Bebé de Fluorite",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "TigerCub-Gingerbread",
+    "name": "Tigre Bebé de Gengibre",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "TigerCub-Jade",
+    "name": "Tigre Bebé de Jade",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Jade"
+  },
+  {
+    "id": "TigerCub-MossyStone",
+    "name": "Tigre Bebé de Musgo",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "TigerCub-PinkMarble",
+    "name": "Tigre Bebé de Mármore Rosa",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "TigerCub-Opal",
+    "name": "Tigre Bebé de Opala",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Opal"
+  },
+  {
+    "id": "TigerCub-RoseGold",
+    "name": "Tigre Bebé de Ouro Rosa",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "TigerCub-Porcelain",
+    "name": "Tigre Bebé de Porcelana",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "TigerCub-Silver",
+    "name": "Tigre Bebé de Prata",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Silver"
+  },
+  {
+    "id": "TigerCub-RoseQuartz",
+    "name": "Tigre Bebé de Quartzo Rosa",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "TigerCub-Ruby",
+    "name": "Tigre Bebé de Rubi",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Ruby"
+  },
+  {
+    "id": "TigerCub-Glass",
+    "name": "Tigre Bebé de Vidro",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Glass"
+  },
+  {
+    "id": "TigerCub-Watery",
+    "name": "Tigre Bebé de Água",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Watery"
+  },
+  {
+    "id": "TigerCub-Amber",
+    "name": "Tigre Bebé de Âmbar",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Amber"
+  },
+  {
+    "id": "TigerCub-Onyx",
+    "name": "Tigre Bebé de Ónix",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Onyx"
+  },
+  {
+    "id": "TigerCub-Aquatic",
+    "name": "Tigre Bebé do Mar",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "TigerCub-PolkaDot",
+    "name": "Tigre Bebé às Bolinhas",
+    "category": "premium",
+    "species": "TigerCub",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "BearCub-Rainbow",
+    "name": "Urso Bebé Arco-Íris",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Rainbow"
+  },
+  {
+    "id": "BearCub-Spooky",
+    "name": "Urso Bebé Arrepiante",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Spooky"
+  },
+  {
+    "id": "BearCub-Aurora",
+    "name": "Urso Bebé Aurora",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Aurora"
+  },
+  {
+    "id": "BearCub-Balloon",
+    "name": "Urso Bebé Balão",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Balloon"
+  },
+  {
+    "id": "BearCub-Celestial",
+    "name": "Urso Bebé Celeste",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Celestial"
+  },
+  {
+    "id": "BearCub-Shimmer",
+    "name": "Urso Bebé Cintilante",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Shimmer"
+  },
+  {
+    "id": "BearCub-Sunset",
+    "name": "Urso Bebé Crepuscular",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Sunset"
+  },
+  {
+    "id": "BearCub-Cupid",
+    "name": "Urso Bebé Cupido",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Cupid"
+  },
+  {
+    "id": "BearCub-StarryNight",
+    "name": "Urso Bebé Estelar",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "StarryNight"
+  },
+  {
+    "id": "BearCub-Fairy",
+    "name": "Urso Bebé Fada",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Fairy"
+  },
+  {
+    "id": "BearCub-Ghost",
+    "name": "Urso Bebé Fantasma",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Ghost"
+  },
+  {
+    "id": "BearCub-Ember",
+    "name": "Urso Bebé Flamejante",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Ember"
+  },
+  {
+    "id": "BearCub-Floral",
+    "name": "Urso Bebé Floral",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Floral"
+  },
+  {
+    "id": "BearCub-Glow",
+    "name": "Urso Bebé Fluorescente",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Glow"
+  },
+  {
+    "id": "BearCub-IcySnow",
+    "name": "Urso Bebé Glacial",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "IcySnow"
+  },
+  {
+    "id": "BearCub-Koi",
+    "name": "Urso Bebé Koi",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Koi"
+  },
+  {
+    "id": "BearCub-Moonglow",
+    "name": "Urso Bebé Lunar",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Moonglow"
+  },
+  {
+    "id": "BearCub-SolarSystem",
+    "name": "Urso Bebé Orbital",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "SolarSystem"
+  },
+  {
+    "id": "BearCub-AutumnLeaf",
+    "name": "Urso Bebé Outonal",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "AutumnLeaf"
+  },
+  {
+    "id": "BearCub-BlackPearl",
+    "name": "Urso Bebé Pérola Negra",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "BlackPearl"
+  },
+  {
+    "id": "BearCub-RoyalPurple",
+    "name": "Urso Bebé Púrpura Real",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "BearCub-Sunshine",
+    "name": "Urso Bebé Radiante",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Sunshine"
+  },
+  {
+    "id": "BearCub-Peppermint",
+    "name": "Urso Bebé Rebuçado de Menta",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Peppermint"
+  },
+  {
+    "id": "BearCub-Turquoise",
+    "name": "Urso Bebé Turquesa",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Turquoise"
+  },
+  {
+    "id": "BearCub-Vampire",
+    "name": "Urso Bebé Vampiro",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Vampire"
+  },
+  {
+    "id": "BearCub-StainedGlass",
+    "name": "Urso Bebé Vitral",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "StainedGlass"
+  },
+  {
+    "id": "BearCub-Frost",
+    "name": "Urso Bebé da Geada",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Frost"
+  },
+  {
+    "id": "BearCub-Thunderstorm",
+    "name": "Urso Bebé da Trovoada",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Thunderstorm"
+  },
+  {
+    "id": "BearCub-Shadow",
+    "name": "Urso Bebé das Sombras",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Shadow"
+  },
+  {
+    "id": "BearCub-SandSculpture",
+    "name": "Urso Bebé de Areia",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "SandSculpture"
+  },
+  {
+    "id": "BearCub-Holly",
+    "name": "Urso Bebé de Azevinho",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Holly"
+  },
+  {
+    "id": "BearCub-Bronze",
+    "name": "Urso Bebé de Bronze",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Bronze"
+  },
+  {
+    "id": "BearCub-BirchBark",
+    "name": "Urso Bebé de Bétula",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "BirchBark"
+  },
+  {
+    "id": "BearCub-Windup",
+    "name": "Urso Bebé de Corda",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Windup"
+  },
+  {
+    "id": "BearCub-Fluorite",
+    "name": "Urso Bebé de Fluorite",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Fluorite"
+  },
+  {
+    "id": "BearCub-Gingerbread",
+    "name": "Urso Bebé de Gengibre",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Gingerbread"
+  },
+  {
+    "id": "BearCub-Jade",
+    "name": "Urso Bebé de Jade",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Jade"
+  },
+  {
+    "id": "BearCub-MossyStone",
+    "name": "Urso Bebé de Musgo",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "MossyStone"
+  },
+  {
+    "id": "BearCub-PinkMarble",
+    "name": "Urso Bebé de Mármore Rosa",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "PinkMarble"
+  },
+  {
+    "id": "BearCub-Opal",
+    "name": "Urso Bebé de Opala",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Opal"
+  },
+  {
+    "id": "BearCub-RoseGold",
+    "name": "Urso Bebé de Ouro Rosa",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "RoseGold"
+  },
+  {
+    "id": "BearCub-Porcelain",
+    "name": "Urso Bebé de Porcelana",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Porcelain"
+  },
+  {
+    "id": "BearCub-Silver",
+    "name": "Urso Bebé de Prata",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Silver"
+  },
+  {
+    "id": "BearCub-RoseQuartz",
+    "name": "Urso Bebé de Quartzo Rosa",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "RoseQuartz"
+  },
+  {
+    "id": "BearCub-Ruby",
+    "name": "Urso Bebé de Rubi",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Ruby"
+  },
+  {
+    "id": "BearCub-Glass",
+    "name": "Urso Bebé de Vidro",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Glass"
+  },
+  {
+    "id": "BearCub-Watery",
+    "name": "Urso Bebé de Água",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Watery"
+  },
+  {
+    "id": "BearCub-Amber",
+    "name": "Urso Bebé de Âmbar",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Amber"
+  },
+  {
+    "id": "BearCub-Onyx",
+    "name": "Urso Bebé de Ónix",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Onyx"
+  },
+  {
+    "id": "BearCub-Aquatic",
+    "name": "Urso Bebé do Mar",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "Aquatic"
+  },
+  {
+    "id": "BearCub-PolkaDot",
+    "name": "Urso Bebé às Bolinhas",
+    "category": "premium",
+    "species": "BearCub",
+    "potion": "PolkaDot"
+  },
+  {
+    "id": "Cactus-Alien",
+    "name": "Cacto Alienígena",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "Alien"
+  },
+  {
+    "id": "Cactus-Fungi",
+    "name": "Cacto Cogumelo",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "Fungi"
+  },
+  {
+    "id": "Cactus-VirtualPet",
+    "name": "Cacto Virtual",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "Cactus-Veggie",
+    "name": "Cacto da Horta",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "Veggie"
+  },
+  {
+    "id": "Cactus-Dessert",
+    "name": "Cacto de Açúcar",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "Dessert"
+  },
+  {
+    "id": "Cactus-TeaShop",
+    "name": "Cacto de Chá",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "Cactus-Cryptid",
+    "name": "Cacto dos Criptídeos",
+    "category": "wacky",
+    "species": "Cactus",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "Dragon-Alien",
+    "name": "Dragão Alienígena",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "Alien"
+  },
+  {
+    "id": "Dragon-Fungi",
+    "name": "Dragão Cogumelo",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "Fungi"
+  },
+  {
+    "id": "Dragon-VirtualPet",
+    "name": "Dragão Virtual",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "Dragon-Veggie",
+    "name": "Dragão da Horta",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "Veggie"
+  },
+  {
+    "id": "Dragon-Dessert",
+    "name": "Dragão de Açúcar",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "Dessert"
+  },
+  {
+    "id": "Dragon-TeaShop",
+    "name": "Dragão de Chá",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "Dragon-Cryptid",
+    "name": "Dragão dos Criptídeos",
+    "category": "wacky",
+    "species": "Dragon",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "LionCub-Alien",
+    "name": "Leão Bebé Alienígena",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "Alien"
+  },
+  {
+    "id": "LionCub-Fungi",
+    "name": "Leão Bebé Cogumelo",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "Fungi"
+  },
+  {
+    "id": "LionCub-VirtualPet",
+    "name": "Leão Bebé Virtual",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "LionCub-Veggie",
+    "name": "Leão Bebé da Horta",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "Veggie"
+  },
+  {
+    "id": "LionCub-Dessert",
+    "name": "Leão Bebé de Açúcar",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "Dessert"
+  },
+  {
+    "id": "LionCub-TeaShop",
+    "name": "Leão Bebé de Chá",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "LionCub-Cryptid",
+    "name": "Leão Bebé dos Criptídeos",
+    "category": "wacky",
+    "species": "LionCub",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "Wolf-Alien",
+    "name": "Lobo Alienígena",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "Alien"
+  },
+  {
+    "id": "Wolf-Fungi",
+    "name": "Lobo Cogumelo",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "Fungi"
+  },
+  {
+    "id": "Wolf-VirtualPet",
+    "name": "Lobo Virtual",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "Wolf-Veggie",
+    "name": "Lobo da Horta",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "Veggie"
+  },
+  {
+    "id": "Wolf-Dessert",
+    "name": "Lobo de Açúcar",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "Dessert"
+  },
+  {
+    "id": "Wolf-TeaShop",
+    "name": "Lobo de Chá",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "Wolf-Cryptid",
+    "name": "Lobo dos Criptídeos",
+    "category": "wacky",
+    "species": "Wolf",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "PandaCub-Alien",
+    "name": "Panda Bebé Alienígena",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "Alien"
+  },
+  {
+    "id": "PandaCub-Fungi",
+    "name": "Panda Bebé Cogumelo",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "Fungi"
+  },
+  {
+    "id": "PandaCub-VirtualPet",
+    "name": "Panda Bebé Virtual",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "PandaCub-Veggie",
+    "name": "Panda Bebé da Horta",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "Veggie"
+  },
+  {
+    "id": "PandaCub-Dessert",
+    "name": "Panda Bebé de Açúcar",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "Dessert"
+  },
+  {
+    "id": "PandaCub-TeaShop",
+    "name": "Panda Bebé de Chá",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "PandaCub-Cryptid",
+    "name": "Panda Bebé dos Criptídeos",
+    "category": "wacky",
+    "species": "PandaCub",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "FlyingPig-Alien",
+    "name": "Porco Voador Alienígena",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "Alien"
+  },
+  {
+    "id": "FlyingPig-Fungi",
+    "name": "Porco Voador Cogumelo",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "Fungi"
+  },
+  {
+    "id": "FlyingPig-VirtualPet",
+    "name": "Porco Voador Virtual",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "FlyingPig-Veggie",
+    "name": "Porco Voador da Horta",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "Veggie"
+  },
+  {
+    "id": "FlyingPig-Dessert",
+    "name": "Porco Voador de Açúcar",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "Dessert"
+  },
+  {
+    "id": "FlyingPig-TeaShop",
+    "name": "Porco Voador de Chá",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "FlyingPig-Cryptid",
+    "name": "Porco Voador dos Criptídeos",
+    "category": "wacky",
+    "species": "FlyingPig",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "Fox-Alien",
+    "name": "Raposa Alienígena",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "Alien"
+  },
+  {
+    "id": "Fox-Fungi",
+    "name": "Raposa Cogumelo",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "Fungi"
+  },
+  {
+    "id": "Fox-VirtualPet",
+    "name": "Raposa Virtual",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "Fox-Veggie",
+    "name": "Raposa da Horta",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "Veggie"
+  },
+  {
+    "id": "Fox-Dessert",
+    "name": "Raposa de Açúcar",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "Dessert"
+  },
+  {
+    "id": "Fox-TeaShop",
+    "name": "Raposa de Chá",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "Fox-Cryptid",
+    "name": "Raposa dos Criptídeos",
+    "category": "wacky",
+    "species": "Fox",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "TigerCub-Alien",
+    "name": "Tigre Bebé Alienígena",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "Alien"
+  },
+  {
+    "id": "TigerCub-Fungi",
+    "name": "Tigre Bebé Cogumelo",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "Fungi"
+  },
+  {
+    "id": "TigerCub-VirtualPet",
+    "name": "Tigre Bebé Virtual",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "TigerCub-Veggie",
+    "name": "Tigre Bebé da Horta",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "Veggie"
+  },
+  {
+    "id": "TigerCub-Dessert",
+    "name": "Tigre Bebé de Açúcar",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "Dessert"
+  },
+  {
+    "id": "TigerCub-TeaShop",
+    "name": "Tigre Bebé de Chá",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "TigerCub-Cryptid",
+    "name": "Tigre Bebé dos Criptídeos",
+    "category": "wacky",
+    "species": "TigerCub",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "BearCub-Alien",
+    "name": "Urso Bebé Alienígena",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "Alien"
+  },
+  {
+    "id": "BearCub-Fungi",
+    "name": "Urso Bebé Cogumelo",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "Fungi"
+  },
+  {
+    "id": "BearCub-VirtualPet",
+    "name": "Urso Bebé Virtual",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "VirtualPet"
+  },
+  {
+    "id": "BearCub-Veggie",
+    "name": "Urso Bebé da Horta",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "Veggie"
+  },
+  {
+    "id": "BearCub-Dessert",
+    "name": "Urso Bebé de Açúcar",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "Dessert"
+  },
+  {
+    "id": "BearCub-TeaShop",
+    "name": "Urso Bebé de Chá",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "TeaShop"
+  },
+  {
+    "id": "BearCub-Cryptid",
+    "name": "Urso Bebé dos Criptídeos",
+    "category": "wacky",
+    "species": "BearCub",
+    "potion": "Cryptid"
+  },
+  {
+    "id": "MagicalBee-Base",
+    "name": "Abelha Mágica",
+    "category": "special",
+    "species": "MagicalBee",
+    "potion": "Base"
+  },
+  {
+    "id": "JackOLantern-Base",
+    "name": "Abóbora de Halloween",
+    "category": "special",
+    "species": "JackOLantern",
+    "potion": "Base"
+  },
+  {
+    "id": "JackOLantern-Glow",
+    "name": "Abóbora de Halloween Fluorescente",
+    "category": "special",
+    "species": "JackOLantern",
+    "potion": "Glow"
+  },
+  {
+    "id": "JackOLantern-RoyalPurple",
+    "name": "Abóbora de Halloween Roxo Real",
+    "category": "special",
+    "species": "JackOLantern",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "MantisShrimp-Base",
+    "name": "Camarão-mantis",
+    "category": "special",
+    "species": "MantisShrimp",
+    "potion": "Base"
+  },
+  {
+    "id": "Cactus-Veteran",
+    "name": "Cato Veterano",
+    "category": "special",
+    "species": "Cactus",
+    "potion": "Veteran"
+  },
+  {
+    "id": "Wolf-Cerberus",
+    "name": "Cria de Cérbero",
+    "category": "special",
+    "species": "Wolf",
+    "potion": "Cerberus"
+  },
+  {
+    "id": "Dragon-Veteran",
+    "name": "Dragão Veterano",
+    "category": "special",
+    "species": "Dragon",
+    "potion": "Veteran"
+  },
+  {
+    "id": "Phoenix-Base",
+    "name": "Fénix",
+    "category": "special",
+    "species": "Phoenix",
+    "potion": "Base"
+  },
+  {
+    "id": "Gryphon-Gryphatrice",
+    "name": "Grifatriz",
+    "category": "special",
+    "species": "Gryphon",
+    "potion": "Gryphatrice"
+  },
+  {
+    "id": "Gryphatrice-Jubilant",
+    "name": "Grifatriz Radiante",
+    "category": "special",
+    "species": "Gryphatrice",
+    "potion": "Jubilant"
+  },
+  {
+    "id": "Gryphon-RoyalPurple",
+    "name": "Grifo Roxo Real",
+    "category": "special",
+    "species": "Gryphon",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Dragon-Hydra",
+    "name": "Hidra",
+    "category": "special",
+    "species": "Dragon",
+    "potion": "Hydra"
+  },
+  {
+    "id": "Hippogriff-Hopeful",
+    "name": "Hipogrifo Esperançoso",
+    "category": "special",
+    "species": "Hippogriff",
+    "potion": "Hopeful"
+  },
+  {
+    "id": "Jackalope-RoyalPurple",
+    "name": "Jackalope Roxo Real",
+    "category": "special",
+    "species": "Jackalope",
+    "potion": "RoyalPurple"
+  },
+  {
+    "id": "Lion-Veteran",
+    "name": "Leão Veterano",
+    "category": "special",
+    "species": "Lion",
+    "potion": "Veteran"
+  },
+  {
+    "id": "Wolf-Veteran",
+    "name": "Lobo Veterano",
+    "category": "special",
+    "species": "Wolf",
+    "potion": "Veteran"
+  },
+  {
+    "id": "JackOLantern-Ghost",
+    "name": "Lâmpada de Halloween Fantasmagórica",
+    "category": "special",
+    "species": "JackOLantern",
+    "potion": "Ghost"
+  },
+  {
+    "id": "Mammoth-Base",
+    "name": "Mamute-lanoso",
+    "category": "special",
+    "species": "Mammoth",
+    "potion": "Base"
+  },
+  {
+    "id": "Orca-Base",
+    "name": "Orca",
+    "category": "special",
+    "species": "Orca",
+    "potion": "Base"
+  },
+  {
+    "id": "Turkey-Base",
+    "name": "Peru",
+    "category": "special",
+    "species": "Turkey",
+    "potion": "Base"
+  },
+  {
+    "id": "Turkey-Gilded",
+    "name": "Peru Dourado",
+    "category": "special",
+    "species": "Turkey",
+    "potion": "Gilded"
+  },
+  {
+    "id": "Fox-Veteran",
+    "name": "Raposa Veterana",
+    "category": "special",
+    "species": "Fox",
+    "potion": "Veteran"
+  },
+  {
+    "id": "Tiger-Veteran",
+    "name": "Tigre Veterano",
+    "category": "special",
+    "species": "Tiger",
+    "potion": "Veteran"
+  },
+  {
+    "id": "BearCub-Polar",
+    "name": "Ursinho-polar",
+    "category": "special",
+    "species": "BearCub",
+    "potion": "Polar"
+  },
+  {
+    "id": "Bear-Veteran",
+    "name": "Urso Veterano",
+    "category": "special",
+    "species": "Bear",
+    "potion": "Veteran"
+  }
+]

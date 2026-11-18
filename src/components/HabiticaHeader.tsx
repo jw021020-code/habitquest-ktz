@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { PlayerStats } from '@/lib/game/formulas';
 import { Attributes, CharacterAppearance, EquippedGear, HeroClass } from '@/lib/game/items';
+import { ALL_PET_IDS } from '@/lib/game/pets';
 import { CLASS_INFO } from '@/lib/game/skills';
 import { RemoteProfile } from '@/lib/supabase/data';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -38,7 +39,6 @@ interface HabiticaHeaderProps {
   costume?: EquippedGear;
   useCostume?: boolean;
   petId?: string;
-  mountId?: string;
   ownedEquipmentCount: number;
   ownedPetsCount: number;
   totalAttributes: Attributes;
@@ -79,7 +79,6 @@ export function HabiticaHeader({
   costume,
   useCostume,
   petId,
-  mountId,
   ownedEquipmentCount,
   ownedPetsCount,
   totalAttributes,
@@ -242,7 +241,7 @@ export function HabiticaHeader({
                   }`}
                 >
                   <PawPrint className="w-3.5 h-3.5" />
-                  Estábulo — Pets & Montarias ({ownedPetsCount}/190)
+                  Estábulo — Mascotes ({ownedPetsCount}/{ALL_PET_IDS.length})
                 </button>
                 <button
                   onClick={() => onSelectInvTab('appearance')}
@@ -296,7 +295,6 @@ export function HabiticaHeader({
                   costume={costume}
                   useCostume={useCostume}
                   petId={petId}
-                  mountId={mountId}
                   size="stage"
                   className="border-2 border-[#6133b4] group-hover:border-[#ffbe5d] transition shadow-xl"
                 />
@@ -482,7 +480,6 @@ export function HabiticaHeader({
                       costume={m.costume}
                       useCostume={m.use_costume}
                       petId={m.stable?.equippedPet}
-                      mountId={m.stable?.equippedMount}
                       size="sm"
                       className="border-2 border-[#432874] shadow-md"
                     />

@@ -6,11 +6,7 @@ import {
   EquippedGear,
   getEquipmentSpritePath,
 } from '@/lib/game/items';
-import {
-  getMountBodySpritePath,
-  getMountHeadSpritePath,
-  getPetSpritePath,
-} from '@/lib/game/pets';
+import { getPetSpritePath } from '@/lib/game/pets';
 
 interface CharacterAvatarProps {
   appearance: CharacterAppearance;
@@ -18,7 +14,6 @@ interface CharacterAvatarProps {
   costume?: EquippedGear;
   useCostume?: boolean;
   petId?: string;
-  mountId?: string;
   size?: 'sm' | 'md' | 'lg' | 'stage';
   className?: string;
 }
@@ -33,8 +28,8 @@ const SIZE_CLASS: Record<NonNullable<CharacterAvatarProps['size']>, string> = {
 /**
  * Renderiza o palco de avatar estilo Habitica (140x140 pixel-art)
  * seguindo a ordem oficial de camadas do Habitica para todos os 8 slots:
- * Background -> Mount Body -> Back -> Skin -> Shirt -> Armor -> Hair -> Beard/Mustache
- * -> Body -> Eyewear -> Head -> HeadAccessory -> Shield -> Weapon -> Mount Head -> Pet.
+ * Background -> Back -> Skin -> Shirt -> Armor -> Hair -> Beard/Mustache
+ * -> Body -> Eyewear -> Head -> HeadAccessory -> Shield -> Weapon -> Pet.
  */
 export function CharacterAvatar({
   appearance,
@@ -42,7 +37,6 @@ export function CharacterAvatar({
   costume,
   useCostume = false,
   petId,
-  mountId,
   size = 'md',
   className = '',
 }: CharacterAvatarProps) {
@@ -61,10 +55,6 @@ export function CharacterAvatar({
 
   const hasBg = Boolean(background && background !== 'none');
   const charLayers: { key: string; src: string }[] = [];
-
-  if (mountId) {
-    charLayers.push({ key: 'mount_body', src: getMountBodySpritePath(mountId) });
-  }
 
   if (visualGear.back) {
     charLayers.push({
@@ -146,10 +136,6 @@ export function CharacterAvatar({
     });
   }
 
-  if (mountId) {
-    charLayers.push({ key: 'mount_head', src: getMountHeadSpritePath(mountId) });
-  }
-
   return (
     <div
       className={`relative shrink-0 rounded-md bg-[#271b3d] border border-[#4f2a93] overflow-hidden select-none shadow-inner ${SIZE_CLASS[size]} ${className}`}
@@ -166,7 +152,7 @@ export function CharacterAvatar({
         <div className="absolute inset-0 bg-gradient-to-b from-[#36205d] via-[#2a174a] to-[#1f1238]" />
       )}
 
-      {/* Camadas do Personagem + Montaria */}
+      {/* Camadas do Personagem */}
       <div className="absolute inset-0 flex items-center justify-center">
         {charLayers.map((layer) => (
           <img

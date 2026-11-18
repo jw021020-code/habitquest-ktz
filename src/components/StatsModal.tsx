@@ -255,8 +255,8 @@ export function StatsModal({
                     Orbe do Renascimento
                   </p>
                   <p className="text-xs text-[#a8a1b5]">
-                    Reinicia para o Nível 1 mantendo todos os seus equipamentos, mascotes e
-                    montarias, e concede +50 GP de bônus.
+                    Reinicia para o Nível 1 mantendo todos os seus equipamentos e mascotes, e
+                    concede +50 GP de bônus.
                   </p>
                 </div>
                 {confirmRebirth ? (

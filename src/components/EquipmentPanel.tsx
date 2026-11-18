@@ -28,9 +28,9 @@ import {
 import {
   ALL_PET_IDS,
   formatPetName,
-  getMountHeadSpritePath,
   getPetSpritePath,
-  hasMountForPet,
+  PET_CATALOG,
+  PetCategory,
   StableState,
 } from '@/lib/game/pets';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -56,7 +56,6 @@ interface EquipmentPanelProps {
   onBuyItem: (item: EquipmentItem) => void;
   onBuyPotion: () => void;
   onBuyArmoire: () => void;
-  onBuyFoodPack: () => void;
   onBuyHatchPotion: () => void;
   onSellEgg: () => void;
   onSellPotion: () => void;
@@ -64,9 +63,7 @@ interface EquipmentPanelProps {
   onToggleCostumeEquip: (item: EquipmentItem) => void;
   onToggleUseCostume: () => void;
   onHatchEgg: () => void;
-  onFeedPet: (petId: string) => void;
   onTogglePet: (petId: string) => void;
-  onToggleMount: (mountId: string) => void;
 }
 
 const ALL_SLOTS: EquipmentSlot[] = [
@@ -149,7 +146,6 @@ export function EquipmentPanel({
   onBuyItem,
   onBuyPotion,
   onBuyArmoire,
-  onBuyFoodPack,
   onBuyHatchPotion,
   onSellEgg,
   onSellPotion,
@@ -157,9 +153,7 @@ export function EquipmentPanel({
   onToggleCostumeEquip,
   onToggleUseCostume,
   onHatchEgg,
-  onFeedPet,
   onTogglePet,
-  onToggleMount,
 }: EquipmentPanelProps) {
   const [slotFilter, setSlotFilter] = useState<EquipmentSlot | 'all'>('all');
   const [categoryFilter, setCategoryFilter] = useState<GearCategory | 'all'>('all');
@@ -167,7 +161,8 @@ export function EquipmentPanel({
   const [sortMode, setSortMode] = useState<ShopSortMode>('price-asc');
   const [visibleLimit, setVisibleLimit] = useState<number>(PAGE_SIZE);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAllPetsCollection, setShowAllPetsCollection] = useState(false);
+  const [petCategoryFilter, setPetCategoryFilter] = useState<'owned' | 'all' | PetCategory>('owned');
+  const [petVisibleLimit, setPetVisibleLimit] = useState<number>(PAGE_SIZE);
   const [petSearch, setPetSearch] = useState('');
 
   if (!mode) return null;
@@ -206,9 +201,19 @@ export function EquipmentPanel({
   const canHatch =
     stable.eggs > 0 && stable.potions > 0 && ownedPetIds.length < ALL_PET_IDS.length;
 
-  const displayedPetIds = (showAllPetsCollection ? ALL_PET_IDS : ownedPetIds).filter((pid) =>
-    formatPetName(pid).toLowerCase().includes(petSearch.trim().toLowerCase())
-  );
+  const petQuery = petSearch.trim().toLowerCase();
+  const filteredPetEntries = PET_CATALOG.filter((pet) => {
+    const isOwned = stable.pets[pet.id] !== undefined;
+    if (petCategoryFilter === 'owned' && !isOwned) return false;
+    if (petCategoryFilter !== 'owned' && petCategoryFilter !== 'all' && pet.category !== petCategoryFilter) {
+      return false;
+    }
+    if (petQuery && !pet.name.toLowerCase().includes(petQuery) && !pet.id.toLowerCase().includes(petQuery)) {
+      return false;
+    }
+    return true;
+  });
+  const visiblePetEntries = filteredPetEntries.slice(0, petVisibleLimit);
 
   return (
     <section className="max-w-7xl w-full mx-auto px-4 pt-4 pb-8 select-none">
@@ -433,13 +438,13 @@ export function EquipmentPanel({
             </div>
           )}
 
-          {/* Sub-aba 2: ESTÁBULO (INCUBADORA + 190 PETS + 189 MONTARIAS) */}
+          {/* Sub-aba 2: ESTÁBULO (INCUBADORA + 1.248 MASCOTES) */}
           {invTab === 'stable' && (
             <div className="space-y-5">
               {/* Incubadora Simplificada Estilo Habitica */}
               <div className="bg-[#23202a] border border-[#432874] rounded-md p-4">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="grid grid-cols-3 gap-3 flex-1">
+                  <div className="grid grid-cols-2 gap-3 flex-1">
                     <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3 flex items-center gap-3">
                       <img
                         src="/sprites/Pet_Egg_Wolf.png"
@@ -464,21 +469,7 @@ export function EquipmentPanel({
                         <div className="text-lg font-condensed font-bold text-[#925cf3] tabular-nums">
                           {stable.potions}
                         </div>
-                        <div className="text-xs font-condensed text-[#a8a1b5]">Poções</div>
-                      </div>
-                    </div>
-
-                    <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3 flex items-center gap-3">
-                      <img
-                        src="/sprites/Pet_Food_Meat.png"
-                        alt="Ração de Pet"
-                        className="w-12 h-12 object-contain [image-rendering:pixelated] shrink-0"
-                      />
-                      <div>
-                        <div className="text-lg font-condensed font-bold text-[#24cc8f] tabular-nums">
-                          {stable.foods}
-                        </div>
-                        <div className="text-xs font-condensed text-[#a8a1b5]">Rações</div>
+                        <div className="text-xs font-condensed text-[#a8a1b5]">Poções de Chocar</div>
                       </div>
                     </div>
                   </div>
@@ -501,44 +492,53 @@ export function EquipmentPanel({
                       }}
                       className="text-[11px] text-[#d6c7ff] hover:text-[#ffbe5d] text-center"
                     >
-                      Precisa de Poção ou Ração? Compre na aba Lojas!
+                      Precisa de Poção de Chocar? Compre na aba Lojas!
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Barra de Filtro do Estábulo */}
-              <div className="bg-[#23202a] border border-[#3a3447] rounded-md p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    onClick={() => setShowAllPetsCollection(false)}
-                    className={`px-3 py-1.5 rounded text-xs font-condensed font-bold transition ${
-                      !showAllPetsCollection
-                        ? 'bg-[#6133b4] text-white'
-                        : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
-                    }`}
-                  >
-                    Meus Mascotes ({ownedPetIds.length})
-                  </button>
-                  <button
-                    onClick={() => setShowAllPetsCollection(true)}
-                    className={`px-3 py-1.5 rounded text-xs font-condensed font-bold transition ${
-                      showAllPetsCollection
-                        ? 'bg-[#6133b4] text-white'
-                        : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
-                    }`}
-                  >
-                    Coleção Completa ({ownedPetIds.length} / {ALL_PET_IDS.length})
-                  </button>
+              {/* Barra de Filtro por Categoria e Busca do Estábulo */}
+              <div className="bg-[#23202a] border border-[#3a3447] rounded-md p-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {(
+                    [
+                      { id: 'owned', label: `Meus Mascotes (${ownedPetIds.length})` },
+                      { id: 'all', label: `Todos (${ALL_PET_IDS.length})` },
+                      { id: 'drop', label: 'Básicos (90)' },
+                      { id: 'quest', label: 'Missão (610)' },
+                      { id: 'premium', label: 'Mágicos (459)' },
+                      { id: 'wacky', label: 'Malucos (63)' },
+                      { id: 'special', label: 'Especiais (26)' },
+                    ] as const
+                  ).map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setPetCategoryFilter(cat.id);
+                        setPetVisibleLimit(PAGE_SIZE);
+                      }}
+                      className={`px-2.5 py-1.5 rounded text-xs font-condensed font-bold transition ${
+                        petCategoryFilter === cat.id
+                          ? 'bg-[#6133b4] text-white'
+                          : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
                 </div>
 
-                <div className="relative w-full sm:w-64">
+                <div className="relative w-full lg:w-64">
                   <Search className="w-3.5 h-3.5 text-[#8a8299] absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={petSearch}
-                    onChange={(e) => setPetSearch(e.target.value)}
-                    placeholder="Buscar mascote ou espécie..."
+                    onChange={(e) => {
+                      setPetSearch(e.target.value);
+                      setPetVisibleLimit(PAGE_SIZE);
+                    }}
+                    placeholder="Buscar mascote, cor ou espécie..."
                     className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
                   />
                 </div>
@@ -546,146 +546,85 @@ export function EquipmentPanel({
 
               {/* Grid de Mascotes Estilo Habitica Stable */}
               <div>
-                <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
-                  Mascotes ({ownedPetIds.length} / {ALL_PET_IDS.length})
-                </h3>
-                {displayedPetIds.length === 0 ? (
+                <div className="flex items-center justify-between mb-2.5">
+                  <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
+                    Mascotes ({ownedPetIds.length} / {ALL_PET_IDS.length})
+                  </h3>
+                  <span className="text-[11px] text-[#a8a1b5]">
+                    Exibindo {visiblePetEntries.length} de {filteredPetEntries.length}
+                  </span>
+                </div>
+                {visiblePetEntries.length === 0 ? (
                   <div className="bg-[#23202a] border border-[#3a3447] rounded-md py-8 text-center text-xs text-[#8a8299]">
                     Você ainda não chocou nenhum mascote (ou nenhum corresponde à busca).
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
-                    {displayedPetIds.map((petId) => {
-                      const affinity = stable.pets[petId];
-                      const isOwned = typeof affinity === 'number';
-                      const isEquipped = stable.equippedPet === petId;
-                      const canEvolve = hasMountForPet(petId);
-                      return (
-                        <div
-                          key={petId}
-                          className={`rounded-md border p-2.5 flex flex-col justify-between transition ${
-                            isEquipped
-                              ? 'bg-[#2c2240] border-[#925cf3] shadow-md'
-                              : isOwned
-                                ? 'bg-[#23202a] border-[#3a3447]'
-                                : 'bg-[#1a181d]/60 border-[#2c2836] opacity-60'
-                          }`}
-                        >
-                          <div className="flex flex-col items-center text-center">
-                            <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-1.5">
-                              <img
-                                src={getPetSpritePath(petId)}
-                                alt={petId}
-                                className={`w-14 h-14 object-contain [image-rendering:pixelated] ${
-                                  isOwned ? '' : 'brightness-0 opacity-30'
-                                }`}
-                              />
-                            </div>
-                            <p className="text-xs font-condensed font-bold text-white line-clamp-1">
-                              {formatPetName(petId)}
-                            </p>
-
-                            {isOwned ? (
-                              <div className="w-full mt-1.5">
-                                <div className="w-full h-1.5 bg-[#1a181d] rounded-full overflow-hidden">
-                                  <div
-                                    className="h-full bg-[#24cc8f]"
-                                    style={{ width: `${Math.min(100, affinity)}%` }}
-                                  />
-                                </div>
-                                <p className="text-[10px] text-[#a8a1b5] mt-0.5">
-                                  {canEvolve ? `Amizade ${affinity}/100` : 'Pet Especial'}
-                                </p>
-                              </div>
-                            ) : (
-                              <p className="text-[10px] text-[#6e677d] mt-1">Não descoberto</p>
-                            )}
-                          </div>
-
-                          {isOwned && (
-                            <div className="grid grid-cols-2 gap-1 mt-2 pt-2 border-t border-[#3a3447] text-[10px] font-condensed font-bold">
-                              <button
-                                onClick={() => onTogglePet(petId)}
-                                className={`py-1 rounded ${
-                                  isEquipped
-                                    ? 'bg-[#925cf3] text-white'
-                                    : 'bg-[#1a181d] hover:bg-[#36205d] text-[#d6c7ff]'
-                                }`}
-                              >
-                                {isEquipped ? 'Ativo' : 'Equipar'}
-                              </button>
-                              {canEvolve ? (
-                                <button
-                                  disabled={stable.foods <= 0 || affinity >= 100}
-                                  onClick={() => onFeedPet(petId)}
-                                  className="py-1 rounded bg-[#1a181d] hover:bg-[#24cc8f]/20 text-[#24cc8f] disabled:opacity-40"
-                                  title={affinity >= 100 ? 'Já evoluiu para Montaria!' : 'Alimentar (+20 amizade)'}
-                                >
-                                  {affinity >= 100 ? 'Domado' : '🍖 +20'}
-                                </button>
-                              ) : (
-                                <span
-                                  className="py-1 rounded bg-[#1a181d] text-[#8a8299] text-center"
-                                  title="Este mascote especial é exclusivo de companhia e não possui montaria"
-                                >
-                                  Único
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Grid de Montarias Estilo Habitica */}
-              <div>
-                <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
-                  Montarias Domadas ({Object.keys(stable.mounts ?? {}).length} / 189)
-                </h3>
-                {Object.keys(stable.mounts ?? {}).length === 0 ? (
-                  <div className="bg-[#23202a] border border-[#3a3447] rounded-md py-6 text-center text-xs text-[#8a8299]">
-                    Alimente um mascote até 100/100 de amizade para evoluí-lo em Montaria!
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
-                    {Object.keys(stable.mounts ?? {}).map((mountId) => {
-                      const isMounted = stable.equippedMount === mountId;
-                      return (
-                        <div
-                          key={mountId}
-                          className={`rounded-md border p-2.5 flex flex-col items-center text-center justify-between ${
-                            isMounted
-                              ? 'bg-[#2c2240] border-[#925cf3]'
-                              : 'bg-[#23202a] border-[#3a3447]'
-                          }`}
-                        >
-                          <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-1.5">
-                            <img
-                              src={getMountHeadSpritePath(mountId)}
-                              alt={mountId}
-                              className="w-14 h-14 object-contain [image-rendering:pixelated]"
-                            />
-                          </div>
-                          <p className="text-xs font-condensed font-bold text-white line-clamp-1 mb-2">
-                            {formatPetName(mountId)}
-                          </p>
-                          <button
-                            onClick={() => onToggleMount(mountId)}
-                            className={`w-full py-1.5 rounded text-xs font-condensed font-bold ${
-                              isMounted
-                                ? 'bg-[#925cf3] text-white'
-                                : 'bg-[#1a181d] hover:bg-[#36205d] text-[#d6c7ff]'
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                      {visiblePetEntries.map((pet) => {
+                        const isOwned = stable.pets[pet.id] !== undefined;
+                        const isEquipped = stable.equippedPet === pet.id;
+                        return (
+                          <div
+                            key={pet.id}
+                            className={`rounded-md border p-2.5 flex flex-col justify-between transition ${
+                              isEquipped
+                                ? 'bg-[#2c2240] border-[#925cf3] shadow-md'
+                                : isOwned
+                                  ? 'bg-[#23202a] border-[#3a3447]'
+                                  : 'bg-[#1a181d]/60 border-[#2c2836] opacity-60'
                             }`}
                           >
-                            {isMounted ? 'Desmontar' : 'Montar'}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                            <div className="flex flex-col items-center text-center">
+                              <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-1.5">
+                                <img
+                                  src={getPetSpritePath(pet.id)}
+                                  alt={pet.name}
+                                  loading="lazy"
+                                  className={`w-14 h-14 object-contain [image-rendering:pixelated] ${
+                                    isOwned ? '' : 'brightness-0 opacity-30'
+                                  }`}
+                                />
+                              </div>
+                              <p className="text-xs font-condensed font-bold text-white line-clamp-2">
+                                {pet.name}
+                              </p>
+
+                              {!isOwned && (
+                                <p className="text-[10px] text-[#6e677d] mt-1">Não descoberto</p>
+                              )}
+                            </div>
+
+                            {isOwned && (
+                              <div className="mt-2 pt-2 border-t border-[#3a3447] text-[10px] font-condensed font-bold">
+                                <button
+                                  onClick={() => onTogglePet(pet.id)}
+                                  className={`w-full py-1.5 rounded transition ${
+                                    isEquipped
+                                      ? 'bg-[#925cf3] text-white'
+                                      : 'bg-[#1a181d] hover:bg-[#36205d] text-[#d6c7ff]'
+                                  }`}
+                                >
+                                  {isEquipped ? '✓ Ativo' : 'Equipar'}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {visiblePetEntries.length < filteredPetEntries.length && (
+                      <div className="mt-4 flex justify-center">
+                        <button
+                          onClick={() => setPetVisibleLimit((v) => v + PAGE_SIZE)}
+                          className="px-5 py-2.5 rounded-md bg-[#36205d] hover:bg-[#4f2a93] border border-[#6133b4] text-white text-xs font-condensed font-bold uppercase tracking-wider transition"
+                        >
+                          Carregar mais ({filteredPetEntries.length - visiblePetEntries.length} restantes)
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -705,7 +644,6 @@ export function EquipmentPanel({
                   costume={costume}
                   useCostume={useCostume}
                   petId={stable.equippedPet}
-                  mountId={stable.equippedMount}
                   size="stage"
                   className="border-2 border-[#925cf3] shadow-2xl mb-3"
                 />
@@ -1144,12 +1082,12 @@ export function EquipmentPanel({
 
           {/* Coluna Principal Direita: Destaques + Grid de Equipamentos estilo Habitica Shop */}
           <div className="lg:col-span-9 space-y-5">
-            {/* Destaques Fixos do Mercado (Tônico, Poção de Chocar, Ração, Armoire) */}
+            {/* Destaques Fixos do Mercado (Tônico, Poção de Chocar, Armoire) */}
             <div>
               <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
                 Itens Essenciais & Baú Encantado
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* 1. Tônico de Estamina */}
                 <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
@@ -1200,32 +1138,7 @@ export function EquipmentPanel({
                   </button>
                 </div>
 
-                {/* 3. Ração de Pet */}
-                <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
-                  <div className="p-3 flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
-                      <img
-                        src="/sprites/Pet_Food_Meat.png"
-                        alt="Ração de Pet"
-                        className="w-12 h-12 object-contain [image-rendering:pixelated]"
-                      />
-                    </div>
-                    <p className="text-xs font-condensed font-bold text-white">Ração de Pet</p>
-                    <p className="text-[11px] text-[#24cc8f] mt-0.5">
-                      +20 Amizade (Tem: {stable.foods})
-                    </p>
-                  </div>
-                  <button
-                    disabled={gold < 15}
-                    onClick={onBuyFoodPack}
-                    className="w-full py-2 bg-[#ffbe5d]/20 hover:bg-[#ffbe5d]/30 disabled:bg-[#1a181d] disabled:text-[#6e677d] text-[#ffbe5d] border-t border-[#3a3447] font-condensed font-bold text-xs flex items-center justify-center gap-1 transition"
-                  >
-                    <Coins className="w-3.5 h-3.5" />
-                    15 GP
-                  </button>
-                </div>
-
-                {/* 4. Armoire Encantado */}
+                {/* 3. Armoire Encantado */}
                 <div className="bg-[#23202a] border border-[#925cf3]/50 rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
                     <div className="w-16 h-16 rounded bg-[#271b3d] border border-[#6133b4] flex items-center justify-center mb-2">
@@ -1237,7 +1150,7 @@ export function EquipmentPanel({
                     </div>
                     <p className="text-xs font-condensed font-bold text-white">Armoire Encantado</p>
                     <p className="text-[11px] text-[#d6c7ff] mt-0.5">
-                      Sorteia Equipamentos, XP, Ração ou Ovo!
+                      Sorteia Equipamentos, XP, Ovo ou Poção!
                     </p>
                   </div>
                   <button

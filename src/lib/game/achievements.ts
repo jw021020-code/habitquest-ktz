@@ -92,13 +92,12 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 export type ArmoireReward =
   | { kind: 'equipment'; item: EquipmentItem; label: string }
   | { kind: 'xp'; amount: number; label: string }
-  | { kind: 'food'; amount: number; label: string }
   | { kind: 'egg'; label: string }
   | { kind: 'potion'; label: string };
 
 /**
  * Sorteia recompensa do Armoire Encantado (50% chance de equipamento inédito,
- * priorizando a coleção oficial Armoire; 50% XP, Ração, Ovo ou Poção).
+ * priorizando a coleção oficial Armoire; 50% XP, Ovo ou Poção).
  */
 export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   const ownedSet = new Set(ownedIds);
@@ -121,13 +120,10 @@ export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   }
 
   const sub = Math.random();
-  if (sub < 0.35) {
+  if (sub < 0.4) {
     return { kind: 'xp', amount: 25, label: '+25 XP Encantado' };
   }
-  if (sub < 0.65) {
-    return { kind: 'food', amount: 2, label: '2x Ração de Pet' };
-  }
-  if (sub < 0.85) {
+  if (sub < 0.7) {
     return { kind: 'egg', label: 'Ovo' };
   }
   return { kind: 'potion', label: 'Poção de Chocar' };

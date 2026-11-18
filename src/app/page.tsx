@@ -32,7 +32,6 @@ import {
 import {
   DEFAULT_STABLE,
   formatPetName,
-  hasMountForPet,
   normalizeStableState,
   pickRandomUnownedPet,
   rollTaskDrop,
@@ -397,10 +396,7 @@ export default function HomePage() {
         if (drop.kind === 'egg') {
           return { ...prev, eggs: prev.eggs + 1 };
         }
-        if (drop.kind === 'potion') {
-          return { ...prev, potions: prev.potions + 1 };
-        }
-        return { ...prev, foods: prev.foods + 1 };
+        return { ...prev, potions: prev.potions + 1 };
       });
     }
 
@@ -602,47 +598,17 @@ export default function HomePage() {
       ...prev,
       eggs: prev.eggs - 1,
       potions: prev.potions - 1,
-      pets: { ...prev.pets, [petId]: 10 },
+      pets: { ...prev.pets, [petId]: 1 },
       equippedPet: petId,
     }));
     pushActionLog(`🐣 ${heroName} chocou um mascote aleatório: ${formatPetName(petId)}!`);
     showToast(`🐣 Nasceu um novo mascote: ${formatPetName(petId)}!`);
   };
 
-  const handleFeedPet = (petId: string) => {
-    if (stable.foods <= 0) return;
-    const currentAffinity = stable.pets[petId] ?? 0;
-    const nextAffinity = Math.min(100, currentAffinity + 20);
-    const unlockedMount =
-      nextAffinity >= 100 && hasMountForPet(petId) && !(stable.mounts ?? {})[petId];
-
-    setStable((prev) => ({
-      ...prev,
-      foods: prev.foods - 1,
-      pets: { ...prev.pets, [petId]: nextAffinity },
-      mounts: unlockedMount ? { ...(prev.mounts ?? {}), [petId]: true } : prev.mounts,
-      equippedMount: unlockedMount ? petId : prev.equippedMount,
-    }));
-
-    if (unlockedMount) {
-      pushActionLog(`🐎 O mascote ${formatPetName(petId)} de ${heroName} evoluiu para Montaria!`);
-      showToast(`🐎 ${formatPetName(petId)} atingiu 100/100 e evoluiu para Montaria!`);
-    } else {
-      showToast('🍖 Mascote alimentado (+20 amizade)!');
-    }
-  };
-
   const handleTogglePet = (petId: string) => {
     setStable((prev) => ({
       ...prev,
       equippedPet: prev.equippedPet === petId ? undefined : petId,
-    }));
-  };
-
-  const handleToggleMount = (mountId: string) => {
-    setStable((prev) => ({
-      ...prev,
-      equippedMount: prev.equippedMount === mountId ? undefined : mountId,
     }));
   };
 
@@ -699,17 +665,6 @@ export default function HomePage() {
     }));
     pushActionLog(`🧪 ${heroName} usou um Tônico de Estamina (+30 STA, -15 GP).`);
     showToast('🧪 Tônico de Estamina usado (+30 STA)!');
-  };
-
-  const handleBuyFoodPack = () => {
-    if (stats.gold < 15) return;
-    setStats((s) => ({ ...s, gold: s.gold - 15 }));
-    setStable((prev) => ({
-      ...prev,
-      foods: prev.foods + 1,
-    }));
-    pushActionLog(`🍖 ${heroName} comprou Ração de Pet (-15 GP).`);
-    showToast('🍖 Comprou +1 Ração de Pet!');
   };
 
   const handleBuyHatchPotion = () => {
@@ -968,8 +923,6 @@ export default function HomePage() {
     setMetrics((m) => ({ ...m, armoireOpened: m.armoireOpened + 1 }));
     if (reward.kind === 'equipment') {
       setInventory((prev) => (prev.includes(reward.item.id) ? prev : [...prev, reward.item.id]));
-    } else if (reward.kind === 'food') {
-      setStable((prev) => ({ ...prev, foods: prev.foods + reward.amount }));
     } else if (reward.kind === 'egg') {
       setStable((prev) => ({ ...prev, eggs: prev.eggs + 1 }));
     } else if (reward.kind === 'potion') {
@@ -1069,7 +1022,6 @@ export default function HomePage() {
         costume={costume}
         useCostume={useCostume}
         petId={stable.equippedPet}
-        mountId={stable.equippedMount}
         ownedEquipmentCount={inventory.length}
         ownedPetsCount={Object.keys(stable.pets).length}
         totalAttributes={totalAttributes}
@@ -1167,7 +1119,6 @@ export default function HomePage() {
         onBuyItem={handleBuyItem}
         onBuyPotion={handleBuyPotion}
         onBuyArmoire={handleBuyArmoire}
-        onBuyFoodPack={handleBuyFoodPack}
         onBuyHatchPotion={handleBuyHatchPotion}
         onSellEgg={handleSellEgg}
         onSellPotion={handleSellPotion}
@@ -1175,9 +1126,7 @@ export default function HomePage() {
         onToggleCostumeEquip={handleToggleCostumeEquip}
         onToggleUseCostume={() => setUseCostume((v) => !v)}
         onHatchEgg={handleHatchEgg}
-        onFeedPet={handleFeedPet}
         onTogglePet={handleTogglePet}
-        onToggleMount={handleToggleMount}
       />
 
       {/* Aba 4: KTZ - KNOW THE ZERO (2 Colunas Estilo Guild/Party do Habitica) */}
@@ -1191,7 +1140,6 @@ export default function HomePage() {
         heroCostume={costume}
         heroUseCostume={useCostume}
         heroPetId={stable.equippedPet}
-        heroMountId={stable.equippedMount}
         remoteParty={remoteParty}
         remoteMembers={remoteMembers}
         bossStage={activeBossStage}
