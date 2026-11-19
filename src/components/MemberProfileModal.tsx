@@ -97,11 +97,19 @@ function SlotGrid({
         return (
           <div
             key={slot}
+            style={
+              rarityMeta && rarityMeta.glowShadow !== 'none'
+                ? { boxShadow: rarityMeta.glowShadow }
+                : undefined
+            }
+            title={item && rarityMeta ? `${item.name} (${rarityMeta.label})` : undefined}
             className={`rounded-md border p-2.5 flex flex-col items-center text-center gap-1.5 ${
               item
-                ? isCostume
-                  ? 'bg-[#1c2b29] border-[#24cc8f]/45'
-                  : 'bg-[#1a181d] border-[#6133b4]/60'
+                ? rarityMeta && rarity !== 'common'
+                  ? `${isCostume ? 'bg-[#1c2b29]' : 'bg-[#1a181d]'} ${rarityMeta.cardBorderClass}`
+                  : isCostume
+                    ? 'bg-[#1c2b29] border-[#24cc8f]/45'
+                    : 'bg-[#1a181d] border-[#6133b4]/60'
                 : 'bg-[#1a181d]/50 border-[#342e40] opacity-65'
             }`}
           >
@@ -126,19 +134,10 @@ function SlotGrid({
               </div>
             </div>
 
-            {item && rarityMeta && (
-              <div className="flex flex-wrap items-center justify-center gap-1">
-                <span
-                  className={`text-[9px] font-condensed font-bold px-1.5 py-0.2 rounded border ${rarityMeta.badgeClass}`}
-                >
-                  {rarityMeta.label}
-                </span>
-                {affinity && (
-                  <span className="text-[9px] font-condensed font-bold px-1.5 py-0.2 rounded bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/40">
-                    ★ +50%
-                  </span>
-                )}
-              </div>
+            {item && affinity && (
+              <span className="text-[9px] font-condensed font-bold px-1.5 py-0.2 rounded bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/40">
+                +50% Afinidade
+              </span>
             )}
 
             {effStats && (

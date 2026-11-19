@@ -33,6 +33,7 @@ import {
   HAIR_FLOWER_OPTIONS,
   hasClassAffinity,
   HeroClass,
+  isDropOnlyRarity,
   ItemRarity,
   PlayableHeroClass,
   RARITY_META,
@@ -321,13 +322,15 @@ export function EquipmentPanel({
 
   const filteredShopItems = EQUIPMENT_CATALOG.filter((item) => {
     if (inventory.includes(item.id)) return false;
+    const rarity = getItemRarity(item);
+    if (isDropOnlyRarity(rarity)) return false;
     if (shopFilter !== 'all' && item.heroClass !== shopFilter) return false;
     if (slotFilter !== 'all' && item.slot !== slotFilter) return false;
     if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
     if (categoryFilter === 'seasonal' && seasonFilter !== 'all' && item.season !== seasonFilter) {
       return false;
     }
-    if (shopRarityFilter !== 'all' && getItemRarity(item) !== shopRarityFilter) return false;
+    if (shopRarityFilter !== 'all' && rarity !== shopRarityFilter) return false;
     if (shopStatFocus !== 'all' && item.stats[shopStatFocus] <= 0) return false;
 
     const sum = getStatSum(item.stats);
@@ -463,6 +466,8 @@ export function EquipmentPanel({
                   <div className="grid grid-cols-4 gap-2">
                     {ALL_SLOTS.map((slot) => {
                       const eq = getEquipmentById(equipped[slot]);
+                      const eqRarity = eq ? getItemRarity(eq) : null;
+                      const eqMeta = eqRarity ? RARITY_META[eqRarity] : null;
                       const isSlotSelected = slotFilter === slot;
                       return (
                         <div
@@ -471,15 +476,22 @@ export function EquipmentPanel({
                             setSlotFilter((cur) => (cur === slot ? 'all' : slot));
                             setInvVisibleLimit(INV_PAGE_SIZE);
                           }}
+                          style={
+                            eqMeta && eqMeta.glowShadow !== 'none'
+                              ? { boxShadow: eqMeta.glowShadow }
+                              : undefined
+                          }
                           title={
                             eq
-                              ? `${eq.name} (${formatStats(eq.stats)}). Clique para filtrar ${SLOT_LABEL[slot]}`
+                              ? `${eq.name} (${eqMeta?.label ?? 'Comum'} · ${formatStats(eq.stats)}). Clique para filtrar ${SLOT_LABEL[slot]}`
                               : `Clique para filtrar ${SLOT_LABEL[slot]}`
                           }
                           className={`relative cursor-pointer rounded-md p-2 flex flex-col items-center text-center border transition ${
                             isSlotSelected
                               ? 'bg-[#2c2240] border-[#925cf3] ring-1 ring-[#925cf3]/50'
-                              : 'bg-[#1a181d] border-[#3a3447] hover:border-[#6133b4]'
+                              : eqMeta && eqRarity !== 'common'
+                                ? `bg-[#1a181d] ${eqMeta.cardBorderClass}`
+                                : 'bg-[#1a181d] border-[#3a3447] hover:border-[#6133b4]'
                           }`}
                         >
                           {eq && (
@@ -783,43 +795,52 @@ export function EquipmentPanel({
                       return (
                         <div
                           key={item.id}
+                          style={
+                            rarityMeta.glowShadow !== 'none'
+                              ? { boxShadow: rarityMeta.glowShadow }
+                              : undefined
+                          }
                           className={`flex flex-col justify-between rounded-md border overflow-hidden transition ${
                             isEquipped
-                              ? 'bg-[#2c2240] border-[#925cf3] shadow-md'
+                              ? `bg-[#2c2240] ${rarity !== 'common' ? rarityMeta.cardBorderClass : 'border-[#925cf3]'}`
                               : isCostume
-                                ? 'bg-[#1c2b29] border-[#24cc8f]/60'
-                                : 'bg-[#23202a] border-[#3a3447] hover:border-[#6133b4]'
+                                ? `bg-[#1c2b29] ${rarity !== 'common' ? rarityMeta.cardBorderClass : 'border-[#24cc8f]/60'}`
+                                : `bg-[#23202a] ${rarityMeta.cardBorderClass} hover:brightness-110`
                           }`}
                         >
                           <div
                             className="p-3 flex flex-col items-center text-center"
-                            title={item.notes}
+                            title={`${rarityMeta.label}${item.notes ? ` · ${item.notes}` : ''}`}
                           >
-                            <div className="relative w-20 h-20 rounded-md bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
+                            <div className="w-full flex items-center justify-between gap-1 mb-1.5 text-[9px] font-condensed font-bold">
+                              <span className="px-1.5 py-0.5 rounded bg-[#271b3d] text-[#d6c7ff] truncate">
+                                {SLOT_LABEL[item.slot]}
+                              </span>
+                              {hasAffinity && (
+                                <span
+                                  className="px-1.5 py-0.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40 shrink-0"
+                                  title="Afinidade de Classe: +50% de atributos"
+                                >
+                                  +50%
+                                </span>
+                              )}
+                            </div>
+                            <div
+                              style={
+                                rarityMeta.glowShadow !== 'none'
+                                  ? { boxShadow: rarityMeta.glowShadow }
+                                  : undefined
+                              }
+                              className={`relative w-20 h-20 rounded-md bg-[#1a181d] border ${rarityMeta.cardBorderClass} flex items-center justify-center mb-2`}
+                            >
                               <img
                                 src={getEquipmentShopIconPath(item.id)}
                                 alt={item.name}
                                 loading="lazy"
                                 className="w-16 h-16 object-contain [image-rendering:pixelated]"
                               />
-                              <span className="absolute top-1 left-1 text-[9px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
-                                {SLOT_LABEL[item.slot]}
-                              </span>
-                              <span
-                                className={`absolute top-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded border ${rarityMeta.badgeClass}`}
-                              >
-                                {rarityMeta.label}
-                              </span>
-                              {hasAffinity && (
-                                <span
-                                  className="absolute bottom-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/50"
-                                  title="Afinidade de Classe: +50% de atributos"
-                                >
-                                  +50%
-                                </span>
-                              )}
                               {item.twoHanded && (
-                                <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
+                                <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
                                   2 Mãos
                                 </span>
                               )}
@@ -1672,8 +1693,6 @@ export function EquipmentPanel({
                       { id: 'common', label: 'Comum' },
                       { id: 'uncommon', label: 'Incomum' },
                       { id: 'rare', label: 'Raro' },
-                      { id: 'epic', label: 'Épico' },
-                      { id: 'legendary', label: 'Lendário' },
                     ] as const
                   ).map((rar) => (
                     <button
@@ -1924,35 +1943,44 @@ export function EquipmentPanel({
                   return (
                     <div
                       key={item.id}
-                      title={item.notes}
-                      className="bg-[#23202a] border border-[#3a3447] hover:border-[#6133b4] rounded-md flex flex-col justify-between overflow-hidden transition"
+                      title={`${rarityMeta.label}${item.notes ? ` · ${item.notes}` : ''}`}
+                      style={
+                        rarityMeta.glowShadow !== 'none'
+                          ? { boxShadow: rarityMeta.glowShadow }
+                          : undefined
+                      }
+                      className={`bg-[#23202a] border ${rarityMeta.cardBorderClass} hover:brightness-110 rounded-md flex flex-col justify-between overflow-hidden transition`}
                     >
                       <div className="p-3 flex flex-col items-center text-center">
-                        <div className="relative w-20 h-20 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
+                        <div className="w-full flex items-center justify-between gap-1 mb-1.5 text-[9px] font-condensed font-bold">
+                          <span className="px-1.5 py-0.5 rounded bg-[#271b3d] text-[#d6c7ff] truncate">
+                            {CLASS_LABEL[item.heroClass]}
+                          </span>
+                          {hasAffinity && (
+                            <span
+                              className="px-1.5 py-0.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40 shrink-0"
+                              title="Afinidade de Classe: +50% de atributos"
+                            >
+                              +50%
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          style={
+                            rarityMeta.glowShadow !== 'none'
+                              ? { boxShadow: rarityMeta.glowShadow }
+                              : undefined
+                          }
+                          className={`relative w-20 h-20 rounded bg-[#1a181d] border ${rarityMeta.cardBorderClass} flex items-center justify-center mb-2`}
+                        >
                           <img
                             src={getEquipmentShopIconPath(item.id)}
                             alt={item.name}
                             loading="lazy"
                             className="w-16 h-16 object-contain [image-rendering:pixelated]"
                           />
-                          <span className="absolute top-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#271b3d] text-[#d6c7ff]">
-                            {CLASS_LABEL[item.heroClass]}
-                          </span>
-                          <span
-                            className={`absolute top-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded border ${rarityMeta.badgeClass}`}
-                          >
-                            {rarityMeta.label}
-                          </span>
-                          {hasAffinity && (
-                            <span
-                              className="absolute bottom-1 left-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/50"
-                              title="Afinidade de Classe: +50% de atributos"
-                            >
-                              +50%
-                            </span>
-                          )}
                           {item.twoHanded && (
-                            <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold uppercase px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
+                            <span className="absolute bottom-1 right-1 text-[8px] font-condensed font-bold px-1 rounded bg-rose-950/90 text-rose-300 border border-rose-500/40">
                               2 Mãos
                             </span>
                           )}

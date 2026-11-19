@@ -40,11 +40,11 @@ export const ZERO_ATTRS: Attributes = { str: 0, int: 0, con: 0, per: 0 };
 
 /**
  * Curva polinomial equilibrada de XP para o próximo nível:
- * Nível 1->2 = 100 | Nível 5->6 = 408 | Nível 10->11 = 1.153 | Nível 50->51 = 21.513
+ * Nível 1->2 = 350 | Nível 5->6 = 1.054 | Nível 10->11 = 2.339 | Nível 50->51 = 28.819
  */
 export function getXpToNextLevel(level: number): number {
   const safe = Math.max(1, level);
-  return 100 + (safe - 1) * 45 + Math.pow(safe - 1, 2) * 8;
+  return 350 + (safe - 1) * 140 + Math.pow(safe - 1, 2) * 9;
 }
 
 export function getUnallocatedStatPoints(level: number, allocated?: Attributes): number {

@@ -200,42 +200,63 @@ export type ItemRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
 export const RARITY_META: Record<
   ItemRarity,
-  { label: string; badgeClass: string; weight: number }
+  {
+    label: string;
+    badgeClass: string;
+    cardBorderClass: string;
+    glowShadow: string;
+    weight: number;
+  }
 > = {
   common: {
     label: 'Comum',
     badgeClass: 'bg-slate-700/70 text-slate-200 border-slate-500/40',
-    weight: 50,
+    cardBorderClass: 'border-[#3a3447]',
+    glowShadow: 'none',
+    weight: 48,
   },
   uncommon: {
     label: 'Incomum',
     badgeClass: 'bg-emerald-900/70 text-emerald-300 border-emerald-500/40',
+    cardBorderClass: 'border-emerald-500/80',
+    glowShadow: '0 0 10px rgba(16, 185, 129, 0.28)',
     weight: 28,
   },
   rare: {
     label: 'Raro',
     badgeClass: 'bg-sky-900/70 text-sky-300 border-sky-500/40',
-    weight: 14,
+    cardBorderClass: 'border-sky-400/90',
+    glowShadow: '0 0 15px rgba(56, 189, 248, 0.40)',
+    weight: 15,
   },
   epic: {
     label: 'Épico',
     badgeClass: 'bg-purple-900/70 text-purple-300 border-purple-500/50',
-    weight: 6,
+    cardBorderClass: 'border-purple-400',
+    glowShadow: '0 0 20px rgba(192, 132, 252, 0.55)',
+    weight: 7,
   },
   legendary: {
     label: 'Lendário',
     badgeClass: 'bg-amber-900/70 text-amber-300 border-amber-400/60',
+    cardBorderClass: 'border-amber-400 ring-1 ring-amber-300/60',
+    glowShadow: '0 0 26px rgba(251, 191, 36, 0.72)',
     weight: 2,
   },
 };
 
 export function getItemRarity(item: EquipmentItem): ItemRarity {
-  const sum = item.stats.str + item.stats.int + item.stats.con + item.stats.per;
-  if (sum >= 30) return 'legendary';
-  if (sum >= 20) return 'epic';
-  if (sum >= 12) return 'rare';
-  if (sum >= 5) return 'uncommon';
+  const raw = item.stats.str + item.stats.int + item.stats.con + item.stats.per;
+  const sum = item.twoHanded ? Math.round(raw / 1.45) : raw;
+  if (sum >= 25) return 'legendary';
+  if (sum >= 19) return 'epic';
+  if (sum >= 13) return 'rare';
+  if (sum >= 7) return 'uncommon';
   return 'common';
+}
+
+export function isDropOnlyRarity(rarity: ItemRarity): boolean {
+  return rarity === 'epic' || rarity === 'legendary';
 }
 
 export function hasClassAffinity(

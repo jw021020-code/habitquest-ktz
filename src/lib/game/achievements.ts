@@ -93,7 +93,10 @@ export function buildAchievementContext(
         0
       ) * 10
     ) / 10;
-  const workoutsCount = workoutEntries.length;
+  const workoutsCount = workoutEntries.reduce(
+    (acc, w) => acc + (w.cardio ? 1 : 0) + (w.musculacao ? 1 : 0),
+    0
+  );
   const comboCount = workoutEntries.filter((w) => w.cardio && w.musculacao).length;
   const questsCompleted = metrics.quests?.totalQuestsCompleted ?? 0;
   const checkInStreak = metrics.checkin?.streak ?? 0;
@@ -517,17 +520,16 @@ export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
 }
 
 /**
- * Sorteia um equipamento inédito garantido (Incomum, Raro, Épico ou Lendário)
- * para o Baú de Honra PRF do Mês.
+ * Sorteia um equipamento inédito seguindo uma tabela de pesos de raridade.
  */
-export function rollGuaranteedEquipment(
-  ownedIds: string[] = []
+export function rollEquipmentFromWeights(
+  ownedIds: string[] = [],
+  weights: Partial<Record<ItemRarity, number>>
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
   const ownedSet = new Set(ownedIds);
   const unownedPool = EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
   if (unownedPool.length === 0) return null;
 
-  const preferredRarities: ItemRarity[] = ['uncommon', 'rare', 'epic', 'legendary'];
   const byRarity: Record<ItemRarity, EquipmentItem[]> = {
     common: [],
     uncommon: [],
@@ -539,19 +541,23 @@ export function rollGuaranteedEquipment(
     byRarity[getItemRarity(item)].push(item);
   }
 
-  let availableRarities = preferredRarities.filter((r) => byRarity[r].length > 0);
+  let availableRarities = (Object.keys(weights) as ItemRarity[]).filter(
+    (r) => (weights[r] ?? 0) > 0 && byRarity[r].length > 0
+  );
   if (availableRarities.length === 0) {
-    availableRarities = ['common'];
+    availableRarities = (Object.keys(byRarity) as ItemRarity[]).filter(
+      (r) => byRarity[r].length > 0
+    );
   }
 
   const totalWeight = availableRarities.reduce(
-    (acc, r) => acc + RARITY_META[r].weight,
+    (acc, r) => acc + (weights[r] ?? RARITY_META[r].weight),
     0
   );
   let roll = Math.random() * totalWeight;
   let chosenRarity: ItemRarity = availableRarities[0];
   for (const r of availableRarities) {
-    roll -= RARITY_META[r].weight;
+    roll -= weights[r] ?? RARITY_META[r].weight;
     if (roll <= 0) {
       chosenRarity = r;
       break;
@@ -565,4 +571,38 @@ export function rollGuaranteedEquipment(
     rarity: chosenRarity,
     label: `[${RARITY_META[chosenRarity].label}] ${picked.name}`,
   };
+}
+
+/**
+ * Sorteia um equipamento inédito garantido para o Baú de Honra PRF do Mês:
+ * Raro 45% · Épico 40% · Lendário 15%.
+ */
+export function rollGuaranteedEquipment(
+  ownedIds: string[] = []
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  return rollEquipmentFromWeights(ownedIds, { rare: 45, epic: 40, legendary: 15 });
+}
+
+/** Drop bônus (15%) ao concluir Missão Semanal PRF: Raro 75% · Épico 22% · Lendário 3%. */
+export function rollWeeklyQuestEquipmentDrop(
+  ownedIds: string[] = []
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  if (Math.random() > 0.15) return null;
+  return rollEquipmentFromWeights(ownedIds, { rare: 75, epic: 22, legendary: 3 });
+}
+
+/** Drop de equipamento ao derrotar um Boss da KTZ (escala com o estágio do Boss). */
+export function rollBossEquipmentDrop(
+  ownedIds: string[] = [],
+  bossStage = 1
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  const dropChance = bossStage >= 61 ? 0.65 : bossStage >= 26 ? 0.5 : 0.35;
+  if (Math.random() > dropChance) return null;
+  const weights: Partial<Record<ItemRarity, number>> =
+    bossStage >= 61
+      ? { rare: 40, epic: 45, legendary: 15 }
+      : bossStage >= 26
+      ? { rare: 55, epic: 35, legendary: 10 }
+      : { rare: 70, epic: 25, legendary: 5 };
+  return rollEquipmentFromWeights(ownedIds, weights);
 }

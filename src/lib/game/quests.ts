@@ -361,7 +361,7 @@ export function computePeriodTotals(
     const keys = getEntryPeriodKeys(w.loggedAt);
     if (!keys) continue;
     const km = w.cardio ? Math.max(0, Number(w.km) || 0) : 0;
-    const count = w.cardio || w.musculacao ? 1 : 0;
+    const count = (w.cardio ? 1 : 0) + (w.musculacao ? 1 : 0);
 
     if (keys.dayKey === curDay) {
       daily.runKm += km;

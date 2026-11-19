@@ -70,6 +70,10 @@ export function WorkoutLogCard({
   };
 
   const comboCount = entries.filter((e) => e.cardio && e.musculacao).length;
+  const totalWorkoutCount = entries.reduce(
+    (acc, e) => acc + (e.cardio ? 1 : 0) + (e.musculacao ? 1 : 0),
+    0
+  );
 
   return (
     <section className="flex flex-col bg-[#23202a] border border-[#342e40] rounded-md overflow-hidden shadow-lg">
@@ -81,13 +85,13 @@ export function WorkoutLogCard({
             Treinamento Físico Diário
           </h2>
           <span className="px-2 py-0.5 rounded-full bg-[#36205d] border border-[#6133b4] text-[11px] font-condensed font-bold text-[#d6c7ff]">
-            {entries.length}
+            {totalWorkoutCount}
           </span>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] font-condensed text-[#a8a1b5]">
           <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#24cc8f] font-bold">
-            {entries.length} treinos
+            {totalWorkoutCount} treinos
           </span>
           {comboCount > 0 && (
             <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#ffbe5d] font-bold">

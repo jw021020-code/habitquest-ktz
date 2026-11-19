@@ -48,7 +48,9 @@ import {
   DEFAULT_METRICS,
   HeroMetrics,
   rollArmoireReward,
+  rollBossEquipmentDrop,
   rollGuaranteedEquipment,
+  rollWeeklyQuestEquipmentDrop,
 } from '@/lib/game/achievements';
 import {
   buildQuestProgressList,
@@ -119,7 +121,7 @@ const DEFAULT_STATS: PlayerStats = {
   mp: 30,
   max_mp: 32,
   xp: 0,
-  xp_to_next: 100,
+  xp_to_next: 350,
   gold: 0,
   heroClass: 'apprentice',
   buffs: { ...ZERO_ATTRS },
@@ -347,6 +349,10 @@ export default function HomePage() {
         eggs: prev.eggs + dropCount,
         potions: prev.potions + dropCount,
       }));
+      const bossGearDrop = rollBossEquipmentDrop(inventory, currentStage);
+      if (bossGearDrop && !inventory.includes(bossGearDrop.item.id)) {
+        setInventory((prev) => [...prev, bossGearDrop.item.id]);
+      }
       setMetrics((m) => ({
         ...m,
         bossesDefeated: m.bossesDefeated + 1,
@@ -909,7 +915,7 @@ export default function HomePage() {
       mp: 30,
       max_mp: 32,
       xp: 0,
-      xp_to_next: 100,
+      xp_to_next: 350,
       gold: s.gold + 50,
       heroClass: 'apprentice',
       buffs: { ...ZERO_ATTRS },
@@ -1677,6 +1683,13 @@ export default function HomePage() {
     const extraParts: string[] = [];
     if (bonusEggs > 0) extraParts.push(`+${bonusEggs} Ovo`);
     if (bonusPotions > 0) extraParts.push(`+${bonusPotions} Poção`);
+    if (cycle === 'weekly') {
+      const weeklyEquip = rollWeeklyQuestEquipmentDrop(inventory);
+      if (weeklyEquip && !inventory.includes(weeklyEquip.item.id)) {
+        setInventory((prev) => [...prev, weeklyEquip.item.id]);
+        extraParts.push(`🎁 ${weeklyEquip.label}`);
+      }
+    }
     const extraText = extraParts.length > 0 ? ` · ${extraParts.join(', ')}` : '';
 
     pushActionLog(
