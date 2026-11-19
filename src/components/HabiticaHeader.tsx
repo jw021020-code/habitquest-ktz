@@ -283,7 +283,7 @@ export function HabiticaHeader({
                   }`}
                 >
                   <PawPrint className="w-3.5 h-3.5" />
-                  Estábulo — Mascotes ({ownedPetsCount}/{ALL_PET_IDS.length})
+                  Estábulo ({ownedPetsCount}/{ALL_PET_IDS.length})
                 </button>
                 <button
                   onClick={() => onSelectInvTab('appearance')}
@@ -551,21 +551,19 @@ export function HabiticaHeader({
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-[10px] font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
-                    KTZ · Missão de Boss
-                  </span>
-                  <span className="text-[10px] font-condensed font-bold text-[#ffbe5d]">
-                    ⚔️ Atq {bossAttack} STA
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-2 text-xs sm:text-sm font-condensed font-bold text-white mb-1.5">
+                <div className="flex items-center justify-between gap-2 text-xs sm:text-sm font-condensed font-bold text-white mb-1">
                   <span className="flex items-center gap-1 truncate">
                     <Sword className="w-3.5 h-3.5 text-[#ff6165] shrink-0" />
                     {bossName}
                   </span>
-                  <span className="text-[#ffd4d5] tabular-nums text-xs shrink-0">
+                  <span className="text-[10px] font-condensed font-bold text-[#ffbe5d] shrink-0">
+                    Atq {bossAttack} STA
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 text-[11px] font-condensed text-[#ffd4d5] tabular-nums mb-1">
+                  <span>Boss #{bossStage}</span>
+                  <span>
                     {bossHp} / {bossMaxHp} HP
                   </span>
                 </div>

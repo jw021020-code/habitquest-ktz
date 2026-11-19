@@ -49,14 +49,9 @@ export function DailyCheckInModal({
         <div className="bg-[#36205d] border-b border-[#4f2a93] px-5 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <CalendarCheck className="w-5 h-5 text-[#ffbe5d]" />
-            <div>
-              <h2 className="font-condensed font-bold text-base sm:text-lg text-white uppercase tracking-wide leading-none">
-                Check-in Diário da Patrulha
-              </h2>
-              <p className="text-[11px] text-[#d6c7ff] mt-0.5">
-                Recompensas escaladas para o Nível {level} · Bônus de Sequência
-              </p>
-            </div>
+            <h2 className="font-condensed font-bold text-base sm:text-lg text-white leading-none">
+              Check-in Diário (Nv. {level})
+            </h2>
           </div>
 
           <button
@@ -102,8 +97,8 @@ export function DailyCheckInModal({
 
           {/* Trilha de 7 Dias */}
           <div>
-            <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc] mb-2">
-              Ciclo de 7 Dias (Marcos Especiais nos Dias 3, 5 e 7):
+            <p className="text-xs font-condensed font-bold text-[#cfc8dc] mb-2">
+              Ciclo de 7 dias
             </p>
             <div className="grid grid-cols-7 gap-1.5">
               {[1, 2, 3, 4, 5, 6, 7].map((dayNum) => {
@@ -112,11 +107,11 @@ export function DailyCheckInModal({
                 const isToday = canClaimToday && dayNum === currentCycleDay;
                 const bonusTag =
                   dayNum === 3
-                    ? '🥚/🧪'
+                    ? 'Ovo/Poção'
                     : dayNum === 5
-                    ? '🥚+🧪'
+                    ? 'Ovo+Poção'
                     : dayNum === 7
-                    ? '🎁 Baú'
+                    ? 'Armoire'
                     : null;
 
                 return (
@@ -153,14 +148,9 @@ export function DailyCheckInModal({
 
           {/* Recompensa de Hoje */}
           <div className="bg-[#1a181d] border border-[#432874] rounded-md p-3.5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff]">
-                {canClaimToday ? 'Recompensa de Hoje (Nv.' + level + ')' : 'Check-in de Hoje Concluído'}
-              </span>
-              <span className="text-[11px] font-condensed text-[#24cc8f] font-bold">
-                Escala com seu Nível
-              </span>
-            </div>
+            <span className="block text-xs font-condensed font-bold text-[#d6c7ff]">
+              {canClaimToday ? `Recompensa de hoje (Nv. ${level})` : 'Check-in de hoje concluído'}
+            </span>
 
             <div className="flex flex-wrap items-center gap-2 text-xs font-condensed font-bold">
               <span className="px-2.5 py-1 rounded bg-[#ffbe5d]/15 border border-[#ffbe5d]/40 text-[#ffbe5d] flex items-center gap-1">
@@ -192,8 +182,8 @@ export function DailyCheckInModal({
               Resgatar Check-in Diário
             </button>
           ) : (
-            <div className="w-full py-2.5 rounded-md bg-[#1f1c26] border border-[#24cc8f]/40 text-[#24cc8f] font-condensed font-bold text-xs uppercase tracking-wider text-center">
-              ✅ Você já garantiu seu Check-in de hoje! Volte amanhã para continuar a sequência.
+            <div className="w-full py-2.5 rounded-md bg-[#1f1c26] border border-[#24cc8f]/40 text-[#24cc8f] font-condensed font-bold text-xs text-center">
+              Check-in de hoje concluído.
             </div>
           )}
         </div>

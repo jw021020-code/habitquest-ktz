@@ -61,7 +61,7 @@ export function StatsModal({
           <div className="flex items-center gap-2">
             <Trophy className="w-4 h-4 text-[#ffbe5d]" />
             <h2 className="font-condensed font-bold text-base uppercase tracking-wide text-white">
-              Perfil do Herói — Atributos, Conquistas & Dados
+              Perfil do Herói: Atributos e Conquistas
             </h2>
           </div>
           <button

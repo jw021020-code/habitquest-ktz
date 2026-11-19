@@ -473,7 +473,7 @@ export function EquipmentPanel({
                           }}
                           title={
                             eq
-                              ? `${eq.name} (${formatStats(eq.stats)}) — Clique para filtrar ${SLOT_LABEL[slot]}`
+                              ? `${eq.name} (${formatStats(eq.stats)}). Clique para filtrar ${SLOT_LABEL[slot]}`
                               : `Clique para filtrar ${SLOT_LABEL[slot]}`
                           }
                           className={`relative cursor-pointer rounded-md p-2 flex flex-col items-center text-center border transition ${
@@ -578,7 +578,7 @@ export function EquipmentPanel({
                           }}
                           title={
                             eq
-                              ? `${eq.name} — Clique para filtrar ${SLOT_LABEL[slot]}`
+                              ? `${eq.name}. Clique para filtrar ${SLOT_LABEL[slot]}`
                               : `Clique para filtrar ${SLOT_LABEL[slot]}`
                           }
                           className={`relative cursor-pointer rounded-md p-2 flex flex-col items-center text-center border transition ${
@@ -667,10 +667,10 @@ export function EquipmentPanel({
                     {(
                       [
                         { id: 'all', label: 'Todos' },
-                        { id: 'equipped', label: '🛡️ Equipados Agora' },
-                        { id: 'upgrades', label: '⬆️ Upgrades' },
-                        { id: 'with-stats', label: '⚔️ Com Atributos' },
-                        { id: 'cosmetic', label: '✨ Apenas Visuais' },
+                        { id: 'equipped', label: 'Equipados' },
+                        { id: 'upgrades', label: 'Upgrades' },
+                        { id: 'with-stats', label: 'Com atributos' },
+                        { id: 'cosmetic', label: 'Visuais' },
                       ] as const
                     ).map((st) => (
                       <button
@@ -929,15 +929,7 @@ export function EquipmentPanel({
                           : 'bg-[#1a181d] text-[#6e677d] border border-[#3a3447] cursor-not-allowed'
                       }`}
                     >
-                      🐣 Chocar Mascote Aleatório (1 Ovo + 1 Poção)
-                    </button>
-                    <button
-                      onClick={() => {
-                        onChangeShopFilter('all');
-                      }}
-                      className="text-[11px] text-[#d6c7ff] hover:text-[#ffbe5d] text-center"
-                    >
-                      Precisa de Poção de Chocar? Compre na aba Lojas!
+                      Chocar mascote (1 Ovo + 1 Poção)
                     </button>
                   </div>
                 </div>
@@ -951,7 +943,7 @@ export function EquipmentPanel({
                       [
                         { id: 'owned', label: `Meus Mascotes (${ownedPetIds.length})` },
                         { id: 'all', label: `Todos (${ALL_PET_IDS.length})` },
-                        { id: 'special', label: `⭐ Especiais / Únicos (${specialPetsCount})` },
+                        { id: 'special', label: `Especiais (${specialPetsCount})` },
                       ] as const
                     ).map((cat) => (
                       <button
@@ -1000,7 +992,7 @@ export function EquipmentPanel({
                       }}
                       className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
                     >
-                      <option value="all">🐾 Espécie: Todas ({PET_SPECIES_LIST.length})</option>
+                      <option value="all">Espécie: Todas ({PET_SPECIES_LIST.length})</option>
                       {PET_SPECIES_LIST.map((sp) => {
                         const c = petSpeciesCounts.get(sp) ?? { owned: 0, total: 0 };
                         return (
@@ -1024,7 +1016,7 @@ export function EquipmentPanel({
                       }}
                       className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
                     >
-                      <option value="all">🎨 Cor / Estilo: Todas ({PET_POTIONS_LIST.length})</option>
+                      <option value="all">Cor: Todas ({PET_POTIONS_LIST.length})</option>
                       {PET_POTIONS_LIST.map((po) => {
                         const c = petPotionCounts.get(po) ?? { owned: 0, total: 0 };
                         return (
@@ -1150,9 +1142,6 @@ export function EquipmentPanel({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
               {/* Coluna Esquerda: Palco Preview Ao Vivo (Fixo ao rolar) */}
               <div className="lg:col-span-4 bg-[#23202a] border border-[#3a3447] rounded-md p-5 flex flex-col items-center text-center h-fit lg:sticky lg:top-4">
-                <span className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-3">
-                  Preview do Palco Habitica
-                </span>
                 <CharacterAvatar
                   appearance={appearance}
                   equipped={equipped}
@@ -1160,11 +1149,8 @@ export function EquipmentPanel({
                   useCostume={useCostume}
                   petId={stable.equippedPet}
                   size="stage"
-                  className="border-2 border-[#925cf3] shadow-2xl mb-3"
+                  className="border-2 border-[#925cf3] shadow-2xl"
                 />
-                <p className="text-xs text-[#a8a1b5]">
-                  Todas as alterações de aparência e fundo de cenário são salvas automaticamente.
-                </p>
               </div>
 
               {/* Coluna Direita: Seletores Visuais Completos do Habitica */}
@@ -1583,9 +1569,9 @@ export function EquipmentPanel({
                   {(
                     [
                       { id: 'all', label: 'Todos Disponíveis' },
-                      { id: 'upgrades', label: '⬆️ Apenas Upgrades' },
-                      { id: 'with-stats', label: '⚔️ Apenas com Atributos' },
-                      { id: 'cosmetic', label: '✨ Apenas Visuais' },
+                      { id: 'upgrades', label: 'Upgrades' },
+                      { id: 'with-stats', label: 'Com atributos' },
+                      { id: 'cosmetic', label: 'Visuais' },
                     ] as const
                   ).map((u) => (
                     <button
@@ -1757,8 +1743,8 @@ export function EquipmentPanel({
           <div className="lg:col-span-9 space-y-5">
             {/* Destaques Fixos do Mercado (Tônico, Elixir de Mana, Poção de Chocar, Armoire) */}
             <div>
-              <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
-                Itens Essenciais & Baú Encantado
+              <h3 className="text-xs font-condensed font-bold text-[#d6c7ff] mb-2.5">
+                Consumíveis e Armoire
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
                 {/* 1. Tônico de Estamina */}

@@ -15,8 +15,8 @@ const robotoCondensed = Roboto_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "HabitQuest — RPG de Hábitos",
-  description: "Transforme hábitos e tarefas em um RPG cooperativo com seus amigos.",
+  title: "HabitQuest: RPG de Hábitos",
+  description: "Registre estudos e treinos em um RPG cooperativo com seu clã.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

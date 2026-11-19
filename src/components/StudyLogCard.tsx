@@ -102,10 +102,10 @@ export function StudyLogCard({
 
         <div className="flex items-center gap-2 text-[11px] font-condensed text-[#a8a1b5]">
           <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#ffbe5d] font-bold">
-            ⏱️ {totalMinutes} min
+            {totalMinutes} min
           </span>
           <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#24cc8f] font-bold">
-            📝 {totalQuestions} questões
+            {totalQuestions} questões
           </span>
         </div>
       </div>
@@ -118,21 +118,21 @@ export function StudyLogCard({
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="sm:col-span-2">
-              <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc] mb-1">
-                Matéria Estudada*
+              <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                Matéria*
               </label>
               <input
                 type="text"
                 required
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="Digite a matéria estudada..."
+                placeholder="Ex.: Legislação de Trânsito"
                 className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc] mb-1">
+              <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
                 Tempo (min)*
               </label>
               <input
@@ -200,8 +200,8 @@ export function StudyLogCard({
             <div className="flex flex-wrap items-center gap-2.5 font-bold">
               <span className="text-[#ffbe5d]">+{preview.xp} XP</span>
               <span className="text-[#ffbe5d]">+{preview.gold} GP</span>
-              <span className="text-[#24cc8f]">⚔️ -{preview.bossDamage} Boss HP</span>
-              <span className="text-[#ff8b8e]">⚡ -{preview.staminaLost} STA</span>
+              <span className="text-[#24cc8f]">-{preview.bossDamage} Boss HP</span>
+              <span className="text-[#ff8b8e]">-{preview.staminaLost} STA</span>
             </div>
           </div>
 
@@ -238,7 +238,7 @@ export function StudyLogCard({
           {filteredEntries.length === 0 ? (
             <div className="bg-[#1a181d]/60 border border-dashed border-[#3a3447] rounded-md py-8 px-4 text-center">
               <p className="text-xs text-[#8a8299]">
-                Nenhum estudo teórico registrado ainda. Registre acima para ganhar XP, Ouro e causar dano ao Boss da KTZ!
+                Nenhum estudo registrado.
               </p>
             </div>
           ) : (

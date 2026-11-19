@@ -87,11 +87,11 @@ export function WorkoutLogCard({
 
         <div className="flex items-center gap-2 text-[11px] font-condensed text-[#a8a1b5]">
           <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#24cc8f] font-bold">
-            💪 {entries.length} treinos
+            {entries.length} treinos
           </span>
           {comboCount > 0 && (
             <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#ffbe5d] font-bold">
-              🔥 {comboCount} combos
+              {comboCount} combos
             </span>
           )}
         </div>
@@ -103,10 +103,6 @@ export function WorkoutLogCard({
           onSubmit={handleSubmit}
           className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3.5 space-y-3 text-sm shadow-inner"
         >
-          <p className="text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc]">
-            Selecione as modalidades realizadas no dia (pode marcar ambas):
-          </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {/* Cartão Checkbox Cárdio estilo Habitica Daily */}
             <label
@@ -187,8 +183,8 @@ export function WorkoutLogCard({
 
           {cardio && (
             <div>
-              <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#ffbe5d] mb-1">
-                🏃 Distância Corrida (km) — opcional (conta para Missões PRF)
+              <label className="block text-xs font-condensed font-bold text-[#ffbe5d] mb-1">
+                Distância corrida (km)
               </label>
               <input
                 type="number"
@@ -203,14 +199,14 @@ export function WorkoutLogCard({
           )}
 
           <div>
-            <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc] mb-1">
-              Observações do Treino (opcional)
+            <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+              Observações
             </label>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Ex.: 5km corrida + treino superior..."
+              placeholder="Ex.: 5 km corrida + treino superior"
               className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
             />
           </div>
@@ -222,11 +218,11 @@ export function WorkoutLogCard({
               <div className="flex flex-wrap items-center gap-2.5 font-bold">
                 <span className="text-[#ffbe5d]">+{preview.xp} XP</span>
                 <span className="text-[#ffbe5d]">+{preview.gold} GP</span>
-                <span className="text-[#24cc8f]">⚔️ -{preview.bossDamage} Boss HP</span>
-                <span className="text-[#ff8b8e]">⚡ -{preview.staminaLost} STA</span>
+                <span className="text-[#24cc8f]">-{preview.bossDamage} Boss HP</span>
+                <span className="text-[#ff8b8e]">-{preview.staminaLost} STA</span>
               </div>
             ) : (
-              <span className="text-[#6e677d]">Marque Cárdio e/ou Musculação para calcular</span>
+              <span className="text-[#6e677d]">Selecione uma modalidade</span>
             )}
           </div>
 
@@ -251,7 +247,7 @@ export function WorkoutLogCard({
           {entries.length === 0 ? (
             <div className="bg-[#1a181d]/60 border border-dashed border-[#3a3447] rounded-md py-8 px-4 text-center">
               <p className="text-xs text-[#8a8299]">
-                Nenhum treino físico registrado ainda. Marque Cárdio e/ou Musculação acima!
+                Nenhum treino registrado.
               </p>
             </div>
           ) : (
@@ -272,12 +268,12 @@ export function WorkoutLogCard({
                       <div className="flex flex-wrap items-center gap-1.5">
                         {entry.cardio && (
                           <span className="text-xs font-condensed font-bold px-2 py-0.5 rounded bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/30">
-                            🏃 Cárdio{entry.km && entry.km > 0 ? ` (${entry.km} km)` : ''}
+                            Cárdio{entry.km && entry.km > 0 ? ` (${entry.km} km)` : ''}
                           </span>
                         )}
                         {entry.musculacao && (
                           <span className="text-xs font-condensed font-bold px-2 py-0.5 rounded bg-[#925cf3]/20 text-[#d6c7ff] border border-[#925cf3]/40">
-                            🏋️ Musculação
+                            Musculação
                           </span>
                         )}
                         {isCombo && (

@@ -63,17 +63,17 @@ function RewardChips({ item }: { item: QuestProgressItem }) {
       </span>
       {reward.eggOrPotionChance && (
         <span className="px-2 py-0.5 rounded bg-[#925cf3]/20 text-[#d6c7ff] border border-[#925cf3]/40">
-          🥚 {Math.round(reward.eggOrPotionChance * 100)}% Ovo/Poção
+          {Math.round(reward.eggOrPotionChance * 100)}% Ovo/Poção
         </span>
       )}
       {reward.guaranteedEggOrPotion && (
         <span className="px-2 py-0.5 rounded bg-[#925cf3]/20 text-[#d6c7ff] border border-[#925cf3]/40">
-          🥚 1 Ovo ou Poção
+          1 Ovo ou Poção
         </span>
       )}
       {(reward.eggs || reward.potions) && (
         <span className="px-2 py-0.5 rounded bg-[#925cf3]/20 text-[#d6c7ff] border border-[#925cf3]/40">
-          🥚 +{reward.eggs ?? 0} Ovo · 🧪 +{reward.potions ?? 0} Poção
+          +{reward.eggs ?? 0} Ovo, +{reward.potions ?? 0} Poção
         </span>
       )}
     </div>
@@ -117,8 +117,8 @@ function QuestCard({
               Resgatada
             </span>
           ) : item.completed ? (
-            <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/40 text-[10px] font-condensed font-bold uppercase animate-pulse">
-              Pronta!
+            <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/40 text-[10px] font-condensed font-bold">
+              Pronta
             </span>
           ) : (
             <span className="shrink-0 px-2 py-0.5 rounded-full bg-[#1a181d] text-[#a8a1b5] border border-[#3a3447] text-[10px] font-condensed font-bold tabular-nums">
@@ -209,24 +209,19 @@ export function QuestsPanel({
         <div className="bg-[#2c2836] border-b border-[#3a3447] px-4 py-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <ScrollText className="w-5 h-5 text-[#ffbe5d]" />
-            <div>
-              <h2 className="font-condensed font-bold text-base sm:text-lg tracking-wide text-white uppercase leading-none">
-                Missões de Aprovação PRF
-              </h2>
-              <p className="text-[11px] text-[#a8a1b5] mt-1">
-                4 Pilares Diretos: Estudar X horas · Resolver X questões · Correr X KM · Realizar treino físico
-              </p>
-            </div>
+            <h2 className="font-condensed font-bold text-base sm:text-lg text-white leading-none">
+              Missões PRF
+            </h2>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-xs font-condensed font-bold">
             {readyCount > 0 && (
-              <span className="px-2.5 py-1 rounded-full bg-[#ffbe5d]/20 border border-[#ffbe5d] text-[#ffbe5d] animate-pulse">
-                🎁 {readyCount} {readyCount === 1 ? 'recompensa pronta' : 'recompensas prontas'}
+              <span className="px-2.5 py-1 rounded-full bg-[#ffbe5d]/20 border border-[#ffbe5d] text-[#ffbe5d]">
+                {readyCount} {readyCount === 1 ? 'recompensa pronta' : 'recompensas prontas'}
               </span>
             )}
             <span className="px-2.5 py-1 rounded bg-[#1a181d] border border-[#3a3447] text-[#d6c7ff]">
-              🏆 {totalQuestsCompleted} {totalQuestsCompleted === 1 ? 'missão concluída' : 'missões concluídas'}
+              {totalQuestsCompleted} {totalQuestsCompleted === 1 ? 'missão concluída' : 'missões concluídas'}
             </span>
           </div>
         </div>
@@ -234,10 +229,10 @@ export function QuestsPanel({
         {/* Filtro de Ciclo */}
         <div className="px-4 py-2.5 bg-[#1a181d] border-b border-[#342e40] flex flex-wrap gap-2">
           {[
-            { id: 'all' as const, label: 'Visão Completa' },
-            { id: 'daily' as const, label: '☀️ Diária (1/4)' },
-            { id: 'weekly' as const, label: '📅 Semanais (2/4)' },
-            { id: 'monthly' as const, label: '🏆 Metas Mensais (4/4)' },
+            { id: 'all' as const, label: 'Todas' },
+            { id: 'daily' as const, label: 'Diária (1/4)' },
+            { id: 'weekly' as const, label: 'Semanais (2/4)' },
+            { id: 'monthly' as const, label: 'Mensais (4/4)' },
           ].map((btn) => (
             <button
               key={btn.id}
@@ -427,9 +422,6 @@ export function QuestsSummaryStrip({
           <span className="text-lg leading-none shrink-0">{dailyQuest.def.icon}</span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-condensed font-bold uppercase px-1.5 py-0.5 rounded bg-[#36205d] text-[#ffbe5d] border border-[#6133b4]">
-                Missão Diária PRF
-              </span>
               <span className="text-xs sm:text-sm font-condensed font-bold text-white truncate">
                 {dailyQuest.def.title}
               </span>

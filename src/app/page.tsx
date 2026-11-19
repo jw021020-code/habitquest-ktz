@@ -504,7 +504,7 @@ export default function HomePage() {
     setStudyEntries((prev) => [newEntry, ...prev]);
 
     const qText = entry.didQuestions ? ` (${entry.questionsDone} questões)` : '';
-    pushActionLog(`📘 ${heroName} registrou Estudo: ${entry.subject} — ${entry.minutes} min${qText}.`);
+    pushActionLog(`${heroName} registrou Estudo: ${entry.subject} (${entry.minutes} min${qText}).`);
 
     const res = calculateStudyReward(
       stats,
@@ -739,9 +739,9 @@ export default function HomePage() {
   const handleToggleEquip = (item: EquipmentItem) => {
     if (equipped[item.slot] !== item.id) {
       if (item.slot === 'weapon' && item.twoHanded && equipped.shield) {
-        showToast(`⚔️ ${item.name} (2 mãos) equipado — escudo removido.`);
+        showToast(`${item.name} (2 mãos) equipado. Escudo removido.`);
       } else if (item.slot === 'shield' && getEquipmentById(equipped.weapon)?.twoHanded) {
-        showToast(`🛡️ ${item.name} equipado — arma de 2 mãos removida.`);
+        showToast(`${item.name} equipado. Arma de 2 mãos removida.`);
       }
     }
     setEquipped((prev) => {

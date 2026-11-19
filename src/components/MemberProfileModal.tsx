@@ -257,7 +257,7 @@ export function MemberProfileModal({
                       : 'bg-[#23202a] text-[#a8a1b5] hover:text-white'
                   }`}
                 >
-                  ⚔️ Batalha
+                  Batalha
                 </button>
                 <button
                   onClick={() => setPreviewCostume(true)}
@@ -267,7 +267,7 @@ export function MemberProfileModal({
                       : 'bg-[#23202a] text-[#a8a1b5] hover:text-white'
                   }`}
                 >
-                  ✨ Fantasia
+                  Fantasia
                 </button>
               </div>
             </div>
@@ -347,9 +347,9 @@ export function MemberProfileModal({
           {/* Sub-abas do Perfil */}
           <div className="flex flex-wrap gap-2 border-b border-[#3a3447] pb-2">
             {[
-              { id: 'gear' as const, label: '🛡️ Equipamentos (Batalha & Visual)' },
-              { id: 'history' as const, label: `📚 Estudos (${studyEntries.length}) & 💪 Treinos (${workoutEntries.length})` },
-              { id: 'collection' as const, label: '🐾 Estábulo & Conquistas' },
+              { id: 'gear' as const, label: 'Equipamentos' },
+              { id: 'history' as const, label: `Estudos (${studyEntries.length}) e Treinos (${workoutEntries.length})` },
+              { id: 'collection' as const, label: 'Estábulo e Conquistas' },
             ].map((t) => (
               <button
                 key={t.id}

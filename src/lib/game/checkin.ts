@@ -84,13 +84,13 @@ export function computeCheckInReward(
 
   if (cycleDay === 3) {
     milestoneBonus = 'egg_or_potion';
-    milestoneLabel = '🥚 +1 Ovo ou Poção de Chocar';
+    milestoneLabel = '+1 Ovo ou Poção de Chocar';
   } else if (cycleDay === 5) {
     milestoneBonus = 'egg_and_potion';
-    milestoneLabel = '🥚 +1 Ovo e 🧪 +1 Poção de Chocar';
+    milestoneLabel = '+1 Ovo e +1 Poção de Chocar';
   } else if (cycleDay === 7) {
     milestoneBonus = 'armoire';
-    milestoneLabel = '🎁 1 Baú do Armoire Encantado Grátis';
+    milestoneLabel = '1 Baú do Armoire Encantado';
   }
 
   return {

@@ -205,7 +205,7 @@ export function PartyPanel({
               <div className="flex items-center gap-2 min-w-0">
                 <Shield className="w-4 h-4 text-[#ffbe5d] shrink-0" />
                 <h2 className="font-condensed font-bold text-base uppercase tracking-wide text-white truncate">
-                  KTZ — Boss #{bossStage}
+                  Boss #{bossStage}
                 </h2>
               </div>
               <button
