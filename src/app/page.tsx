@@ -1956,6 +1956,8 @@ export default function HomePage() {
         petsCount={Object.keys(stable.pets).length}
         attributes={totalAttributes}
         metrics={metrics}
+        studyEntries={studyEntries}
+        workoutEntries={workoutEntries}
         onAllocateStat={handleAllocateStat}
         onRebirth={handleRebirth}
         onExportSave={handleExportSave}

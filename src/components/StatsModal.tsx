@@ -2,8 +2,16 @@
 
 import React, { useRef, useState } from 'react';
 import { BarChart3, Database, Download, Plus, RotateCcw, Trophy, Upload, X } from 'lucide-react';
-import { ACHIEVEMENTS, HeroMetrics } from '@/lib/game/achievements';
+import {
+  ACHIEVEMENT_CATEGORIES,
+  AchievementCategory,
+  ACHIEVEMENTS,
+  buildAchievementContext,
+  HeroMetrics,
+} from '@/lib/game/achievements';
 import { Attributes } from '@/lib/game/items';
+import { StudyEntry } from './StudyLogCard';
+import { WorkoutEntry } from './WorkoutLogCard';
 
 interface StatsModalProps {
   open: boolean;
@@ -14,6 +22,8 @@ interface StatsModalProps {
   petsCount: number;
   attributes: Attributes;
   metrics: HeroMetrics;
+  studyEntries?: StudyEntry[];
+  workoutEntries?: WorkoutEntry[];
   onAllocateStat: (stat: keyof Attributes) => void;
   onRebirth: () => void;
   onExportSave: () => void;
@@ -31,6 +41,8 @@ export function StatsModal({
   petsCount,
   attributes,
   metrics,
+  studyEntries = [],
+  workoutEntries = [],
   onAllocateStat,
   onRebirth,
   onExportSave,
@@ -38,12 +50,16 @@ export function StatsModal({
 }: StatsModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [tab, setTab] = useState<ProfileTab>('stats');
+  const [achFilter, setAchFilter] = useState<'all' | AchievementCategory>('all');
   const [confirmRebirth, setConfirmRebirth] = useState(false);
 
   if (!open) return null;
 
-  const ctx = { level, petsCount, metrics };
+  const ctx = buildAchievementContext(level, metrics, studyEntries, workoutEntries);
   const unlockedCount = ACHIEVEMENTS.filter((a) => a.check(ctx)).length;
+  const filteredAchievements = ACHIEVEMENTS.filter(
+    (a) => achFilter === 'all' || a.category === achFilter
+  );
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -137,7 +153,7 @@ export function StatsModal({
                       {
                         key: 'int',
                         label: 'Inteligência (INT)',
-                        desc: 'Aumenta o ganho de XP e o Mana máximo.',
+                        desc: 'Aumenta a Mana máxima, a regeneração de MP e o dano arcano nos Bosses.',
                         val: attributes.int,
                         color: 'text-sky-300',
                       },
@@ -220,30 +236,82 @@ export function StatsModal({
           )}
 
           {tab === 'achievements' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {ACHIEVEMENTS.map((ach) => {
-                const unlocked = ach.check(ctx);
-                return (
-                  <div
-                    key={ach.id}
-                    className={`p-3 rounded-md border flex items-center gap-3 ${
-                      unlocked
-                        ? 'bg-[#2c2240] border-[#925cf3]'
-                        : 'bg-[#1a181d] border-[#3a3447] opacity-55'
+            <div className="space-y-3">
+              {/* Filtro por Categoria PRF */}
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  onClick={() => setAchFilter('all')}
+                  className={`px-2.5 py-1 rounded text-[11px] font-condensed font-bold transition cursor-pointer ${
+                    achFilter === 'all'
+                      ? 'bg-[#6133b4] text-white'
+                      : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white border border-[#3a3447]'
+                  }`}
+                >
+                  Todas ({ACHIEVEMENTS.length})
+                </button>
+                {ACHIEVEMENT_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setAchFilter(cat.id)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-condensed font-bold transition cursor-pointer ${
+                      achFilter === cat.id
+                        ? 'bg-[#6133b4] text-white'
+                        : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white border border-[#3a3447]'
                     }`}
                   >
-                    <div className="w-11 h-11 rounded-md bg-[#23202a] border border-[#3a3447] flex items-center justify-center text-lg shrink-0">
-                      {unlocked ? ach.icon : '🔒'}
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {filteredAchievements.map((ach) => {
+                  const unlocked = ach.check(ctx);
+                  const cur = ach.getCurrent(ctx);
+                  const pct = Math.max(0, Math.min(100, Math.round((cur / ach.target) * 100)));
+                  return (
+                    <div
+                      key={ach.id}
+                      className={`p-3 rounded-md border flex items-start gap-3 ${
+                        unlocked
+                          ? 'bg-[#2c2240] border-[#925cf3]'
+                          : 'bg-[#1a181d] border-[#3a3447]'
+                      }`}
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-md bg-[#23202a] border border-[#3a3447] flex items-center justify-center text-lg shrink-0 ${
+                          unlocked ? '' : 'opacity-50 grayscale'
+                        }`}
+                      >
+                        {ach.icon}
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs sm:text-sm font-condensed font-bold text-white truncate">
+                            {ach.title}
+                          </p>
+                          <span
+                            className={`text-[10px] font-condensed font-bold tabular-nums shrink-0 ${
+                              unlocked ? 'text-[#24cc8f]' : 'text-[#ffbe5d]'
+                            }`}
+                          >
+                            {ach.formatProgress(ctx)}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#a8a1b5]">{ach.description}</p>
+                        <div className="w-full h-1.5 rounded-full bg-[#23202a] border border-[#3a3447] overflow-hidden">
+                          <div
+                            className={`h-full transition-all ${
+                              unlocked ? 'bg-[#24cc8f]' : 'bg-[#6133b4]'
+                            }`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-xs sm:text-sm font-condensed font-bold text-white truncate">
-                        {ach.title}
-                      </p>
-                      <p className="text-[11px] text-[#a8a1b5]">{ach.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           )}
 

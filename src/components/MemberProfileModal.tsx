@@ -16,7 +16,11 @@ import {
   X,
   Zap,
 } from 'lucide-react';
-import { ACHIEVEMENTS, DEFAULT_METRICS } from '@/lib/game/achievements';
+import {
+  ACHIEVEMENTS,
+  buildAchievementContext,
+  DEFAULT_METRICS,
+} from '@/lib/game/achievements';
 import {
   Attributes,
   computeTotalAttributes,
@@ -587,33 +591,56 @@ export function MemberProfileModal({
                   Conquistas
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {ACHIEVEMENTS.map((ach) => {
-                    const unlocked = ach.check({
-                      level: member.level,
-                      petsCount: ownedPetsCount,
+                  {(() => {
+                    const achCtx = buildAchievementContext(
+                      member.level,
                       metrics,
-                    });
-                    return (
-                      <div
-                        key={ach.id}
-                        className={`rounded-md border p-2.5 flex items-center gap-2.5 ${
-                          unlocked
-                            ? 'bg-[#2c2240]/60 border-[#925cf3]/60'
-                            : 'bg-[#1a181d]/50 border-[#342e40] opacity-50'
-                        }`}
-                      >
-                        <span className="text-xl shrink-0">{ach.icon}</span>
-                        <div className="min-w-0">
-                          <div className="text-xs font-condensed font-bold text-white truncate">
-                            {ach.title}
-                          </div>
-                          <div className="text-[10px] text-[#a8a1b5] truncate">
-                            {ach.description}
+                      studyEntries,
+                      workoutEntries
+                    );
+                    return ACHIEVEMENTS.map((ach) => {
+                      const unlocked = ach.check(achCtx);
+                      const cur = ach.getCurrent(achCtx);
+                      const pct = Math.max(0, Math.min(100, Math.round((cur / ach.target) * 100)));
+                      return (
+                        <div
+                          key={ach.id}
+                          className={`rounded-md border p-2.5 flex items-start gap-2.5 ${
+                            unlocked
+                              ? 'bg-[#2c2240]/60 border-[#925cf3]/60'
+                              : 'bg-[#1a181d]/50 border-[#342e40] opacity-70'
+                          }`}
+                        >
+                          <span className={`text-xl shrink-0 ${unlocked ? '' : 'grayscale opacity-50'}`}>
+                            {ach.icon}
+                          </span>
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="text-xs font-condensed font-bold text-white truncate">
+                                {ach.title}
+                              </div>
+                              <span
+                                className={`text-[10px] font-condensed font-bold tabular-nums shrink-0 ${
+                                  unlocked ? 'text-[#24cc8f]' : 'text-[#ffbe5d]'
+                                }`}
+                              >
+                                {ach.formatProgress(achCtx)}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-[#a8a1b5] truncate">
+                              {ach.description}
+                            </div>
+                            <div className="w-full h-1 rounded-full bg-[#23202a] overflow-hidden">
+                              <div
+                                className={`h-full ${unlocked ? 'bg-[#24cc8f]' : 'bg-[#6133b4]'}`}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    });
+                  })()}
                 </div>
               </div>
             </div>
