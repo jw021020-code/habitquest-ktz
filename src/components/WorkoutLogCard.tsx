@@ -9,8 +9,10 @@ export interface WorkoutEntry {
   id: string;
   cardio: boolean;
   musculacao: boolean;
+  km?: number;
   notes?: string;
   createdAt: string;
+  loggedAt?: string;
 }
 
 interface WorkoutLogCardProps {
@@ -32,6 +34,7 @@ export function WorkoutLogCard({
 }: WorkoutLogCardProps) {
   const [cardio, setCardio] = useState(false);
   const [musculacao, setMusculacao] = useState(false);
+  const [kmInput, setKmInput] = useState('');
   const [notes, setNotes] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -48,14 +51,18 @@ export function WorkoutLogCard({
     e.preventDefault();
     if (!canSubmit) return;
 
+    const parsedKm = cardio ? Math.max(0, parseFloat(kmInput.replace(',', '.')) || 0) : 0;
+
     onAddWorkout({
       cardio,
       musculacao,
+      km: cardio && parsedKm > 0 ? Math.round(parsedKm * 100) / 100 : undefined,
       notes: notes.trim() || undefined,
     });
 
     setCardio(false);
     setMusculacao(false);
+    setKmInput('');
     setNotes('');
   };
 
@@ -175,6 +182,23 @@ export function WorkoutLogCard({
             </label>
           </div>
 
+          {cardio && (
+            <div>
+              <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#ffbe5d] mb-1">
+                🏃 Distância Corrida (km) — opcional (conta para Missões PRF)
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="0.1"
+                value={kmInput}
+                onChange={(e) => setKmInput(e.target.value)}
+                placeholder="Ex.: 3.0"
+                className="w-full bg-[#23202a] border border-[#ffbe5d]/40 rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#ffbe5d]"
+              />
+            </div>
+          )}
+
           <div>
             <label className="block text-[11px] font-condensed font-bold uppercase tracking-wider text-[#cfc8dc] mb-1">
               Observações do Treino (opcional)
@@ -245,7 +269,7 @@ export function WorkoutLogCard({
                       <div className="flex flex-wrap items-center gap-1.5">
                         {entry.cardio && (
                           <span className="text-xs font-condensed font-bold px-2 py-0.5 rounded bg-[#ffbe5d]/20 text-[#ffbe5d] border border-[#ffbe5d]/30">
-                            🏃 Cárdio
+                            🏃 Cárdio{entry.km && entry.km > 0 ? ` (${entry.km} km)` : ''}
                           </span>
                         )}
                         {entry.musculacao && (

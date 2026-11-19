@@ -21,6 +21,7 @@ export interface StudyEntry {
   didQuestions: boolean;
   questionsDone: number;
   createdAt: string;
+  loggedAt?: string;
 }
 
 interface StudyLogCardProps {

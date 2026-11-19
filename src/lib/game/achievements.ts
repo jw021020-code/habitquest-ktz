@@ -16,6 +16,18 @@ export interface HeroMetrics {
   currentBossDamage?: number;
   totalBossDamage?: number;
   lastClaimedBossStage?: number;
+  quests?: {
+    dailyKey: string;
+    dailyQuestIds: string[];
+    dailyClaimedIds: string[];
+    weeklyKey: string;
+    weeklyQuestIds: string[];
+    weeklyClaimedIds: string[];
+    monthlyKey: string;
+    monthlyClaimedIds: string[];
+    monthlyBonusClaimed: boolean;
+    totalQuestsCompleted: number;
+  };
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -168,4 +180,55 @@ export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   }
   const gp = 25 + Math.floor(Math.random() * 36); // 25..60 GP
   return { kind: 'gold', amount: gp, label: `+${gp} GP do Baú` };
+}
+
+/**
+ * Sorteia um equipamento inédito garantido (Incomum, Raro, Épico ou Lendário)
+ * para o Baú de Honra PRF do Mês.
+ */
+export function rollGuaranteedEquipment(
+  ownedIds: string[] = []
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  const ownedSet = new Set(ownedIds);
+  const unownedPool = EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
+  if (unownedPool.length === 0) return null;
+
+  const preferredRarities: ItemRarity[] = ['uncommon', 'rare', 'epic', 'legendary'];
+  const byRarity: Record<ItemRarity, EquipmentItem[]> = {
+    common: [],
+    uncommon: [],
+    rare: [],
+    epic: [],
+    legendary: [],
+  };
+  for (const item of unownedPool) {
+    byRarity[getItemRarity(item)].push(item);
+  }
+
+  let availableRarities = preferredRarities.filter((r) => byRarity[r].length > 0);
+  if (availableRarities.length === 0) {
+    availableRarities = ['common'];
+  }
+
+  const totalWeight = availableRarities.reduce(
+    (acc, r) => acc + RARITY_META[r].weight,
+    0
+  );
+  let roll = Math.random() * totalWeight;
+  let chosenRarity: ItemRarity = availableRarities[0];
+  for (const r of availableRarities) {
+    roll -= RARITY_META[r].weight;
+    if (roll <= 0) {
+      chosenRarity = r;
+      break;
+    }
+  }
+
+  const bucket = byRarity[chosenRarity];
+  const picked = bucket[Math.floor(Math.random() * bucket.length)];
+  return {
+    item: picked,
+    rarity: chosenRarity,
+    label: `[${RARITY_META[chosenRarity].label}] ${picked.name}`,
+  };
 }

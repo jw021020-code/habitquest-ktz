@@ -8,6 +8,7 @@ import {
   Heart,
   Palette,
   PawPrint,
+  ScrollText,
   Shield,
   ShoppingBag,
   Sparkles,
@@ -25,7 +26,7 @@ import { CLASS_INFO } from '@/lib/game/skills';
 import { RemoteProfile } from '@/lib/supabase/data';
 import { CharacterAvatar } from './CharacterAvatar';
 
-export type ActiveSection = 'registro' | 'inventario' | 'loja' | 'ktz';
+export type ActiveSection = 'registro' | 'quests' | 'inventario' | 'loja' | 'ktz';
 export type InventorySubTab = 'equipment' | 'stable' | 'appearance';
 export type ShopSubTab = HeroClass | 'all';
 
@@ -52,6 +53,7 @@ interface HabiticaHeaderProps {
   activeSection: ActiveSection;
   invTab: InventorySubTab;
   shopFilter: ShopSubTab;
+  readyQuestsCount?: number;
   supabaseReady: boolean;
   onSelectSection: (section: ActiveSection) => void;
   onSelectInvTab: (tab: InventorySubTab) => void;
@@ -92,6 +94,7 @@ export function HabiticaHeader({
   activeSection,
   invTab,
   shopFilter,
+  readyQuestsCount = 0,
   supabaseReady,
   onSelectSection,
   onSelectInvTab,
@@ -141,6 +144,12 @@ export function HabiticaHeader({
                   icon: <CheckSquare className="w-4 h-4" />,
                 },
                 {
+                  id: 'quests' as ActiveSection,
+                  label: 'Missões PRF',
+                  icon: <ScrollText className="w-4 h-4" />,
+                  badge: readyQuestsCount,
+                },
+                {
                   id: 'inventario' as ActiveSection,
                   label: 'Inventário',
                   icon: <ShoppingBag className="w-4 h-4" />,
@@ -161,7 +170,7 @@ export function HabiticaHeader({
                   <button
                     key={tab.id}
                     onClick={() => onSelectSection(tab.id)}
-                    className={`px-3.5 flex items-center gap-2 border-b-4 transition ${
+                    className={`px-2.5 lg:px-3.5 whitespace-nowrap flex items-center gap-1.5 lg:gap-2 border-b-4 transition ${
                       active
                         ? 'border-[#925cf3] bg-[#36205d]/75 text-white'
                         : 'border-transparent text-[#e2d8ff]/80 hover:text-white hover:bg-[#36205d]/40'
@@ -169,6 +178,11 @@ export function HabiticaHeader({
                   >
                     {tab.icon}
                     <span>{tab.label}</span>
+                    {tab.badge && tab.badge > 0 ? (
+                      <span className="px-1.5 py-0.2 rounded-full bg-[#ffbe5d] text-[#1a181d] text-[10px] font-extrabold leading-tight">
+                        {tab.badge}
+                      </span>
+                    ) : null}
                   </button>
                 );
               })}

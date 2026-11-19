@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, Dumbbell, ShoppingBag, Store, Users } from 'lucide-react';
+import { BookOpen, Dumbbell, ScrollText, ShoppingBag, Store, Users } from 'lucide-react';
 import {
   applyClassSkill,
   BossCombatModifiers,
@@ -48,7 +48,17 @@ import {
   DEFAULT_METRICS,
   HeroMetrics,
   rollArmoireReward,
+  rollGuaranteedEquipment,
 } from '@/lib/game/achievements';
+import {
+  buildQuestProgressList,
+  computePeriodTotals,
+  getQuestById,
+  MONTHLY_BONUS_REWARD,
+  MONTHLY_QUESTS_POOL,
+  QuestCycle,
+  syncQuestsPeriod,
+} from '@/lib/game/quests';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import {
   fetchLatestPartyBoss,
@@ -69,6 +79,7 @@ import {
   ShopSubTab,
 } from '@/components/HabiticaHeader';
 import { PartyChatMessage, PartyPanel } from '@/components/PartyPanel';
+import { QuestsPanel, QuestsSummaryStrip } from '@/components/QuestsPanel';
 import { SkillsBar } from '@/components/SkillsBar';
 import { StatsModal } from '@/components/StatsModal';
 import { StudyEntry, StudyLogCard } from '@/components/StudyLogCard';
@@ -87,7 +98,7 @@ interface PartyState {
   rewardXp: number;
 }
 
-type MobileTab = 'study' | 'workout' | 'inventario' | 'loja' | 'ktz';
+type MobileTab = 'study' | 'workout' | 'quests' | 'inventario' | 'loja' | 'ktz';
 
 const STORAGE_KEY = 'habitquest_ktz_launch_v1';
 
@@ -467,7 +478,8 @@ export default function HomePage() {
   };
 
   const handleAddStudy = (entry: Omit<StudyEntry, 'id' | 'createdAt'>) => {
-    const nowLabel = new Date().toLocaleTimeString('pt-BR', {
+    const now = new Date();
+    const nowLabel = now.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -475,6 +487,7 @@ export default function HomePage() {
       ...entry,
       id: crypto.randomUUID(),
       createdAt: nowLabel,
+      loggedAt: now.toISOString(),
     };
     setStudyEntries((prev) => [newEntry, ...prev]);
 
@@ -498,7 +511,8 @@ export default function HomePage() {
   };
 
   const handleAddWorkout = (entry: Omit<WorkoutEntry, 'id' | 'createdAt'>) => {
-    const nowLabel = new Date().toLocaleTimeString('pt-BR', {
+    const now = new Date();
+    const nowLabel = now.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -506,10 +520,12 @@ export default function HomePage() {
       ...entry,
       id: crypto.randomUUID(),
       createdAt: nowLabel,
+      loggedAt: now.toISOString(),
     };
     setWorkoutEntries((prev) => [newEntry, ...prev]);
 
-    const label = [entry.cardio ? 'Cárdio' : '', entry.musculacao ? 'Musculação' : '']
+    const kmText = entry.cardio && entry.km && entry.km > 0 ? ` (${entry.km} km)` : '';
+    const label = [entry.cardio ? `Cárdio${kmText}` : '', entry.musculacao ? 'Musculação' : '']
       .filter(Boolean)
       .join(' + ');
     pushActionLog(`💪 ${heroName} registrou Treino: ${label}.`);
@@ -1389,7 +1405,192 @@ export default function HomePage() {
   const activeRewardXp = remoteParty ? remoteParty.reward_xp : party.rewardXp;
   const supabaseReady = isSupabaseConfigured();
 
+  const [nowTs, setNowTs] = useState<number | null>(null);
+  useEffect(() => {
+    setNowTs(Date.now());
+  }, []);
+
+  const questsState = useMemo(
+    () => (nowTs !== null ? syncQuestsPeriod(metrics.quests, new Date(nowTs)) : null),
+    [metrics.quests, nowTs]
+  );
+
+  useEffect(() => {
+    if (!questsState) return;
+    const m = metrics.quests;
+    if (
+      !m ||
+      m.dailyKey !== questsState.dailyKey ||
+      m.weeklyKey !== questsState.weeklyKey ||
+      m.monthlyKey !== questsState.monthlyKey
+    ) {
+      setMetrics((prev) => ({ ...prev, quests: questsState }));
+    }
+  }, [metrics.quests, questsState]);
+
+  const periodTotals = useMemo(
+    () =>
+      nowTs !== null
+        ? computePeriodTotals(studyEntries, workoutEntries, new Date(nowTs))
+        : {
+            daily: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
+            weekly: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
+            monthly: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
+          },
+    [studyEntries, workoutEntries, nowTs]
+  );
+
+  const dailyQuests = useMemo(
+    () =>
+      questsState
+        ? buildQuestProgressList(
+            questsState.dailyQuestIds,
+            questsState.dailyClaimedIds,
+            periodTotals.daily
+          )
+        : [],
+    [questsState, periodTotals.daily]
+  );
+
+  const weeklyQuests = useMemo(
+    () =>
+      questsState
+        ? buildQuestProgressList(
+            questsState.weeklyQuestIds,
+            questsState.weeklyClaimedIds,
+            periodTotals.weekly
+          )
+        : [],
+    [questsState, periodTotals.weekly]
+  );
+
+  const monthlyQuests = useMemo(
+    () =>
+      questsState
+        ? buildQuestProgressList(
+            MONTHLY_QUESTS_POOL.map((q) => q.id),
+            questsState.monthlyClaimedIds,
+            periodTotals.monthly
+          )
+        : [],
+    [questsState, periodTotals.monthly]
+  );
+
+  const canClaimMonthlyBonus =
+    Boolean(questsState) &&
+    monthlyQuests.length === 4 &&
+    monthlyQuests.every((q) => q.completed) &&
+    !questsState!.monthlyBonusClaimed;
+
+  const readyQuestsCount =
+    [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter((q) => q.completed && !q.claimed)
+      .length + (canClaimMonthlyBonus ? 1 : 0);
+
+  const handleClaimQuest = (questId: string, cycle: QuestCycle) => {
+    const def = getQuestById(questId);
+    if (!def) return;
+
+    const list =
+      cycle === 'daily' ? dailyQuests : cycle === 'weekly' ? weeklyQuests : monthlyQuests;
+    const item = list.find((q) => q.def.id === questId);
+    if (!item || !item.completed || item.claimed) return;
+
+    const { xp, gold, eggOrPotionChance, guaranteedEggOrPotion, eggs = 0, potions = 0 } =
+      def.reward;
+
+    let bonusEggs = eggs;
+    let bonusPotions = potions;
+    if (guaranteedEggOrPotion || (eggOrPotionChance && Math.random() < eggOrPotionChance)) {
+      if (Math.random() < 0.5) bonusEggs += 1;
+      else bonusPotions += 1;
+    }
+
+    const res = grantXpAndResources(stats, totalAttributes, {
+      xp,
+      goldDelta: gold,
+    });
+    setStats(res.nextStats);
+
+    if (bonusEggs > 0 || bonusPotions > 0) {
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + bonusEggs,
+        potions: prev.potions + bonusPotions,
+      }));
+    }
+
+    setMetrics((prev) => {
+      const synced = syncQuestsPeriod(prev.quests);
+      return {
+        ...prev,
+        totalGoldEarned: prev.totalGoldEarned + gold,
+        quests: {
+          ...synced,
+          dailyClaimedIds:
+            cycle === 'daily'
+              ? [...synced.dailyClaimedIds, questId]
+              : synced.dailyClaimedIds,
+          weeklyClaimedIds:
+            cycle === 'weekly'
+              ? [...synced.weeklyClaimedIds, questId]
+              : synced.weeklyClaimedIds,
+          monthlyClaimedIds:
+            cycle === 'monthly'
+              ? [...synced.monthlyClaimedIds, questId]
+              : synced.monthlyClaimedIds,
+          totalQuestsCompleted: (synced.totalQuestsCompleted ?? 0) + 1,
+        },
+      };
+    });
+
+    const extraParts: string[] = [];
+    if (bonusEggs > 0) extraParts.push(`+${bonusEggs} Ovo`);
+    if (bonusPotions > 0) extraParts.push(`+${bonusPotions} Poção`);
+    const extraText = extraParts.length > 0 ? ` · ${extraParts.join(', ')}` : '';
+
+    pushActionLog(
+      `🎯 ${heroName} concluiu a missão "${def.title}": +${xp} XP, +${gold} GP${extraText}!`
+    );
+    showToast(`🎯 Missão Concluída! +${xp} XP, +${gold} GP${extraText}`);
+  };
+
+  const handleClaimMonthlyBonus = () => {
+    if (!canClaimMonthlyBonus) return;
+
+    const equipDrop = rollGuaranteedEquipment(inventory);
+    const res = grantXpAndResources(stats, totalAttributes, {
+      xp: MONTHLY_BONUS_REWARD.xp,
+      goldDelta: MONTHLY_BONUS_REWARD.gold,
+    });
+    setStats(res.nextStats);
+
+    if (equipDrop && !inventory.includes(equipDrop.item.id)) {
+      setInventory((prev) => [...prev, equipDrop.item.id]);
+    }
+
+    setMetrics((prev) => {
+      const synced = syncQuestsPeriod(prev.quests);
+      return {
+        ...prev,
+        totalGoldEarned: prev.totalGoldEarned + MONTHLY_BONUS_REWARD.gold,
+        quests: {
+          ...synced,
+          monthlyBonusClaimed: true,
+        },
+      };
+    });
+
+    const dropLabel = equipDrop ? ` · 🎁 ${equipDrop.label}` : '';
+    pushActionLog(
+      `👑 ${heroName} fechou todas as 4 Metas Mensais PRF e abriu o Baú de Honra: +${MONTHLY_BONUS_REWARD.xp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
+    );
+    showToast(
+      `👑 Baú de Honra PRF! +${MONTHLY_BONUS_REWARD.xp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
+    );
+  };
+
   const showRegistroSection = activeSection === 'registro';
+  const showQuestsSection = activeSection === 'quests';
   const showKtzSection = activeSection === 'ktz';
   const gearMode: 'inventory' | 'shop' | null =
     activeSection === 'inventario'
@@ -1423,10 +1624,12 @@ export default function HomePage() {
         activeSection={activeSection}
         invTab={invTab}
         shopFilter={shopFilter}
+        readyQuestsCount={readyQuestsCount}
         supabaseReady={supabaseReady}
         onSelectSection={(sec) => {
           setActiveSection(sec);
           if (sec === 'ktz') setMobileTab('ktz');
+          else if (sec === 'quests') setMobileTab('quests');
           else if (sec === 'inventario') setMobileTab('inventario');
           else if (sec === 'loja') setMobileTab('loja');
           else if (mobileTab !== 'study' && mobileTab !== 'workout') setMobileTab('study');
@@ -1458,31 +1661,58 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Aba 1: REGISTRO (Colunas de Estudo Teórico + Treinamento Físico Diário) */}
+      {/* Aba 1: REGISTRO (Resumo Missão Diária + Colunas de Estudo Teórico + Treinamento Físico Diário) */}
       {showRegistroSection && (
-        <main className="max-w-7xl w-full mx-auto px-4 pt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className={mobileTab === 'workout' ? 'hidden md:block' : 'block'}>
-            <StudyLogCard
-              entries={studyEntries}
-              stats={stats}
-              totalAttributes={totalAttributes}
-              bossAttack={activeBossAttack}
-              onAddStudy={handleAddStudy}
-              onDeleteStudy={handleDeleteStudy}
-            />
-          </div>
+        <>
+          <QuestsSummaryStrip
+            dailyQuest={dailyQuests[0]}
+            readyCount={readyQuestsCount}
+            onOpenQuests={() => {
+              setActiveSection('quests');
+              setMobileTab('quests');
+            }}
+            onClaimDaily={(qId) => handleClaimQuest(qId, 'daily')}
+          />
+          <main className="max-w-7xl w-full mx-auto px-4 pt-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className={mobileTab === 'workout' ? 'hidden md:block' : 'block'}>
+              <StudyLogCard
+                entries={studyEntries}
+                stats={stats}
+                totalAttributes={totalAttributes}
+                bossAttack={activeBossAttack}
+                onAddStudy={handleAddStudy}
+                onDeleteStudy={handleDeleteStudy}
+              />
+            </div>
 
-          <div className={mobileTab === 'study' ? 'hidden md:block' : 'block'}>
-            <WorkoutLogCard
-              entries={workoutEntries}
-              stats={stats}
-              totalAttributes={totalAttributes}
-              bossAttack={activeBossAttack}
-              onAddWorkout={handleAddWorkout}
-              onDeleteWorkout={handleDeleteWorkout}
-            />
-          </div>
-        </main>
+            <div className={mobileTab === 'study' ? 'hidden md:block' : 'block'}>
+              <WorkoutLogCard
+                entries={workoutEntries}
+                stats={stats}
+                totalAttributes={totalAttributes}
+                bossAttack={activeBossAttack}
+                onAddWorkout={handleAddWorkout}
+                onDeleteWorkout={handleDeleteWorkout}
+              />
+            </div>
+          </main>
+        </>
+      )}
+
+      {/* Aba Missões PRF (Diária, Semanais e Metas Mensais) */}
+      {showQuestsSection && questsState && (
+        <QuestsPanel
+          dailyQuests={dailyQuests}
+          weeklyQuests={weeklyQuests}
+          monthlyQuests={monthlyQuests}
+          monthlyBonusClaimed={questsState.monthlyBonusClaimed}
+          totalQuestsCompleted={questsState.totalQuestsCompleted}
+          dailyKey={questsState.dailyKey}
+          weeklyKey={questsState.weeklyKey}
+          monthlyKey={questsState.monthlyKey}
+          onClaimQuest={handleClaimQuest}
+          onClaimMonthlyBonus={handleClaimMonthlyBonus}
+        />
       )}
 
       {/* Abas 2 & 3: INVENTÁRIO e LOJA (Views de Página Inteira Estilo Habitica) */}
@@ -1582,11 +1812,12 @@ export default function HomePage() {
         onAuthSuccess={refreshSupabaseSession}
       />
 
-      {/* Barra de Navegação Inferior no Mobile (5 Abas Estilo Habitica Mobile) */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[#36205d] border-t border-[#4f2a93] grid grid-cols-5">
+      {/* Barra de Navegação Inferior no Mobile (6 Abas Estilo Habitica Mobile) */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[#36205d] border-t border-[#4f2a93] grid grid-cols-6">
         {[
           { id: 'study', label: 'Estudo', icon: <BookOpen className="w-4 h-4" /> },
           { id: 'workout', label: 'Treino', icon: <Dumbbell className="w-4 h-4" /> },
+          { id: 'quests', label: 'Missões', icon: <ScrollText className="w-4 h-4" />, badge: readyQuestsCount },
           { id: 'inventario', label: 'Inventário', icon: <ShoppingBag className="w-4 h-4" /> },
           { id: 'loja', label: 'Lojas', icon: <Store className="w-4 h-4" /> },
           { id: 'ktz', label: 'KTZ', icon: <Users className="w-4 h-4" /> },
@@ -1597,16 +1828,22 @@ export default function HomePage() {
               const id = tab.id as MobileTab;
               setMobileTab(id);
               if (id === 'ktz') setActiveSection('ktz');
+              else if (id === 'quests') setActiveSection('quests');
               else if (id === 'inventario') setActiveSection('inventario');
               else if (id === 'loja') setActiveSection('loja');
               else setActiveSection('registro');
             }}
-            className={`flex flex-col items-center justify-center py-2 text-[10px] font-condensed gap-0.5 ${
+            className={`relative flex flex-col items-center justify-center py-2 text-[10px] font-condensed gap-0.5 ${
               mobileTab === tab.id ? 'text-[#ffbe5d] font-bold bg-[#271b3d]/50' : 'text-[#d6c7ff]/80'
             }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
+            {tab.badge && tab.badge > 0 ? (
+              <span className="absolute top-1 right-2 px-1 rounded-full bg-[#ffbe5d] text-[#1a181d] text-[9px] font-extrabold leading-tight">
+                {tab.badge}
+              </span>
+            ) : null}
           </button>
         ))}
       </nav>
