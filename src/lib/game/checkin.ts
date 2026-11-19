@@ -15,7 +15,6 @@ export const DEFAULT_CHECKIN_STATE: CheckInState = {
 export interface CheckInRewardPreview {
   streak: number;
   streakMult: number;
-  xp: number;
   gold: number;
   staRestore: number;
   mpRestore: number;
@@ -60,10 +59,9 @@ export function getProjectedStreak(
 }
 
 /**
- * Calcula a recompensa escalável por Nível + Sequência (1.0x até 1.6x).
- * - Ouro: round((12 + level * 2.5) * streakMult)
- * - XP: round((20 + level * 6 + level^1.45 * 1.2) * streakMult)
- * - Restauração: +15% Max STA e +15% Max MP
+ * Calcula a recompensa de Check-in Diário (ZERO XP) escalável por Nível + Sequência (1.0x até 1.6x).
+ * - Ouro: round((15 + level * 3) * streakMult)
+ * - Restauração: +20% Max STA e +20% Max MP
  * - Marcos de sequência: Dia 3 (Ovo/Poção), Dia 5 (Ovo + Poção), Dia 7, 14, 21... (Baú do Armoire Grátis)
  */
 export function computeCheckInReward(
@@ -76,12 +74,9 @@ export function computeCheckInReward(
   const safeStreak = Math.max(1, streak);
   const streakMult = 1 + Math.min(6, safeStreak - 1) * 0.1;
 
-  const gold = Math.round((12 + safeLevel * 2.5) * streakMult);
-  const xp = Math.round(
-    (20 + safeLevel * 6 + Math.pow(safeLevel, 1.45) * 1.2) * streakMult
-  );
-  const staRestore = Math.max(5, Math.round(maxHp * 0.15));
-  const mpRestore = Math.max(4, Math.round(maxMp * 0.15));
+  const gold = Math.round((15 + safeLevel * 3) * streakMult);
+  const staRestore = Math.max(6, Math.round(maxHp * 0.2));
+  const mpRestore = Math.max(5, Math.round(maxMp * 0.2));
 
   const cycleDay = ((safeStreak - 1) % 7) + 1;
   let milestoneBonus: CheckInRewardPreview['milestoneBonus'] = 'none';
@@ -101,7 +96,6 @@ export function computeCheckInReward(
   return {
     streak: safeStreak,
     streakMult,
-    xp,
     gold,
     staRestore,
     mpRestore,

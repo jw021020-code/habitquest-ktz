@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CalendarCheck, CheckCircle2, Coins, Flame, Gift, Heart, Sparkles, X, Zap } from 'lucide-react';
+import { CalendarCheck, CheckCircle2, Coins, Flame, Gift, Heart, X, Zap } from 'lucide-react';
 import {
   CheckInState,
   computeCheckInReward,
@@ -163,17 +163,14 @@ export function DailyCheckInModal({
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs font-condensed font-bold">
-              <span className="px-2.5 py-1 rounded bg-[#24cc8f]/15 border border-[#24cc8f]/40 text-[#24cc8f] flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" />+{reward.xp} XP
-              </span>
               <span className="px-2.5 py-1 rounded bg-[#ffbe5d]/15 border border-[#ffbe5d]/40 text-[#ffbe5d] flex items-center gap-1">
                 <Coins className="w-3.5 h-3.5" />+{reward.gold} GP
               </span>
               <span className="px-2.5 py-1 rounded bg-[#ff6165]/15 border border-[#ff6165]/40 text-[#ff8b8e] flex items-center gap-1">
-                <Heart className="w-3.5 h-3.5" />+{reward.staRestore} STA (15%)
+                <Heart className="w-3.5 h-3.5" />+{reward.staRestore} STA (20%)
               </span>
               <span className="px-2.5 py-1 rounded bg-[#50b5e9]/15 border border-[#50b5e9]/40 text-[#50b5e9] flex items-center gap-1">
-                <Zap className="w-3.5 h-3.5" />+{reward.mpRestore} MP (15%)
+                <Zap className="w-3.5 h-3.5" />+{reward.mpRestore} MP (20%)
               </span>
             </div>
 

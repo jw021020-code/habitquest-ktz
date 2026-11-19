@@ -173,6 +173,14 @@ function computeStaminaLoss(
   );
 }
 
+export function getLevelScale(level: number): number {
+  return 1 + Math.min(3.5, Math.max(0, level - 1) * 0.055);
+}
+
+export function getQuestScale(level: number): number {
+  return 1 + Math.min(2.0, Math.max(0, level - 1) * 0.03);
+}
+
 function computeBasePreview(
   stats: PlayerStats,
   baseXp: number,
@@ -184,12 +192,19 @@ function computeBasePreview(
 ): RewardPreview {
   const exhaustMult = stats.hp <= 0 && !stats.critGuarantee ? 0.7 : 1.0;
   const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
-  const levelScale = 1 + Math.min(2.0, (stats.level - 1) * 0.02);
-  const xp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02) * levelScale));
+  const levelScale = getLevelScale(stats.level);
+  // XP é 100% neutro de classe/atributos (INT e Crítico não alteram XP)
+  const xp = Math.max(1, Math.round(baseXp * levelScale));
   const gold = Math.max(1, Math.round(baseGold * (1 + attrs.per * 0.02) * exhaustMult));
   const bossDamage = Math.max(
     1,
-    Math.round(baseBossDamage * (1 + attrs.str * 0.02) * exhaustMult * vulnMult * levelScale)
+    Math.round(
+      baseBossDamage *
+        (1 + attrs.str * 0.02 + attrs.int * 0.012) *
+        exhaustMult *
+        vulnMult *
+        levelScale
+    )
   );
   const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
   return { xp, gold, bossDamage, staminaLost };
@@ -215,7 +230,7 @@ export function previewStudyReward(
 
   return computeBasePreview(
     stats,
-    18 * totalFactor,
+    26 * totalFactor,
     6 * totalFactor,
     10 * totalFactor,
     attrs,
@@ -233,18 +248,20 @@ export function previewWorkoutReward(
   musculacao: boolean,
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  km = 0
 ): RewardPreview {
   const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
   if (count === 0) {
     return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
   }
   const mult = count === 2 ? 2.2 : 1.0;
+  const safeKm = cardio ? Math.min(15, Math.max(0, Number(km) || 0)) : 0;
   return computeBasePreview(
     stats,
-    22 * mult,
-    8 * mult,
-    14 * mult,
+    55 * mult + safeKm * 15,
+    8 * mult + safeKm * 2,
+    14 * mult + safeKm * 4,
     attrs,
     bossAttack,
     bossMods
@@ -265,23 +282,31 @@ function applyProgressReward(
   const isExhausted = stats.hp <= 0 && !guaranteedCrit;
   const exhaustMult = isExhausted ? 0.7 : 1.0;
   const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
-  const levelScale = 1 + Math.min(2.0, (stats.level - 1) * 0.02);
+  const levelScale = getLevelScale(stats.level);
 
   const shadowBonusCrit = (stats.shadowCharges ?? 0) > 0 ? 0.2 : 0;
   const critChance = Math.min(0.55, 0.08 + (attrs.str + attrs.per) * 0.004 + shadowBonusCrit);
   const isCritical = guaranteedCrit || Math.random() < critChance;
   const critMult = guaranteedCrit ? 1.75 : isCritical ? 1.5 : 1.0;
 
-  const gainedXp = Math.max(1, Math.round(baseXp * (1 + attrs.int * 0.02) * levelScale * critMult));
+  // XP é 100% neutro de classe (sem bônus de INT nem de Crítico)
+  const gainedXp = Math.max(1, Math.round(baseXp * levelScale));
   const gainedGold = Math.max(
     1,
     Math.round(baseGold * (1 + attrs.per * 0.02) * critMult * exhaustMult)
   );
   const bossDamage = Math.max(
     1,
-    Math.round(baseBossDamage * (1 + attrs.str * 0.02) * levelScale * critMult * exhaustMult * vulnMult)
+    Math.round(
+      baseBossDamage *
+        (1 + attrs.str * 0.02 + attrs.int * 0.012) *
+        levelScale *
+        critMult *
+        exhaustMult *
+        vulnMult
+    )
   );
-  const gainedMp = Math.max(2, Math.round(baseMp + attrs.int * 0.15));
+  const gainedMp = Math.max(2, Math.round(baseMp + attrs.int * 0.2));
 
   const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
   const staminaAfterHit = Math.max(0, stats.hp - staminaLost);
@@ -344,7 +369,7 @@ export function calculateStudyReward(
 
   return applyProgressReward(
     stats,
-    18 * totalFactor,
+    26 * totalFactor,
     6 * totalFactor,
     10 * totalFactor,
     4 * Math.min(3, totalFactor),
@@ -360,16 +385,18 @@ export function calculateWorkoutReward(
   musculacao: boolean,
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  km = 0
 ) {
   const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
   const mult = count === 2 ? 2.2 : 1.0;
+  const safeKm = cardio ? Math.min(15, Math.max(0, Number(km) || 0)) : 0;
 
   return applyProgressReward(
     stats,
-    22 * mult,
-    8 * mult,
-    14 * mult,
+    55 * mult + safeKm * 15,
+    8 * mult + safeKm * 2,
+    14 * mult + safeKm * 4,
     5 * mult,
     attrs,
     bossAttack,

@@ -55,6 +55,7 @@ import {
   computePeriodTotals,
   getDayKey,
   getQuestById,
+  getQuestXpForLevel,
   MONTHLY_BONUS_REWARD,
   MONTHLY_QUESTS_POOL,
   QuestCycle,
@@ -547,7 +548,8 @@ export default function HomePage() {
       entry.musculacao,
       totalAttributes,
       activeBossAttack,
-      bossMods
+      bossMods,
+      entry.km ?? 0
     );
     processDropAndToast(res, `Treino: ${label}`);
   };
@@ -1463,10 +1465,11 @@ export default function HomePage() {
         ? buildQuestProgressList(
             questsState.dailyQuestIds,
             questsState.dailyClaimedIds,
-            periodTotals.daily
+            periodTotals.daily,
+            stats.level
           )
         : [],
-    [questsState, periodTotals.daily]
+    [questsState, periodTotals.daily, stats.level]
   );
 
   const weeklyQuests = useMemo(
@@ -1475,10 +1478,11 @@ export default function HomePage() {
         ? buildQuestProgressList(
             questsState.weeklyQuestIds,
             questsState.weeklyClaimedIds,
-            periodTotals.weekly
+            periodTotals.weekly,
+            stats.level
           )
         : [],
-    [questsState, periodTotals.weekly]
+    [questsState, periodTotals.weekly, stats.level]
   );
 
   const monthlyQuests = useMemo(
@@ -1487,10 +1491,11 @@ export default function HomePage() {
         ? buildQuestProgressList(
             MONTHLY_QUESTS_POOL.map((q) => q.id),
             questsState.monthlyClaimedIds,
-            periodTotals.monthly
+            periodTotals.monthly,
+            stats.level
           )
         : [],
-    [questsState, periodTotals.monthly]
+    [questsState, periodTotals.monthly, stats.level]
   );
 
   const canClaimMonthlyBonus =
@@ -1516,7 +1521,6 @@ export default function HomePage() {
     const reward = computeCheckInReward(stats.level, stats.max_hp, stats.max_mp, nextStreak);
 
     const res = grantXpAndResources(stats, totalAttributes, {
-      xp: reward.xp,
       goldDelta: reward.gold,
     });
     const nextStats: PlayerStats = {
@@ -1575,10 +1579,10 @@ export default function HomePage() {
     const bonusText = bonusParts.length > 0 ? ` · ${bonusParts.join(', ')}` : '';
 
     pushActionLog(
-      `📅 ${heroName} fez Check-in Diário (${nextStreak}d): +${reward.xp} XP, +${reward.gold} GP, +${reward.staRestore} STA, +${reward.mpRestore} MP${bonusText}!`
+      `📅 ${heroName} fez Check-in Diário (${nextStreak}d): +${reward.gold} GP, +${reward.staRestore} STA, +${reward.mpRestore} MP${bonusText}!`
     );
     showToast(
-      `📅 Check-in ${nextStreak}d! +${reward.xp} XP, +${reward.gold} GP${bonusText}`
+      `📅 Check-in ${nextStreak}d! +${reward.gold} GP, +${reward.staRestore} STA, +${reward.mpRestore} MP${bonusText}`
     );
   };
 
@@ -1621,8 +1625,9 @@ export default function HomePage() {
     const item = list.find((q) => q.def.id === questId);
     if (!item || !item.completed || item.claimed) return;
 
-    const { xp, gold, eggOrPotionChance, guaranteedEggOrPotion, eggs = 0, potions = 0 } =
+    const { gold, eggOrPotionChance, guaranteedEggOrPotion, eggs = 0, potions = 0 } =
       def.reward;
+    const xp = item.scaledXp;
 
     let bonusEggs = eggs;
     let bonusPotions = potions;
@@ -1684,8 +1689,9 @@ export default function HomePage() {
     if (!canClaimMonthlyBonus) return;
 
     const equipDrop = rollGuaranteedEquipment(inventory);
+    const scaledBonusXp = getQuestXpForLevel(MONTHLY_BONUS_REWARD.xp, stats.level);
     const res = grantXpAndResources(stats, totalAttributes, {
-      xp: MONTHLY_BONUS_REWARD.xp,
+      xp: scaledBonusXp,
       goldDelta: MONTHLY_BONUS_REWARD.gold,
     });
     setStats(res.nextStats);
@@ -1708,10 +1714,10 @@ export default function HomePage() {
 
     const dropLabel = equipDrop ? ` · 🎁 ${equipDrop.label}` : '';
     pushActionLog(
-      `👑 ${heroName} fechou todas as 4 Metas Mensais PRF e abriu o Baú de Honra: +${MONTHLY_BONUS_REWARD.xp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
+      `👑 ${heroName} fechou todas as 4 Metas Mensais PRF e abriu o Baú de Honra: +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
     );
     showToast(
-      `👑 Baú de Honra PRF! +${MONTHLY_BONUS_REWARD.xp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
+      `👑 Baú de Honra PRF! +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
     );
   };
 
@@ -1832,6 +1838,7 @@ export default function HomePage() {
       {/* Aba Missões PRF (Diária, Semanais e Metas Mensais) */}
       {showQuestsSection && questsState && (
         <QuestsPanel
+          level={stats.level}
           dailyQuests={dailyQuests}
           weeklyQuests={weeklyQuests}
           monthlyQuests={monthlyQuests}

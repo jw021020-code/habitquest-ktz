@@ -1,5 +1,6 @@
 import { StudyEntry } from '@/components/StudyLogCard';
 import { WorkoutEntry } from '@/components/WorkoutLogCard';
+import { getQuestScale } from './formulas';
 
 export type QuestCycle = 'daily' | 'weekly' | 'monthly';
 export type QuestPillar = 'study_hours' | 'questions' | 'run_km' | 'workout';
@@ -49,6 +50,7 @@ export interface PeriodTotals {
 
 export interface QuestProgressItem {
   def: QuestDefinition;
+  scaledXp: number;
   current: number;
   target: number;
   pct: number;
@@ -59,9 +61,13 @@ export interface QuestProgressItem {
 }
 
 export const MONTHLY_BONUS_REWARD = {
-  xp: 1000,
+  xp: 600,
   gold: 500,
 };
+
+export function getQuestXpForLevel(baseXp: number, level = 1): number {
+  return Math.max(1, Math.round(baseXp * getQuestScale(level)));
+}
 
 export const DAILY_QUESTS_POOL: QuestDefinition[] = [
   {
@@ -73,7 +79,7 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     icon: '📚',
     target: 180,
     unit: 'horas',
-    reward: { xp: 90, gold: 45, eggOrPotionChance: 0.25 },
+    reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
   },
   {
     id: 'daily_questions',
@@ -84,7 +90,7 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     icon: '✍️',
     target: 50,
     unit: 'questões',
-    reward: { xp: 90, gold: 45, eggOrPotionChance: 0.25 },
+    reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
   },
   {
     id: 'daily_run_km',
@@ -95,7 +101,7 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     icon: '🏃',
     target: 3,
     unit: 'km',
-    reward: { xp: 90, gold: 45, eggOrPotionChance: 0.25 },
+    reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
   },
   {
     id: 'daily_workout',
@@ -106,7 +112,7 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     icon: '💪',
     target: 1,
     unit: 'treinos',
-    reward: { xp: 90, gold: 45, eggOrPotionChance: 0.25 },
+    reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
   },
 ];
 
@@ -120,7 +126,7 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '📚',
     target: 1200,
     unit: 'horas',
-    reward: { xp: 350, gold: 180, guaranteedEggOrPotion: true },
+    reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
   },
   {
     id: 'weekly_questions',
@@ -131,7 +137,7 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '✍️',
     target: 300,
     unit: 'questões',
-    reward: { xp: 350, gold: 180, guaranteedEggOrPotion: true },
+    reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
   },
   {
     id: 'weekly_run_km',
@@ -142,7 +148,7 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '🏃',
     target: 15,
     unit: 'km',
-    reward: { xp: 350, gold: 180, guaranteedEggOrPotion: true },
+    reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
   },
   {
     id: 'weekly_workout',
@@ -153,7 +159,7 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '💪',
     target: 4,
     unit: 'treinos',
-    reward: { xp: 350, gold: 180, guaranteedEggOrPotion: true },
+    reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
   },
 ];
 
@@ -167,7 +173,7 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '📚',
     target: 4800,
     unit: 'horas',
-    reward: { xp: 1000, gold: 500, eggs: 1, potions: 1 },
+    reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
   },
   {
     id: 'monthly_questions',
@@ -178,7 +184,7 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '✍️',
     target: 1200,
     unit: 'questões',
-    reward: { xp: 1000, gold: 500, eggs: 1, potions: 1 },
+    reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
   },
   {
     id: 'monthly_run_km',
@@ -189,7 +195,7 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '🏃',
     target: 60,
     unit: 'km',
-    reward: { xp: 1000, gold: 500, eggs: 1, potions: 1 },
+    reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
   },
   {
     id: 'monthly_workout',
@@ -200,7 +206,7 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '💪',
     target: 16,
     unit: 'treinos',
-    reward: { xp: 1000, gold: 500, eggs: 1, potions: 1 },
+    reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
   },
 ];
 
@@ -403,7 +409,8 @@ function getRawValueForPillar(totals: PeriodTotals, pillar: QuestPillar): number
 export function buildQuestProgressList(
   questIds: string[],
   claimedIds: string[],
-  totals: PeriodTotals
+  totals: PeriodTotals,
+  level = 1
 ): QuestProgressItem[] {
   const claimedSet = new Set(claimedIds);
   const items: QuestProgressItem[] = [];
@@ -418,6 +425,7 @@ export function buildQuestProgressList(
 
     items.push({
       def,
+      scaledXp: getQuestXpForLevel(def.reward.xp, level),
       current: raw,
       target: def.target,
       pct,

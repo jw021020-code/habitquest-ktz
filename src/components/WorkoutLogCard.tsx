@@ -39,12 +39,15 @@ export function WorkoutLogCard({
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const canSubmit = cardio || musculacao;
+  const parsedKmPreview = cardio ? Math.max(0, parseFloat(kmInput.replace(',', '.')) || 0) : 0;
   const preview = previewWorkoutReward(
     stats,
     cardio,
     musculacao,
     totalAttributes,
-    bossAttack
+    bossAttack,
+    undefined,
+    parsedKmPreview
   );
 
   const handleSubmit = (e: React.FormEvent) => {

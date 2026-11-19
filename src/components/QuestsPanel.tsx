@@ -4,12 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, CheckCircle2, Clock, Crown, Gift, ScrollText, Sparkles, Sun, Target } from 'lucide-react';
 import {
   getCycleTimeRemaining,
+  getQuestXpForLevel,
   MONTHLY_BONUS_REWARD,
   QuestCycle,
   QuestProgressItem,
 } from '@/lib/game/quests';
 
 interface QuestsPanelProps {
+  level: number;
   dailyQuests: QuestProgressItem[];
   weeklyQuests: QuestProgressItem[];
   monthlyQuests: QuestProgressItem[];
@@ -54,7 +56,7 @@ function RewardChips({ item }: { item: QuestProgressItem }) {
   return (
     <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-condensed font-bold">
       <span className="px-2 py-0.5 rounded bg-[#24cc8f]/15 text-[#24cc8f] border border-[#24cc8f]/30">
-        +{reward.xp} XP
+        +{item.scaledXp} XP
       </span>
       <span className="px-2 py-0.5 rounded bg-[#ffbe5d]/15 text-[#ffbe5d] border border-[#ffbe5d]/30">
         +{reward.gold} GP
@@ -164,6 +166,7 @@ function QuestCard({
 }
 
 export function QuestsPanel({
+  level,
   dailyQuests,
   weeklyQuests,
   monthlyQuests,
@@ -358,7 +361,10 @@ export function QuestsPanel({
                 </h4>
                 <p className="text-xs text-[#a8a1b5]">
                   Complete todas as 4 metas mensais ({monthlyCompletedCount}/4) para ganhar{' '}
-                  <span className="text-[#24cc8f] font-bold">+{MONTHLY_BONUS_REWARD.xp} XP</span>,{' '}
+                  <span className="text-[#24cc8f] font-bold">
+                    +{getQuestXpForLevel(MONTHLY_BONUS_REWARD.xp, level)} XP
+                  </span>
+                  ,{' '}
                   <span className="text-[#ffbe5d] font-bold">+{MONTHLY_BONUS_REWARD.gold} GP</span> e{' '}
                   <span className="text-[#d6c7ff] font-bold">1 Equipamento Garantido (Incomum a Lendário)</span>!
                 </p>
