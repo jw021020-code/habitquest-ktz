@@ -430,3 +430,89 @@ export function buildQuestProgressList(
 
   return items;
 }
+
+export interface CycleTimeRemaining {
+  totalMs: number;
+  label: string;
+  isUrgent: boolean;
+  isCritical: boolean;
+}
+
+function getBrasiliaWallParts(date: Date): {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+} {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+
+  const num = (type: string) =>
+    Number(parts.find((p) => p.type === type)?.value ?? 0);
+
+  return {
+    year: num('year'),
+    month: num('month'),
+    day: num('day'),
+    hour: num('hour') === 24 ? 0 : num('hour'),
+    minute: num('minute'),
+    second: num('second'),
+  };
+}
+
+/**
+ * Calcula o tempo restante exato no fuso de Brasília (America/Sao_Paulo)
+ * até o fim do dia (23:59:59), fim da semana (Domingo 23:59:59) ou fim do mês.
+ */
+export function getCycleTimeRemaining(
+  cycle: QuestCycle,
+  now: Date = new Date()
+): CycleTimeRemaining {
+  const p = getBrasiliaWallParts(now);
+  const nowWallMs = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+
+  let endWallMs = nowWallMs;
+  if (cycle === 'daily') {
+    endWallMs = Date.UTC(p.year, p.month - 1, p.day, 23, 59, 59);
+  } else if (cycle === 'weekly') {
+    const dow = new Date(Date.UTC(p.year, p.month - 1, p.day)).getUTCDay(); // 0=Dom .. 6=Sab
+    const daysUntilSunday = dow === 0 ? 0 : 7 - dow;
+    endWallMs = Date.UTC(p.year, p.month - 1, p.day + daysUntilSunday, 23, 59, 59);
+  } else {
+    // Último dia do mês atual: dia 0 do mês seguinte
+    endWallMs = Date.UTC(p.year, p.month, 0, 23, 59, 59);
+  }
+
+  const totalMs = Math.max(0, endWallMs - nowWallMs);
+  const totalSec = Math.floor(totalMs / 1000);
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const label =
+    days > 0
+      ? `${days}d ${pad(hours)}h ${pad(mins)}m`
+      : `${pad(hours)}h ${pad(mins)}m ${pad(secs)}s`;
+
+  const isUrgent =
+    cycle === 'daily'
+      ? totalSec < 3 * 3600
+      : cycle === 'weekly'
+      ? totalSec < 24 * 3600
+      : totalSec < 48 * 3600;
+  const isCritical = totalSec < 3600;
+
+  return { totalMs, label, isUrgent, isCritical };
+}

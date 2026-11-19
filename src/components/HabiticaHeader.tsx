@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   AlertTriangle,
+  CalendarCheck,
   CheckSquare,
   Coins,
   Heart,
@@ -54,11 +55,15 @@ interface HabiticaHeaderProps {
   invTab: InventorySubTab;
   shopFilter: ShopSubTab;
   readyQuestsCount?: number;
+  canClaimCheckIn?: boolean;
+  checkInStreak?: number;
   supabaseReady: boolean;
   onSelectSection: (section: ActiveSection) => void;
   onSelectInvTab: (tab: InventorySubTab) => void;
   onSelectShopFilter: (filter: ShopSubTab) => void;
   onOpenStats: () => void;
+  onOpenCheckIn: () => void;
+  onInspectMember?: (member: RemoteProfile) => void;
   onOpenAuth: () => void;
 }
 
@@ -95,11 +100,15 @@ export function HabiticaHeader({
   invTab,
   shopFilter,
   readyQuestsCount = 0,
+  canClaimCheckIn = false,
+  checkInStreak = 0,
   supabaseReady,
   onSelectSection,
   onSelectInvTab,
   onSelectShopFilter,
   onOpenStats,
+  onOpenCheckIn,
+  onInspectMember,
   onOpenAuth,
 }: HabiticaHeaderProps) {
   const staminaPct = Math.max(0, Math.min(100, Math.round((stats.hp / stats.max_hp) * 100)));
@@ -199,6 +208,25 @@ export function HabiticaHeader({
             >
               <Coins className="w-4 h-4 text-[#ffbe5d] shrink-0" />
               <span>{stats.gold}</span>
+            </button>
+
+            {/* Botão Check-in Diário */}
+            <button
+              onClick={onOpenCheckIn}
+              className={`relative flex items-center gap-1.5 text-xs font-condensed font-bold px-2.5 sm:px-3 py-1.5 rounded-md border transition cursor-pointer ${
+                canClaimCheckIn
+                  ? 'bg-[#24cc8f]/20 hover:bg-[#24cc8f]/30 text-[#24cc8f] border-[#24cc8f] shadow-md'
+                  : 'bg-[#36205d] hover:bg-[#271b3d] text-[#ede8ff] border-[#925cf3]/40'
+              }`}
+              title="Check-in Diário Escalável por Nível"
+            >
+              <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden lg:inline">
+                {canClaimCheckIn ? 'Check-in!' : `Check-in (${checkInStreak}d)`}
+              </span>
+              {canClaimCheckIn && (
+                <span className="w-2 h-2 rounded-full bg-[#ffbe5d] animate-ping" />
+              )}
             </button>
 
             {/* Botão Atributos & Conquistas (com indicador de pontos livres) */}
@@ -481,13 +509,17 @@ export function HabiticaHeader({
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Mini-Avatares dos membros online da KTZ (estilo Party Banner do Habitica) */}
             {remoteMembers.length > 0 && (
-              <button
-                onClick={() => onSelectSection('ktz')}
-                className="hidden xl:flex items-center -space-x-2 hover:space-x-1 transition-all pr-1"
-                title="Ver membros da KTZ - Know The Zero"
-              >
+              <div className="hidden xl:flex items-center -space-x-2 hover:space-x-1 transition-all pr-1">
                 {remoteMembers.slice(0, 4).map((m) => (
-                  <div key={m.id} className="relative">
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() =>
+                      onInspectMember ? onInspectMember(m) : onSelectSection('ktz')
+                    }
+                    className="relative rounded-full focus:outline-none hover:scale-105 transition cursor-pointer"
+                    title={`Ver perfil de ${m.username} (Nv.${m.level})`}
+                  >
                     <CharacterAvatar
                       appearance={m.appearance}
                       equipped={m.equipped}
@@ -495,11 +527,11 @@ export function HabiticaHeader({
                       useCostume={m.use_costume}
                       petId={m.stable?.equippedPet}
                       size="sm"
-                      className="border-2 border-[#432874] shadow-md"
+                      className="border-2 border-[#432874] hover:border-[#ffbe5d] shadow-md"
                     />
-                  </div>
+                  </button>
                 ))}
-              </button>
+              </div>
             )}
 
             {/* Card Oficial do Boss Ativo da KTZ */}

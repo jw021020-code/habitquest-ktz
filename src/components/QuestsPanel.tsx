@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Calendar, CheckCircle2, Crown, Gift, ScrollText, Sparkles, Sun, Target } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Calendar, CheckCircle2, Clock, Crown, Gift, ScrollText, Sparkles, Sun, Target } from 'lucide-react';
 import {
+  getCycleTimeRemaining,
   MONTHLY_BONUS_REWARD,
   QuestCycle,
   QuestProgressItem,
@@ -19,6 +20,33 @@ interface QuestsPanelProps {
   monthlyKey: string;
   onClaimQuest: (questId: string, cycle: QuestCycle) => void;
   onClaimMonthlyBonus: () => void;
+  onPeriodTick?: () => void;
+}
+
+function CycleTimerBadge({
+  cycle,
+  nowMs,
+}: {
+  cycle: QuestCycle;
+  nowMs: number | null;
+}) {
+  if (nowMs === null) return null;
+  const { label, isUrgent, isCritical } = getCycleTimeRemaining(cycle, new Date(nowMs));
+  return (
+    <span
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[11px] font-condensed font-bold tabular-nums ${
+        isCritical
+          ? 'bg-[#ff6165]/20 border-[#ff6165] text-[#ff8b8e] animate-pulse'
+          : isUrgent
+          ? 'bg-[#ffbe5d]/15 border-[#ffbe5d]/60 text-[#ffbe5d]'
+          : 'bg-[#1a181d] border-[#3a3447] text-[#cfc8dc]'
+      }`}
+      title="Tempo restante até o reset deste ciclo (Horário de Brasília)"
+    >
+      <Clock className="w-3 h-3" />
+      Restam {label}
+    </span>
+  );
 }
 
 function RewardChips({ item }: { item: QuestProgressItem }) {
@@ -146,8 +174,22 @@ export function QuestsPanel({
   monthlyKey,
   onClaimQuest,
   onClaimMonthlyBonus,
+  onPeriodTick,
 }: QuestsPanelProps) {
   const [tab, setTab] = useState<'all' | QuestCycle>('all');
+  const [nowMs, setNowMs] = useState<number | null>(null);
+
+  useEffect(() => {
+    setNowMs(Date.now());
+    const id = setInterval(() => {
+      const t = Date.now();
+      setNowMs(t);
+      if (getCycleTimeRemaining('daily', new Date(t)).totalMs <= 1000) {
+        onPeriodTick?.();
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [onPeriodTick]);
 
   const monthlyCompletedCount = monthlyQuests.filter((q) => q.completed).length;
   const allMonthlyDone = monthlyQuests.length === 4 && monthlyCompletedCount === 4;
@@ -212,7 +254,7 @@ export function QuestsPanel({
       {/* 1. Missão Diária (1 sorteada dentre as 4) */}
       {(tab === 'all' || tab === 'daily') && (
         <section className="space-y-2.5">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2">
               <Sun className="w-4 h-4 text-[#ffbe5d]" />
               <h3 className="font-condensed font-bold text-sm sm:text-base uppercase tracking-wider text-white">
@@ -222,6 +264,7 @@ export function QuestsPanel({
                 1 de 4 · {dailyKey}
               </span>
             </div>
+            <CycleTimerBadge cycle="daily" nowMs={nowMs} />
           </div>
 
           <div className="grid grid-cols-1 gap-3">
@@ -239,7 +282,7 @@ export function QuestsPanel({
       {/* 2. Missões Semanais (2 sorteadas dentre as 4) */}
       {(tab === 'all' || tab === 'weekly') && (
         <section className="space-y-2.5">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-[#925cf3]" />
               <h3 className="font-condensed font-bold text-sm sm:text-base uppercase tracking-wider text-white">
@@ -249,6 +292,7 @@ export function QuestsPanel({
                 2 de 4 · {weeklyKey}
               </span>
             </div>
+            <CycleTimerBadge cycle="weekly" nowMs={nowMs} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -266,7 +310,7 @@ export function QuestsPanel({
       {/* 3. Metas Mensais PRF (Todas as 4 fixas no mês) */}
       {(tab === 'all' || tab === 'monthly') && (
         <section className="space-y-3">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4 text-[#24cc8f]" />
               <h3 className="font-condensed font-bold text-sm sm:text-base uppercase tracking-wider text-white">
@@ -276,9 +320,12 @@ export function QuestsPanel({
                 Todas as 4 ativas · {monthlyKey}
               </span>
             </div>
-            <span className="text-xs font-condensed font-bold text-[#24cc8f]">
-              {monthlyCompletedCount}/4 concluídas
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-condensed font-bold text-[#24cc8f]">
+                {monthlyCompletedCount}/4 concluídas
+              </span>
+              <CycleTimerBadge cycle="monthly" nowMs={nowMs} />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -356,6 +403,14 @@ export function QuestsSummaryStrip({
   onOpenQuests,
   onClaimDaily,
 }: QuestsSummaryStripProps) {
+  const [nowMs, setNowMs] = useState<number | null>(null);
+
+  useEffect(() => {
+    setNowMs(Date.now());
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
   if (!dailyQuest) return null;
   const canClaimDaily = dailyQuest.completed && !dailyQuest.claimed;
 
@@ -379,6 +434,7 @@ export function QuestsSummaryStrip({
               >
                 ({dailyQuest.displayCurrent} / {dailyQuest.displayTarget})
               </span>
+              <CycleTimerBadge cycle="daily" nowMs={nowMs} />
             </div>
             <div className="w-full max-w-md h-1.5 rounded-full bg-[#1a181d] border border-[#3a3447] overflow-hidden mt-1.5">
               <div

@@ -6,6 +6,7 @@ import {
   BookOpen,
   Coins,
   Crown,
+  Eye,
   Heart,
   History,
   MessageSquare,
@@ -64,6 +65,8 @@ interface PartyPanelProps {
   messages: PartyChatMessage[];
   onSendChat: (text: string) => void;
   onSelectBossMission: (bossIndex: number, cycle: number) => void;
+  onInspectMember: (member: RemoteProfile) => void;
+  onInspectLocal?: () => void;
   onOpenAuth: () => void;
 }
 
@@ -105,6 +108,8 @@ export function PartyPanel({
   messages,
   onSendChat,
   onSelectBossMission,
+  onInspectMember,
+  onInspectLocal,
   onOpenAuth,
 }: PartyPanelProps) {
   const [rightTab, setRightTab] = useState<'history' | 'chat'>('history');
@@ -334,11 +339,18 @@ export function PartyPanel({
                     return (
                       <div
                         key={member.id}
-                        className={`rounded-md p-2.5 flex items-center gap-3 border ${
+                        onClick={() => onInspectMember(member)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') onInspectMember(member);
+                        }}
+                        className={`rounded-md p-2.5 flex items-center gap-3 border cursor-pointer transition hover:border-[#925cf3] ${
                           isMvp
                             ? 'bg-[#2c2240]/60 border-[#ffbe5d]/50'
                             : 'bg-[#1a181d] border-[#3a3447]'
                         }`}
+                        title={`Ver perfil completo de ${member.username}`}
                       >
                         <CharacterAvatar
                           appearance={member.appearance}
@@ -407,9 +419,15 @@ export function PartyPanel({
                             <span className="text-[#ffbe5d] font-bold">
                               ⚔️ {dmg} dano ({dmgPct}%)
                             </span>
-                            <span className="text-[#8a8299]">
-                              {member.metrics?.bossesDefeated ?? 0} bosses vencidos
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[#8a8299]">
+                                {member.metrics?.bossesDefeated ?? 0} bosses
+                              </span>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#36205d] text-[#d6c7ff] border border-[#6133b4] font-bold">
+                                <Eye className="w-2.5 h-2.5" />
+                                Ver Perfil
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -417,7 +435,15 @@ export function PartyPanel({
                   })
               ) : (
                 /* Card do Herói Local quando offline */
-                <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-2.5 flex items-center gap-3">
+                <div
+                  onClick={onInspectLocal}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if ((e.key === 'Enter' || e.key === ' ') && onInspectLocal) onInspectLocal();
+                  }}
+                  className="bg-[#1a181d] hover:border-[#925cf3] border border-[#3a3447] rounded-md p-2.5 flex items-center gap-3 cursor-pointer transition"
+                >
                   <CharacterAvatar
                     appearance={heroAppearance}
                     equipped={heroEquipped}

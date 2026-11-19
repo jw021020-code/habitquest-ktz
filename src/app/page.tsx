@@ -53,12 +53,19 @@ import {
 import {
   buildQuestProgressList,
   computePeriodTotals,
+  getDayKey,
   getQuestById,
   MONTHLY_BONUS_REWARD,
   MONTHLY_QUESTS_POOL,
   QuestCycle,
   syncQuestsPeriod,
 } from '@/lib/game/quests';
+import {
+  canClaimDailyCheckIn,
+  computeCheckInReward,
+  DEFAULT_CHECKIN_STATE,
+  getProjectedStreak,
+} from '@/lib/game/checkin';
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import {
   fetchLatestPartyBoss,
@@ -71,6 +78,7 @@ import {
   updateRemotePartyBoss,
 } from '@/lib/supabase/data';
 import { AuthModal } from '@/components/AuthModal';
+import { DailyCheckInModal } from '@/components/DailyCheckInModal';
 import { EquipmentPanel } from '@/components/EquipmentPanel';
 import {
   ActiveSection,
@@ -78,6 +86,7 @@ import {
   InventorySubTab,
   ShopSubTab,
 } from '@/components/HabiticaHeader';
+import { MemberProfileModal } from '@/components/MemberProfileModal';
 import { PartyChatMessage, PartyPanel } from '@/components/PartyPanel';
 import { QuestsPanel, QuestsSummaryStrip } from '@/components/QuestsPanel';
 import { SkillsBar } from '@/components/SkillsBar';
@@ -154,6 +163,8 @@ export default function HomePage() {
 
   const [statsOpen, setStatsOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [checkInOpen, setCheckInOpen] = useState(false);
+  const [inspectedMember, setInspectedMember] = useState<RemoteProfile | null>(null);
 
   const [messages, setMessages] = useState<PartyChatMessage[]>([
     {
@@ -919,6 +930,17 @@ export default function HomePage() {
     showToast('🧪 Tônico de Estamina usado (+30 STA)!');
   };
 
+  const handleBuyManaPotion = () => {
+    if (stats.gold < 15 || stats.mp >= stats.max_mp) return;
+    setStats((s) => ({
+      ...s,
+      gold: s.gold - 15,
+      mp: Math.min(s.max_mp, s.mp + 25),
+    }));
+    pushActionLog(`🔷 ${heroName} usou um Elixir de Mana (+25 MP, -15 GP).`);
+    showToast('🔷 Elixir de Mana usado (+25 MP)!');
+  };
+
   const handleBuyHatchPotion = (count = 1) => {
     const cost = 25 * count;
     if (stats.gold < cost) return;
@@ -1283,7 +1305,6 @@ export default function HomePage() {
     if (stats.gold < cost) return;
 
     let simInventory = [...inventory];
-    let totalGold = 0;
     let totalEggs = 0;
     let totalPotions = 0;
     const newEquipNames: string[] = [];
@@ -1297,8 +1318,6 @@ export default function HomePage() {
           simInventory.push(reward.item.id);
         }
         newEquipNames.push(reward.item.name);
-      } else if (reward.kind === 'gold') {
-        totalGold += reward.amount;
       } else if (reward.kind === 'egg') {
         totalEggs += 1;
       } else if (reward.kind === 'potion') {
@@ -1307,13 +1326,12 @@ export default function HomePage() {
     }
 
     const armoireRes = grantXpAndResources(stats, totalAttributes, {
-      goldDelta: -cost + totalGold,
+      goldDelta: -cost,
     });
     setStats(armoireRes.nextStats);
     setMetrics((m) => ({
       ...m,
       armoireOpened: m.armoireOpened + count,
-      totalGoldEarned: m.totalGoldEarned + totalGold,
     }));
     if (simInventory.length > inventory.length) {
       setInventory(simInventory);
@@ -1332,7 +1350,6 @@ export default function HomePage() {
     } else {
       const parts: string[] = [];
       if (newEquipNames.length > 0) parts.push(`${newEquipNames.length} equips`);
-      if (totalGold > 0) parts.push(`+${totalGold} GP`);
       if (totalEggs > 0) parts.push(`${totalEggs} Ovos`);
       if (totalPotions > 0) parts.push(`${totalPotions} Poções`);
       const summary = parts.join(', ');
@@ -1486,6 +1503,115 @@ export default function HomePage() {
     [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter((q) => q.completed && !q.claimed)
       .length + (canClaimMonthlyBonus ? 1 : 0);
 
+  const canCheckInToday =
+    nowTs !== null && canClaimDailyCheckIn(metrics.checkin, new Date(nowTs));
+  const currentCheckInStreak = metrics.checkin?.streak ?? 0;
+
+  const handleClaimCheckIn = () => {
+    const now = new Date();
+    const todayKey = getDayKey(now);
+    if (!canClaimDailyCheckIn(metrics.checkin, now)) return;
+
+    const nextStreak = getProjectedStreak(metrics.checkin, now);
+    const reward = computeCheckInReward(stats.level, stats.max_hp, stats.max_mp, nextStreak);
+
+    const res = grantXpAndResources(stats, totalAttributes, {
+      xp: reward.xp,
+      goldDelta: reward.gold,
+    });
+    const nextStats: PlayerStats = {
+      ...res.nextStats,
+      hp: Math.min(res.nextStats.max_hp, res.nextStats.hp + reward.staRestore),
+      mp: Math.min(res.nextStats.max_mp, res.nextStats.mp + reward.mpRestore),
+    };
+    setStats(nextStats);
+
+    let extraEggs = 0;
+    let extraPotions = 0;
+    let armoireLabel = '';
+
+    if (reward.milestoneBonus === 'egg_or_potion') {
+      if (Math.random() < 0.5) extraEggs += 1;
+      else extraPotions += 1;
+    } else if (reward.milestoneBonus === 'egg_and_potion') {
+      extraEggs += 1;
+      extraPotions += 1;
+    } else if (reward.milestoneBonus === 'armoire') {
+      const drop = rollArmoireReward(inventory);
+      armoireLabel = drop.label;
+      if (drop.kind === 'equipment') {
+        if (!inventory.includes(drop.item.id)) {
+          setInventory((prev) => [...prev, drop.item.id]);
+        }
+      } else if (drop.kind === 'egg') {
+        extraEggs += 1;
+      } else if (drop.kind === 'potion') {
+        extraPotions += 1;
+      }
+    }
+
+    if (extraEggs > 0 || extraPotions > 0) {
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + extraEggs,
+        potions: prev.potions + extraPotions,
+      }));
+    }
+
+    setMetrics((prev) => ({
+      ...prev,
+      totalGoldEarned: prev.totalGoldEarned + reward.gold,
+      checkin: {
+        lastClaimDayKey: todayKey,
+        streak: nextStreak,
+        totalCheckIns: (prev.checkin?.totalCheckIns ?? DEFAULT_CHECKIN_STATE.totalCheckIns) + 1,
+      },
+    }));
+
+    const bonusParts: string[] = [];
+    if (extraEggs > 0) bonusParts.push(`+${extraEggs} Ovo`);
+    if (extraPotions > 0) bonusParts.push(`+${extraPotions} Poção`);
+    if (armoireLabel) bonusParts.push(`🎁 ${armoireLabel}`);
+    const bonusText = bonusParts.length > 0 ? ` · ${bonusParts.join(', ')}` : '';
+
+    pushActionLog(
+      `📅 ${heroName} fez Check-in Diário (${nextStreak}d): +${reward.xp} XP, +${reward.gold} GP, +${reward.staRestore} STA, +${reward.mpRestore} MP${bonusText}!`
+    );
+    showToast(
+      `📅 Check-in ${nextStreak}d! +${reward.xp} XP, +${reward.gold} GP${bonusText}`
+    );
+  };
+
+  const handleInspectLocal = () => {
+    setInspectedMember({
+      id: userId ?? 'local-hero',
+      username: heroName,
+      hero_class: stats.heroClass,
+      level: stats.level,
+      hp: stats.hp,
+      max_hp: stats.max_hp,
+      mp: stats.mp,
+      max_mp: stats.max_mp,
+      xp: stats.xp,
+      xp_to_next: stats.xp_to_next,
+      gold: stats.gold,
+      is_sleeping: false,
+      rebirths: stats.rebirths ?? 0,
+      allocated_stats: stats.allocatedStats ?? { ...ZERO_ATTRS },
+      buffs: stats.buffs ?? { ...ZERO_ATTRS },
+      appearance,
+      equipped,
+      costume,
+      use_costume: useCostume,
+      inventory,
+      stable,
+      metrics,
+      study_entries: studyEntries,
+      workout_entries: workoutEntries,
+      party_id: remoteParty?.id ?? null,
+    });
+  };
+
   const handleClaimQuest = (questId: string, cycle: QuestCycle) => {
     const def = getQuestById(questId);
     if (!def) return;
@@ -1625,6 +1751,8 @@ export default function HomePage() {
         invTab={invTab}
         shopFilter={shopFilter}
         readyQuestsCount={readyQuestsCount}
+        canClaimCheckIn={canCheckInToday}
+        checkInStreak={currentCheckInStreak}
         supabaseReady={supabaseReady}
         onSelectSection={(sec) => {
           setActiveSection(sec);
@@ -1637,6 +1765,8 @@ export default function HomePage() {
         onSelectInvTab={setInvTab}
         onSelectShopFilter={setShopFilter}
         onOpenStats={() => setStatsOpen(true)}
+        onOpenCheckIn={() => setCheckInOpen(true)}
+        onInspectMember={(m) => setInspectedMember(m)}
         onOpenAuth={() => setAuthOpen(true)}
       />
 
@@ -1712,6 +1842,7 @@ export default function HomePage() {
           monthlyKey={questsState.monthlyKey}
           onClaimQuest={handleClaimQuest}
           onClaimMonthlyBonus={handleClaimMonthlyBonus}
+          onPeriodTick={() => setNowTs(Date.now())}
         />
       )}
 
@@ -1729,6 +1860,8 @@ export default function HomePage() {
         gold={stats.gold}
         hp={stats.hp}
         maxHp={stats.max_hp}
+        mp={stats.mp}
+        maxMp={stats.max_mp}
         heroClass={stats.heroClass}
         appearance={appearance}
         equipped={equipped}
@@ -1741,6 +1874,7 @@ export default function HomePage() {
         onBuyItem={handleBuyItem}
         onBuyBatchItems={handleBuyBatchItems}
         onBuyPotion={handleBuyPotion}
+        onBuyManaPotion={handleBuyManaPotion}
         onBuyArmoire={handleBuyArmoire}
         onBuyHatchPotion={handleBuyHatchPotion}
         onSellEgg={handleSellEgg}
@@ -1784,10 +1918,28 @@ export default function HomePage() {
         messages={messages}
         onSendChat={handleSendChat}
         onSelectBossMission={handleSelectBossMission}
+        onInspectMember={(m) => setInspectedMember(m)}
+        onInspectLocal={handleInspectLocal}
         onOpenAuth={() => setAuthOpen(true)}
       />
 
-      {/* Modais: Perfil/Atributos/Conquistas e Conta */}
+      {/* Modais: Perfil/Atributos/Conquistas, Check-in Diário, Inspeção de Membro e Conta */}
+      <DailyCheckInModal
+        open={checkInOpen}
+        onClose={() => setCheckInOpen(false)}
+        level={stats.level}
+        maxHp={stats.max_hp}
+        maxMp={stats.max_mp}
+        checkinState={metrics.checkin}
+        canClaimToday={canCheckInToday}
+        onClaimCheckIn={handleClaimCheckIn}
+      />
+
+      <MemberProfileModal
+        member={inspectedMember}
+        bossStage={activeBossStage}
+        onClose={() => setInspectedMember(null)}
+      />
       <StatsModal
         open={statsOpen}
         onClose={() => setStatsOpen(false)}

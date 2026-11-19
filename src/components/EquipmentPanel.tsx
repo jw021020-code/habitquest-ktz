@@ -44,7 +44,11 @@ import {
   ALL_PET_IDS,
   formatPetName,
   getPetSpritePath,
+  getPotionLabelPt,
+  getSpeciesLabelPt,
   PET_CATALOG,
+  PET_POTIONS_LIST,
+  PET_SPECIES_LIST,
   PetCategory,
   StableState,
 } from '@/lib/game/pets';
@@ -60,6 +64,8 @@ interface EquipmentPanelProps {
   gold: number;
   hp: number;
   maxHp: number;
+  mp: number;
+  maxMp: number;
   heroClass: PlayableHeroClass;
   appearance: CharacterAppearance;
   equipped: EquippedGear;
@@ -72,6 +78,7 @@ interface EquipmentPanelProps {
   onBuyItem: (item: EquipmentItem, afterBuy?: 'bag' | 'equip' | 'costume') => void;
   onBuyBatchItems: (items: EquipmentItem[]) => void;
   onBuyPotion: () => void;
+  onBuyManaPotion: () => void;
   onBuyArmoire: (count?: number) => void;
   onBuyHatchPotion: (count?: number) => void;
   onSellEgg: () => void;
@@ -184,6 +191,8 @@ export function EquipmentPanel({
   gold,
   hp,
   maxHp,
+  mp,
+  maxMp,
   heroClass,
   appearance,
   equipped,
@@ -196,6 +205,7 @@ export function EquipmentPanel({
   onBuyItem,
   onBuyBatchItems,
   onBuyPotion,
+  onBuyManaPotion,
   onBuyArmoire,
   onBuyHatchPotion,
   onSellEgg,
@@ -231,6 +241,8 @@ export function EquipmentPanel({
   const [invVisibleLimit, setInvVisibleLimit] = useState<number>(INV_PAGE_SIZE);
 
   const [petCategoryFilter, setPetCategoryFilter] = useState<'owned' | 'all' | PetCategory>('owned');
+  const [petSpeciesFilter, setPetSpeciesFilter] = useState<string>('all');
+  const [petPotionFilter, setPetPotionFilter] = useState<string>('all');
   const [petVisibleLimit, setPetVisibleLimit] = useState<number>(PAGE_SIZE);
   const [petSearch, setPetSearch] = useState('');
   const [bgSearch, setBgSearch] = useState('');
@@ -348,18 +360,46 @@ export function EquipmentPanel({
     stable.eggs > 0 && stable.potions > 0 && ownedPetIds.length < ALL_PET_IDS.length;
 
   const petQuery = petSearch.trim().toLowerCase();
+  const petSpeciesCounts = new Map<string, { owned: number; total: number }>();
+  const petPotionCounts = new Map<string, { owned: number; total: number }>();
+  for (const pet of PET_CATALOG) {
+    const isOwned = stable.pets[pet.id] !== undefined;
+    const sp = petSpeciesCounts.get(pet.species) ?? { owned: 0, total: 0 };
+    sp.total += 1;
+    if (isOwned) sp.owned += 1;
+    petSpeciesCounts.set(pet.species, sp);
+
+    const po = petPotionCounts.get(pet.potion) ?? { owned: 0, total: 0 };
+    po.total += 1;
+    if (isOwned) po.owned += 1;
+    petPotionCounts.set(pet.potion, po);
+  }
+
   const filteredPetEntries = PET_CATALOG.filter((pet) => {
     const isOwned = stable.pets[pet.id] !== undefined;
     if (petCategoryFilter === 'owned' && !isOwned) return false;
     if (petCategoryFilter !== 'owned' && petCategoryFilter !== 'all' && pet.category !== petCategoryFilter) {
       return false;
     }
-    if (petQuery && !pet.name.toLowerCase().includes(petQuery) && !pet.id.toLowerCase().includes(petQuery)) {
+    if (petSpeciesFilter !== 'all' && pet.species !== petSpeciesFilter) {
+      return false;
+    }
+    if (petPotionFilter !== 'all' && pet.potion !== petPotionFilter) {
+      return false;
+    }
+    if (
+      petQuery &&
+      !pet.name.toLowerCase().includes(petQuery) &&
+      !pet.id.toLowerCase().includes(petQuery) &&
+      !getSpeciesLabelPt(pet.species).toLowerCase().includes(petQuery) &&
+      !getPotionLabelPt(pet.potion).toLowerCase().includes(petQuery)
+    ) {
       return false;
     }
     return true;
   });
   const visiblePetEntries = filteredPetEntries.slice(0, petVisibleLimit);
+  const specialPetsCount = PET_CATALOG.filter((p) => p.category === 'special').length;
 
   const filteredBackgrounds = BACKGROUND_OPTIONS.filter((bg) => {
     const bq = bgSearch.trim().toLowerCase();
@@ -903,49 +943,119 @@ export function EquipmentPanel({
                 </div>
               </div>
 
-              {/* Barra de Filtro por Categoria e Busca do Estábulo */}
-              <div className="bg-[#23202a] border border-[#3a3447] rounded-md p-3 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {(
-                    [
-                      { id: 'owned', label: `Meus Mascotes (${ownedPetIds.length})` },
-                      { id: 'all', label: `Todos (${ALL_PET_IDS.length})` },
-                      { id: 'drop', label: 'Básicos (90)' },
-                      { id: 'quest', label: 'Missão (610)' },
-                      { id: 'premium', label: 'Mágicos (459)' },
-                      { id: 'wacky', label: 'Malucos (63)' },
-                      { id: 'special', label: 'Especiais (26)' },
-                    ] as const
-                  ).map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setPetCategoryFilter(cat.id);
+              {/* Barra de Filtro por Coleção, Espécie, Cor/Estilo e Especiais */}
+              <div className="bg-[#23202a] border border-[#3a3447] rounded-md p-3 space-y-2.5">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(
+                      [
+                        { id: 'owned', label: `Meus Mascotes (${ownedPetIds.length})` },
+                        { id: 'all', label: `Todos (${ALL_PET_IDS.length})` },
+                        { id: 'special', label: `⭐ Especiais / Únicos (${specialPetsCount})` },
+                      ] as const
+                    ).map((cat) => (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          setPetCategoryFilter(cat.id);
+                          setPetVisibleLimit(PAGE_SIZE);
+                        }}
+                        className={`px-2.5 py-1.5 rounded text-xs font-condensed font-bold transition cursor-pointer ${
+                          petCategoryFilter === cat.id
+                            ? 'bg-[#6133b4] text-white'
+                            : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="relative w-full lg:w-64">
+                    <Search className="w-3.5 h-3.5 text-[#8a8299] absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={petSearch}
+                      onChange={(e) => {
+                        setPetSearch(e.target.value);
                         setPetVisibleLimit(PAGE_SIZE);
                       }}
-                      className={`px-2.5 py-1.5 rounded text-xs font-condensed font-bold transition ${
-                        petCategoryFilter === cat.id
-                          ? 'bg-[#6133b4] text-white'
-                          : 'bg-[#1a181d] text-[#a8a1b5] hover:text-white'
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+                      placeholder="Buscar mascote, cor ou espécie..."
+                      className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
+                    />
+                  </div>
                 </div>
 
-                <div className="relative w-full lg:w-64">
-                  <Search className="w-3.5 h-3.5 text-[#8a8299] absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={petSearch}
-                    onChange={(e) => {
-                      setPetSearch(e.target.value);
-                      setPetVisibleLimit(PAGE_SIZE);
-                    }}
-                    placeholder="Buscar mascote, cor ou espécie..."
-                    className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
-                  />
+                {/* Seletores Combináveis de Espécie e Cor/Estilo */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2 pt-2 border-t border-[#3a3447]/60 items-center">
+                  <div className="lg:col-span-5">
+                    <select
+                      value={petSpeciesFilter}
+                      onChange={(e) => {
+                        setPetSpeciesFilter(e.target.value);
+                        if (e.target.value !== 'all' && petCategoryFilter === 'owned') {
+                          setPetCategoryFilter('all');
+                        }
+                        setPetVisibleLimit(PAGE_SIZE);
+                      }}
+                      className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
+                    >
+                      <option value="all">🐾 Espécie: Todas ({PET_SPECIES_LIST.length})</option>
+                      {PET_SPECIES_LIST.map((sp) => {
+                        const c = petSpeciesCounts.get(sp) ?? { owned: 0, total: 0 };
+                        return (
+                          <option key={sp} value={sp}>
+                            {getSpeciesLabelPt(sp)} ({c.owned}/{c.total})
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="lg:col-span-5">
+                    <select
+                      value={petPotionFilter}
+                      onChange={(e) => {
+                        setPetPotionFilter(e.target.value);
+                        if (e.target.value !== 'all' && petCategoryFilter === 'owned') {
+                          setPetCategoryFilter('all');
+                        }
+                        setPetVisibleLimit(PAGE_SIZE);
+                      }}
+                      className="w-full bg-[#1a181d] border border-[#3a3447] rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#925cf3]"
+                    >
+                      <option value="all">🎨 Cor / Estilo: Todas ({PET_POTIONS_LIST.length})</option>
+                      {PET_POTIONS_LIST.map((po) => {
+                        const c = petPotionCounts.get(po) ?? { owned: 0, total: 0 };
+                        return (
+                          <option key={po} value={po}>
+                            {getPotionLabelPt(po)} ({c.owned}/{c.total})
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="lg:col-span-2 flex justify-end">
+                    {(petSpeciesFilter !== 'all' ||
+                      petPotionFilter !== 'all' ||
+                      petSearch.trim() !== '' ||
+                      petCategoryFilter !== 'owned') && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPetCategoryFilter('owned');
+                          setPetSpeciesFilter('all');
+                          setPetPotionFilter('all');
+                          setPetSearch('');
+                          setPetVisibleLimit(PAGE_SIZE);
+                        }}
+                        className="w-full px-2.5 py-1.5 rounded bg-[#1a181d] hover:bg-[#36205d] border border-[#3a3447] text-[11px] font-condensed font-bold text-[#d6c7ff] transition cursor-pointer"
+                      >
+                        Limpar Filtros
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -1645,12 +1755,12 @@ export function EquipmentPanel({
 
           {/* Coluna Principal Direita: Destaques + Grid de Equipamentos estilo Habitica Shop */}
           <div className="lg:col-span-9 space-y-5">
-            {/* Destaques Fixos do Mercado (Tônico, Poção de Chocar, Armoire) */}
+            {/* Destaques Fixos do Mercado (Tônico, Elixir de Mana, Poção de Chocar, Armoire) */}
             <div>
               <h3 className="text-xs font-condensed font-bold uppercase tracking-wider text-[#d6c7ff] mb-2.5">
                 Itens Essenciais & Baú Encantado
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
                 {/* 1. Tônico de Estamina */}
                 <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
@@ -1676,7 +1786,28 @@ export function EquipmentPanel({
                   </button>
                 </div>
 
-                {/* 2. Poção de Chocar */}
+                {/* 2. Elixir de Mana */}
+                <div className="bg-[#23202a] border border-[#50b5e9]/40 rounded-md flex flex-col justify-between overflow-hidden">
+                  <div className="p-3 flex flex-col items-center text-center">
+                    <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#50b5e9]/40 flex items-center justify-center mb-2">
+                      <Zap className="w-9 h-9 text-[#50b5e9] fill-[#50b5e9]/30" />
+                    </div>
+                    <p className="text-xs font-condensed font-bold text-white">
+                      Elixir de Mana
+                    </p>
+                    <p className="text-[11px] text-[#50b5e9] mt-0.5">+25 MP ({mp}/{maxMp})</p>
+                  </div>
+                  <button
+                    disabled={gold < 15 || mp >= maxMp}
+                    onClick={onBuyManaPotion}
+                    className="w-full py-2 bg-[#ffbe5d]/20 hover:bg-[#ffbe5d]/30 disabled:bg-[#1a181d] disabled:text-[#6e677d] text-[#ffbe5d] border-t border-[#3a3447] font-condensed font-bold text-xs flex items-center justify-center gap-1 transition"
+                  >
+                    <Coins className="w-3.5 h-3.5" />
+                    15 GP
+                  </button>
+                </div>
+
+                {/* 3. Poção de Chocar */}
                 <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
                     <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
@@ -1710,7 +1841,7 @@ export function EquipmentPanel({
                   </div>
                 </div>
 
-                {/* 3. Armoire Encantado */}
+                {/* 4. Armoire Encantado */}
                 <div className="bg-[#23202a] border border-[#925cf3]/50 rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
                     <div className="w-16 h-16 rounded bg-[#271b3d] border border-[#6133b4] flex items-center justify-center mb-2">
@@ -1722,7 +1853,7 @@ export function EquipmentPanel({
                     </div>
                     <p className="text-xs font-condensed font-bold text-white">Armoire Encantado</p>
                     <p className="text-[11px] text-[#d6c7ff] mt-0.5">
-                      Sorteia Equipamentos (por Raridade), Ovo, Poção ou Ouro!
+                      Sorteia Equipamentos (por Raridade), Ovo ou Poção!
                     </p>
                   </div>
                   <div className="grid grid-cols-2 border-t border-[#3a3447]">

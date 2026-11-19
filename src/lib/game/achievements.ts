@@ -5,6 +5,7 @@ import {
   ItemRarity,
   RARITY_META,
 } from './items';
+import { CheckInState } from './checkin';
 
 export interface HeroMetrics {
   tasksCompleted: number;
@@ -28,6 +29,7 @@ export interface HeroMetrics {
     monthlyBonusClaimed: boolean;
     totalQuestsCompleted: number;
   };
+  checkin?: CheckInState;
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -117,21 +119,20 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 
 export type ArmoireReward =
   | { kind: 'equipment'; item: EquipmentItem; rarity: ItemRarity; label: string }
-  | { kind: 'gold'; amount: number; label: string }
   | { kind: 'egg'; label: string }
   | { kind: 'potion'; label: string };
 
 /**
- * Sorteia recompensa do Armoire Encantado (ZERO XP):
- * - 55% chance de Equipamento inédito ponderado por Raridade
+ * Sorteia recompensa do Armoire Encantado (SEM OURO e SEM XP):
+ * - 60% chance de Equipamento inédito ponderado por Raridade
  *   (Comum 50% · Incomum 28% · Raro 14% · Épico 6% · Lendário 2%)
- * - 45% chance de Recurso (40% Ovo, 40% Poção de Chocar, 20% Saco de Ouro)
+ * - 40% chance de Recurso (50% Ovo, 50% Poção de Chocar)
  */
 export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   const ownedSet = new Set(ownedIds);
   const unownedPool = EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
 
-  if (unownedPool.length > 0 && Math.random() < 0.55) {
+  if (unownedPool.length > 0 && Math.random() < 0.6) {
     const byRarity: Record<ItemRarity, EquipmentItem[]> = {
       common: [],
       uncommon: [],
@@ -171,15 +172,9 @@ export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
     };
   }
 
-  const sub = Math.random();
-  if (sub < 0.4) {
-    return { kind: 'egg', label: '1x Ovo' };
-  }
-  if (sub < 0.8) {
-    return { kind: 'potion', label: '1x Poção de Chocar' };
-  }
-  const gp = 25 + Math.floor(Math.random() * 36); // 25..60 GP
-  return { kind: 'gold', amount: gp, label: `+${gp} GP do Baú` };
+  return Math.random() < 0.5
+    ? { kind: 'egg', label: '1x Ovo' }
+    : { kind: 'potion', label: '1x Poção de Chocar' };
 }
 
 /**
