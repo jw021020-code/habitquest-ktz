@@ -8,13 +8,13 @@ create table if not exists public.parties (
   leader_id uuid references auth.users(id) on delete set null,
   boss_stage integer not null default 1,
   boss_id text not null default 'dustbunnies',
-  boss_name text not null default 'Coelho da Poeira',
+  boss_name text not null default 'Coelhos de cotão selvagens',
   boss_sprite text not null default '/sprites/quest_dustbunnies.png',
   boss_hp integer not null default 300,
   boss_max_hp integer not null default 300,
-  boss_attack integer not null default 12,
-  reward_gold integer not null default 35,
-  reward_xp integer not null default 80,
+  boss_attack integer not null default 13,
+  reward_gold integer not null default 36,
+  reward_xp integer not null default 95,
   created_at timestamptz not null default now()
 );
 
@@ -23,7 +23,7 @@ insert into public.parties (
   name, invite_code, boss_stage, boss_id, boss_name, boss_sprite, boss_hp, boss_max_hp, boss_attack, reward_gold, reward_xp
 )
 values (
-  'KTZ - Know The Zero', 'KTZ000', 1, 'dustbunnies', 'Coelho da Poeira', '/sprites/quest_dustbunnies.png', 300, 300, 12, 35, 80
+  'KTZ - Know The Zero', 'KTZ000', 1, 'dustbunnies', 'Coelhos de cotão selvagens', '/sprites/quest_dustbunnies.png', 300, 300, 13, 36, 95
 )
 on conflict (name) do nothing;
 
@@ -38,7 +38,7 @@ create table if not exists public.profiles (
   mp integer not null default 30,
   max_mp integer not null default 32,
   xp integer not null default 0,
-  xp_to_next integer not null default 100,
+  xp_to_next integer not null default 350,
   gold integer not null default 0,
   is_sleeping boolean not null default false,
   rebirths integer not null default 0,
@@ -49,8 +49,8 @@ create table if not exists public.profiles (
   costume jsonb not null default '{}'::jsonb,
   use_costume boolean not null default false,
   inventory jsonb not null default '[]'::jsonb,
-  stable jsonb not null default '{"eggs":0,"potions":0,"foods":0,"pets":{},"mounts":{}}'::jsonb,
-  metrics jsonb not null default '{"tasksCompleted":0,"bossesDefeated":0,"criticalHits":0,"totalGoldEarned":0,"armoireOpened":0}'::jsonb,
+  stable jsonb not null default '{"eggs":0,"potions":0,"pets":{}}'::jsonb,
+  metrics jsonb not null default '{"tasksCompleted":0,"bossesDefeated":0,"criticalHits":0,"totalGoldEarned":0,"armoireOpened":0,"currentBossStage":1,"currentBossDamage":0,"totalBossDamage":0,"lastClaimedBossStage":0}'::jsonb,
   study_entries jsonb not null default '[]'::jsonb,
   workout_entries jsonb not null default '[]'::jsonb,
   party_id uuid references public.parties(id) on delete set null,

@@ -171,6 +171,7 @@ export function HabiticaHeader({
                 {
                   id: 'ktz' as ActiveSection,
                   label: 'KTZ - Know The Zero',
+                  shortLabel: 'KTZ',
                   icon: <Users className="w-4 h-4" />,
                 },
               ].map((tab) => {
@@ -186,7 +187,14 @@ export function HabiticaHeader({
                     }`}
                   >
                     {tab.icon}
-                    <span>{tab.label}</span>
+                    {'shortLabel' in tab && tab.shortLabel ? (
+                      <>
+                        <span className="xl:hidden">{tab.shortLabel}</span>
+                        <span className="hidden xl:inline">{tab.label}</span>
+                      </>
+                    ) : (
+                      <span>{tab.label}</span>
+                    )}
                     {tab.badge && tab.badge > 0 ? (
                       <span className="px-1.5 py-0.2 rounded-full bg-[#ffbe5d] text-[#1a181d] text-[10px] font-extrabold leading-tight">
                         {tab.badge}
@@ -236,7 +244,8 @@ export function HabiticaHeader({
               title="Atributos, Conquistas e Backup"
             >
               <Trophy className="w-3.5 h-3.5 text-[#ffbe5d]" />
-              <span className="hidden sm:inline">Perfil & Conquistas</span>
+              <span className="hidden xl:inline">Perfil & Conquistas</span>
+              <span className="hidden sm:inline xl:hidden">Perfil</span>
               {unallocatedPoints > 0 && (
                 <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-[#24cc8f] text-[#1a181d] text-[10px] font-extrabold animate-pulse">
                   +{unallocatedPoints}

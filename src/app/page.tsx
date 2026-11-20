@@ -209,10 +209,7 @@ export default function HomePage() {
           if (parsed.heroName) setHeroName(parsed.heroName);
           if (parsed.stats) {
             const loadedStats = { ...DEFAULT_STATS, ...parsed.stats };
-            loadedStats.xp_to_next = Math.min(
-              loadedStats.xp_to_next,
-              getXpToNextLevel(loadedStats.level)
-            );
+            loadedStats.xp_to_next = getXpToNextLevel(loadedStats.level);
             setStats(loadedStats);
           }
           if (parsed.studyEntries) setStudyEntries(parsed.studyEntries);
@@ -390,9 +387,13 @@ export default function HomePage() {
         }));
       }
 
+      const gearDropText = bossGearDrop ? ` · 🎁 ${bossGearDrop.label}` : '';
       pushActionLog(
-        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção, STA/MP 100%! Próximo: #${nextStage} ${nextBoss.name}.`
+        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção${gearDropText}, STA/MP 100%! Próximo: #${nextStage} ${nextBoss.name}.`
       );
+      if (bossGearDrop) {
+        showToast(`🎁 Drop do Boss: ${bossGearDrop.label}!`);
+      }
       if (victoryRes.leveledUp) {
         pushActionLog(`🎉 ${heroName} alcançou o Nível ${victoryRes.nextStats.level}!`);
       }
@@ -907,6 +908,10 @@ export default function HomePage() {
   };
 
   const handleRebirth = () => {
+    if (stats.level < 10) {
+      showToast('⚠️ O Renascimento exige Nível 10 ou superior.');
+      return;
+    }
     setStats((s) => ({
       ...s,
       level: 1,
@@ -925,6 +930,32 @@ export default function HomePage() {
     setMetrics((m) => ({ ...m, totalGoldEarned: m.totalGoldEarned + 50 }));
     pushActionLog(`🌟 ${heroName} renasceu no Nível 1 como Aprendiz (+50 GP)!`);
     showToast('🌟 Renascimento concluído (+50 GP)! Você voltou a ser Aprendiz.');
+  };
+
+  const handleResetLocal = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setStats(DEFAULT_STATS);
+    setStudyEntries([]);
+    setWorkoutEntries([]);
+    setParty(DEFAULT_PARTY);
+    setAppearance(DEFAULT_APPEARANCE);
+    setEquipped(DEFAULT_EQUIPPED);
+    setCostume(DEFAULT_EQUIPPED);
+    setUseCostume(false);
+    setInventory(DEFAULT_INVENTORY);
+    setStable(DEFAULT_STABLE);
+    setMetrics(DEFAULT_METRICS);
+    setBossMods({});
+    setMessages([
+      {
+        id: 'm1',
+        author: 'Sistema',
+        kind: 'system',
+        text: 'Temporada iniciada do zero no Nível 1!',
+        time: 'Agora',
+      },
+    ]);
+    showToast('🔄 Progresso local zerado para o Nível 1!');
   };
 
   const handleBuyPotion = () => {
@@ -1004,7 +1035,7 @@ export default function HomePage() {
       mp: p.mp ?? 30,
       max_mp: p.max_mp ?? 32,
       xp: p.xp ?? 0,
-      xp_to_next: Math.min(p.xp_to_next ?? 100, getXpToNextLevel(loadedLevel)),
+      xp_to_next: getXpToNextLevel(loadedLevel),
       gold: p.gold ?? 0,
       heroClass: p.hero_class ?? 'apprentice',
       buffs: p.buffs ?? { ...ZERO_ATTRS },
@@ -1017,25 +1048,33 @@ export default function HomePage() {
     setUseCostume(Boolean(p.use_costume));
     setInventory(Array.isArray(p.inventory) ? p.inventory : DEFAULT_INVENTORY);
     setStable(normalizeStableState(p.stable ?? DEFAULT_STABLE));
-    setMetrics(p.metrics ?? DEFAULT_METRICS);
-    if (Array.isArray(p.study_entries)) setStudyEntries(p.study_entries);
-    if (Array.isArray(p.workout_entries)) setWorkoutEntries(p.workout_entries);
+    setMetrics({ ...DEFAULT_METRICS, ...(p.metrics ?? {}) });
+    setStudyEntries(Array.isArray(p.study_entries) ? p.study_entries : []);
+    setWorkoutEntries(Array.isArray(p.workout_entries) ? p.workout_entries : []);
     setRemoteParty(bundle.party);
     setRemoteMembers(bundle.members);
-    if (bundle.messages.length > 0) {
-      setMessages(
-        bundle.messages.map((m) => ({
-          id: m.id,
-          author: m.username,
-          kind: m.kind,
-          text: m.content,
-          time: new Date(m.created_at).toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
-        }))
-      );
-    }
+    setMessages(
+      bundle.messages.length > 0
+        ? bundle.messages.map((m) => ({
+            id: m.id,
+            author: m.username,
+            kind: m.kind,
+            text: m.content,
+            time: new Date(m.created_at).toLocaleTimeString('pt-BR', {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+          }))
+        : [
+            {
+              id: 'ktz-welcome',
+              author: 'Sistema',
+              kind: 'system',
+              text: 'Bem-vindo à KTZ - Know The Zero! Registre estudos e treinos para enfrentar o Boss.',
+              time: 'Agora',
+            },
+          ]
+    );
     setOnlineLoaded(true);
   };
 
@@ -1250,6 +1289,10 @@ export default function HomePage() {
         eggs: prev.eggs + prevBoss.dropCount,
         potions: prev.potions + prevBoss.dropCount,
       }));
+      const sharedGearDrop = rollBossEquipmentDrop(inventory, prevStage);
+      if (sharedGearDrop && !inventory.includes(sharedGearDrop.item.id)) {
+        setInventory((prev) => [...prev, sharedGearDrop.item.id]);
+      }
       setMetrics((m) => ({
         ...m,
         bossesDefeated: m.bossesDefeated + 1,
@@ -1258,8 +1301,9 @@ export default function HomePage() {
         currentBossDamage: 0,
         lastClaimedBossStage: prevStage,
       }));
+      const sharedDropText = sharedGearDrop ? ` · 🎁 ${sharedGearDrop.label}` : '';
       showToast(
-        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção e STA/MP 100%!`
+        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção${sharedDropText} e STA/MP 100%!`
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1973,6 +2017,7 @@ export default function HomePage() {
         workoutEntries={workoutEntries}
         onAllocateStat={handleAllocateStat}
         onRebirth={handleRebirth}
+        onResetLocal={handleResetLocal}
         onExportSave={handleExportSave}
         onImportSave={handleImportSave}
       />

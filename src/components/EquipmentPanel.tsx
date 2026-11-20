@@ -1711,6 +1711,9 @@ export function EquipmentPanel({
                     </button>
                   ))}
                 </div>
+                <p className="text-[10px] text-[#a8a1b5] mt-1.5">
+                  Épicos e Lendários: exclusivos de Armoire, Missões e Bosses.
+                </p>
               </div>
 
               <div>

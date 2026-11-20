@@ -43,7 +43,7 @@ export const DEFAULT_METRICS: HeroMetrics = {
   currentBossStage: 1,
   currentBossDamage: 0,
   totalBossDamage: 0,
-  lastClaimedBossStage: 1,
+  lastClaimedBossStage: 0,
 };
 
 export type AchievementCategory =

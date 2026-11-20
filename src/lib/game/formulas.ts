@@ -65,7 +65,7 @@ function applyLevelUps(
 ) {
   let nextLevel = level;
   let nextXp = xp;
-  let nextXpToNext = Math.min(xpToNext, getXpToNextLevel(level));
+  let nextXpToNext = getXpToNextLevel(level);
   let nextHp = hp;
   let nextMaxHp = maxHp;
   let nextMp = mp;

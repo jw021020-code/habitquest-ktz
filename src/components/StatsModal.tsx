@@ -26,6 +26,7 @@ interface StatsModalProps {
   workoutEntries?: WorkoutEntry[];
   onAllocateStat: (stat: keyof Attributes) => void;
   onRebirth: () => void;
+  onResetLocal?: () => void;
   onExportSave: () => void;
   onImportSave: (jsonText: string) => void;
 }
@@ -45,6 +46,7 @@ export function StatsModal({
   workoutEntries = [],
   onAllocateStat,
   onRebirth,
+  onResetLocal,
   onExportSave,
   onImportSave,
 }: StatsModalProps) {
@@ -52,6 +54,7 @@ export function StatsModal({
   const [tab, setTab] = useState<ProfileTab>('stats');
   const [achFilter, setAchFilter] = useState<'all' | AchievementCategory>('all');
   const [confirmRebirth, setConfirmRebirth] = useState(false);
+  const [confirmResetLocal, setConfirmResetLocal] = useState(false);
 
   if (!open) return null;
 
@@ -323,11 +326,15 @@ export function StatsModal({
                     Orbe do Renascimento
                   </p>
                   <p className="text-xs text-[#a8a1b5]">
-                    Reinicia para o Nível 1 mantendo todos os seus equipamentos e mascotes, e
-                    concede +50 GP de bônus.
+                    Reinicia para o Nível 1 (exige Nível 10+) mantendo equipamentos e mascotes, e
+                    concede +50 GP.
                   </p>
                 </div>
-                {confirmRebirth ? (
+                {level < 10 ? (
+                  <span className="px-3 py-2 rounded bg-[#23202a] border border-[#3a3447] text-[#8a8299] text-xs font-condensed font-bold shrink-0">
+                    Nv. 10+ necessário
+                  </span>
+                ) : confirmRebirth ? (
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       onClick={() => {
@@ -355,6 +362,45 @@ export function StatsModal({
                   </button>
                 )}
               </div>
+
+              {onResetLocal && (
+                <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3.5 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs sm:text-sm font-condensed font-bold text-white">
+                      Zerar Progresso Local
+                    </p>
+                    <p className="text-xs text-[#a8a1b5]">
+                      Limpa estudos, treinos, inventário e nível salvos neste navegador para iniciar do zero.
+                    </p>
+                  </div>
+                  {confirmResetLocal ? (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => {
+                          onResetLocal();
+                          setConfirmResetLocal(false);
+                        }}
+                        className="px-3 py-2 rounded bg-[#ff6165] hover:brightness-110 text-white text-xs font-condensed font-bold uppercase"
+                      >
+                        Confirmar
+                      </button>
+                      <button
+                        onClick={() => setConfirmResetLocal(false)}
+                        className="px-2.5 py-2 rounded bg-[#23202a] border border-[#3a3447] text-[#a8a1b5] text-xs font-condensed font-bold"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmResetLocal(true)}
+                      className="px-3 py-2 rounded bg-[#ff6165]/15 hover:bg-[#ff6165]/25 border border-[#ff6165]/40 text-[#ff8b8e] text-xs font-condensed font-bold uppercase shrink-0"
+                    >
+                      Zerar Local
+                    </button>
+                  )}
+                </div>
+              )}
 
               <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3.5 flex items-center justify-between gap-3">
                 <div>
