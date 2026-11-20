@@ -32,6 +32,7 @@ export interface HeroMetrics {
     totalQuestsCompleted: number;
   };
   checkin?: CheckInState;
+  seasonSeen?: string;
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {

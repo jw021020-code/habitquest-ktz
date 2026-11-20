@@ -95,6 +95,7 @@ import { QuestsPanel, QuestsSummaryStrip } from '@/components/QuestsPanel';
 import { SkillsBar } from '@/components/SkillsBar';
 import { StatsModal } from '@/components/StatsModal';
 import { StudyEntry, StudyLogCard } from '@/components/StudyLogCard';
+import { WelcomeSeasonModal } from '@/components/WelcomeSeasonModal';
 import { WorkoutEntry, WorkoutLogCard } from '@/components/WorkoutLogCard';
 
 interface PartyState {
@@ -112,7 +113,10 @@ interface PartyState {
 
 type MobileTab = 'study' | 'workout' | 'quests' | 'inventario' | 'loja' | 'ktz';
 
-const STORAGE_KEY = 'habitquest_ktz_launch_v1';
+const SEASON_VERSION = '1.0.0';
+const LEGACY_STORAGE_KEY = 'habitquest_ktz_launch_v1';
+const STORAGE_KEY = 'habitquest_ktz_season_1_0_0';
+const WELCOME_SEEN_KEY = 'habitquest_ktz_welcome_seen_1_0_0';
 
 const DEFAULT_STATS: PlayerStats = {
   level: 1,
@@ -167,6 +171,7 @@ export default function HomePage() {
   const [statsOpen, setStatsOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [checkInOpen, setCheckInOpen] = useState(false);
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [inspectedMember, setInspectedMember] = useState<RemoteProfile | null>(null);
 
   const [messages, setMessages] = useState<PartyChatMessage[]>([
@@ -203,6 +208,11 @@ export default function HomePage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
+        // Limpa cache antigo de testes pré-temporada 1.0.0
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        if (!localStorage.getItem(WELCOME_SEEN_KEY)) {
+          setWelcomeOpen(true);
+        }
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -1048,7 +1058,11 @@ export default function HomePage() {
     setUseCostume(Boolean(p.use_costume));
     setInventory(Array.isArray(p.inventory) ? p.inventory : DEFAULT_INVENTORY);
     setStable(normalizeStableState(p.stable ?? DEFAULT_STABLE));
-    setMetrics({ ...DEFAULT_METRICS, ...(p.metrics ?? {}) });
+    const loadedMetrics = { ...DEFAULT_METRICS, ...(p.metrics ?? {}) };
+    setMetrics(loadedMetrics);
+    if (loadedMetrics.seasonSeen !== SEASON_VERSION && !localStorage.getItem(WELCOME_SEEN_KEY)) {
+      setWelcomeOpen(true);
+    }
     setStudyEntries(Array.isArray(p.study_entries) ? p.study_entries : []);
     setWorkoutEntries(Array.isArray(p.workout_entries) ? p.workout_entries : []);
     setRemoteParty(bundle.party);
@@ -1115,8 +1129,8 @@ export default function HomePage() {
         setUserEmail(data.user?.email ?? null);
         if (uid) {
           loadOnlineBundle(uid, metaNick);
-        } else {
-          // Abre o modal de conta automaticamente ao entrar no site online sem sessão ativa
+        } else if (localStorage.getItem(WELCOME_SEEN_KEY)) {
+          // Abre o modal de conta automaticamente apenas após já ter visto as boas-vindas da Temporada 1.0.0
           setAuthOpen(true);
         }
       });
@@ -1987,7 +2001,19 @@ export default function HomePage() {
         onOpenAuth={() => setAuthOpen(true)}
       />
 
-      {/* Modais: Perfil/Atributos/Conquistas, Check-in Diário, Inspeção de Membro e Conta */}
+      {/* Modais: Boas-Vindas Temporada 1.0.0, Perfil/Atributos/Conquistas, Check-in Diário, Inspeção de Membro e Conta */}
+      <WelcomeSeasonModal
+        open={welcomeOpen}
+        onClose={() => {
+          localStorage.setItem(WELCOME_SEEN_KEY, '1');
+          setWelcomeOpen(false);
+          setMetrics((m) => ({ ...m, seasonSeen: SEASON_VERSION }));
+          if (!userId && isSupabaseConfigured()) {
+            setAuthOpen(true);
+          }
+        }}
+      />
+
       <DailyCheckInModal
         open={checkInOpen}
         onClose={() => setCheckInOpen(false)}

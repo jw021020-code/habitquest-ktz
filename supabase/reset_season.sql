@@ -1,5 +1,5 @@
--- Script de Hard Reset de Temporada — KTZ - Know The Zero
--- Reseta todas as contas existentes para Nível 1, Aprendiz, 0 Ouro, 0 Itens, 0 Pets e Boss #1
+-- Script de Hard Reset de Temporada 1.0.0 — KTZ - Know The Zero
+-- Reseta todas as contas existentes para Nível 1, Aprendiz, 0 Ouro, 0 Itens, 0 Pets, 0 Quests e Boss #1
 
 -- 1. Reseta o Boss da KTZ para o Estágio #1
 update public.parties
@@ -27,6 +27,7 @@ set
   xp = 0,
   xp_to_next = 350,
   gold = 0,
+  is_sleeping = false,
   rebirths = 0,
   allocated_stats = '{"str":0,"int":0,"con":0,"per":0}'::jsonb,
   buffs = '{"str":0,"int":0,"con":0,"per":0}'::jsonb,
@@ -40,10 +41,10 @@ set
   workout_entries = '[]'::jsonb,
   party_id = (select id from public.parties where name = 'KTZ - Know The Zero' limit 1);
 
--- 3. Limpa o histórico antigo e registra o início oficial da temporada
+-- 3. Limpa o histórico antigo e registra o início oficial da Temporada 1.0.0
 delete from public.party_messages;
 
 insert into public.party_messages (party_id, username, kind, content)
-select id, 'Sistema', 'system', '🚀 Temporada Oficial iniciada! Todos os membros começaram no Nível 1 como Aprendizes na KTZ - Know The Zero!'
+select id, 'Sistema', 'system', '🚀 Temporada 1.0.0 iniciada! Todos os membros começaram no Nível 1 como Aprendizes na KTZ - Know The Zero. Bons estudos rumo à PRF!'
 from public.parties
 where name = 'KTZ - Know The Zero';
