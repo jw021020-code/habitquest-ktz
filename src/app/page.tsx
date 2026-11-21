@@ -329,7 +329,7 @@ export default function HomePage() {
     const bName = remoteParty ? remoteParty.boss_name : party.bossName;
     const rGold = remoteParty ? remoteParty.reward_gold : party.rewardGold;
     const rXp = remoteParty ? remoteParty.reward_xp : party.rewardXp;
-    const dropCount = getBossById(currentBossId)?.dropCount ?? 1;
+    const dropCount = getProgressiveBoss(currentStage).dropCount;
 
     if (damage <= 0) {
       return { defeated: false, bossName: bName };

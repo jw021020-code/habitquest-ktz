@@ -28,6 +28,7 @@ import {
   CLASS_INFO,
   getBossAtIndexAndCycle,
   getBossById,
+  getProgressiveBoss,
 } from '@/lib/game/skills';
 import { RemoteParty, RemoteProfile } from '@/lib/supabase/data';
 import { CharacterAvatar } from './CharacterAvatar';
@@ -123,7 +124,7 @@ export function PartyPanel({
 
   const bossPct = Math.max(0, Math.min(100, Math.round((bossHp / bossMaxHp) * 100)));
   const bossMeta = getBossById(bossId);
-  const bossDropCount = bossMeta?.dropCount ?? 1;
+  const bossDropCount = getProgressiveBoss(bossStage).dropCount;
   const historyLogs = messages.filter((m) => m.kind === 'system');
   const chatMessages = messages.filter((m) => m.kind === 'chat');
 
@@ -282,7 +283,7 @@ export function PartyPanel({
                     <span className="text-[#d6c7ff]">
                       +{bossDropCount} Ovo · +{bossDropCount} Poção
                     </span>
-                    <span className="text-[#50b5e9]">100% Reset STA/MP</span>
+                    <span className="text-[#50b5e9]">+25% STA · +15% MP</span>
                   </div>
                 </div>
               </div>
