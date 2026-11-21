@@ -450,6 +450,7 @@ export default function HomePage() {
       leveledUp: boolean;
       isCritical: boolean;
       becameExhausted: boolean;
+      effortFactor?: number;
       nextStats: PlayerStats;
     },
     label: string
@@ -469,7 +470,7 @@ export default function HomePage() {
       totalGoldEarned: m.totalGoldEarned + res.deltaGold,
     }));
 
-    const drop = rollTaskDrop(totalAttributes.per);
+    const drop = rollTaskDrop(totalAttributes.per, res.effortFactor);
     if (drop) {
       dropText = ` · 🎁 Drop: ${drop.label}!`;
       pushActionLog(`🎁 ${heroName} encontrou: ${drop.label}!`);
@@ -520,8 +521,13 @@ export default function HomePage() {
     };
     setStudyEntries((prev) => [newEntry, ...prev]);
 
-    const qText = entry.didQuestions ? ` (${entry.questionsDone} questões)` : '';
-    pushActionLog(`${heroName} registrou Estudo: ${entry.subject} (${entry.minutes} min${qText}).`);
+    const parts: string[] = [];
+    if (entry.minutes > 0) parts.push(`${entry.minutes} min`);
+    if (entry.didQuestions && entry.questionsDone > 0) parts.push(`${entry.questionsDone} questões`);
+    if (entry.didEssay && (entry.essaysDone ?? 0) > 0) {
+      parts.push(`${entry.essaysDone} ${(entry.essaysDone ?? 0) === 1 ? 'redação' : 'redações'}`);
+    }
+    pushActionLog(`${heroName} registrou Estudo: ${entry.subject} (${parts.join(', ')}).`);
 
     const res = calculateStudyReward(
       stats,
@@ -530,7 +536,9 @@ export default function HomePage() {
       entry.questionsDone,
       totalAttributes,
       activeBossAttack,
-      bossMods
+      bossMods,
+      Boolean(entry.didEssay),
+      entry.essaysDone ?? 0
     );
     processDropAndToast(res, `Estudo: ${entry.subject}`);
   };

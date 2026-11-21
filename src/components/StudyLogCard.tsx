@@ -6,6 +6,7 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  FileText,
   HelpCircle,
   Plus,
   Search,
@@ -20,6 +21,8 @@ export interface StudyEntry {
   minutes: number;
   didQuestions: boolean;
   questionsDone: number;
+  didEssay?: boolean;
+  essaysDone?: number;
   createdAt: string;
   loggedAt?: string;
 }
@@ -33,7 +36,7 @@ interface StudyLogCardProps {
   onDeleteStudy: (id: string) => void;
 }
 
-const TIME_PRESETS = [15, 30, 60, 90, 120];
+const TIME_PRESETS = [0, 15, 30, 60, 90, 120];
 
 export function StudyLogCard({
   entries,
@@ -47,36 +50,56 @@ export function StudyLogCard({
   const [minutesInput, setMinutesInput] = useState<string>('30');
   const [didQuestions, setDidQuestions] = useState(false);
   const [questionsInput, setQuestionsInput] = useState<string>('10');
+  const [didEssay, setDidEssay] = useState(false);
+  const [essaysInput, setEssaysInput] = useState<string>('1');
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const parsedMinutes = Math.max(0, parseInt(minutesInput, 10) || 0);
   const parsedQuestions = Math.max(0, parseInt(questionsInput, 10) || 0);
-  const canSubmit = subject.trim().length > 0 && parsedMinutes >= 1;
+  const parsedEssays = Math.max(0, parseInt(essaysInput, 10) || 0);
+
+  const hasQuestions = didQuestions && parsedQuestions > 0;
+  const hasEssays = didEssay && parsedEssays > 0;
+  const hasEffort = parsedMinutes > 0 || hasQuestions || hasEssays;
+  const canSubmit = hasEffort && (subject.trim().length > 0 || hasQuestions || hasEssays);
 
   const preview = previewStudyReward(
     stats,
-    Math.max(1, parsedMinutes || 30),
+    parsedMinutes,
     didQuestions,
     parsedQuestions,
     totalAttributes,
-    bossAttack
+    bossAttack,
+    undefined,
+    didEssay,
+    parsedEssays
   );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanSubject = subject.trim();
-    if (!cleanSubject || parsedMinutes <= 0) return;
+    if (!canSubmit) return;
+
+    const cleanSubject =
+      subject.trim() ||
+      (hasEssays && !hasQuestions
+        ? 'Redação'
+        : hasQuestions && !hasEssays
+          ? 'Bateria de Questões'
+          : 'Questões e Redação');
 
     onAddStudy({
       subject: cleanSubject,
       minutes: parsedMinutes,
       didQuestions,
       questionsDone: didQuestions ? parsedQuestions : 0,
+      didEssay,
+      essaysDone: didEssay ? parsedEssays : 0,
     });
 
     setSubject('');
     setDidQuestions(false);
+    setDidEssay(false);
   };
 
   const filteredEntries = entries.filter((e) =>
@@ -85,6 +108,7 @@ export function StudyLogCard({
 
   const totalMinutes = entries.reduce((acc, cur) => acc + cur.minutes, 0);
   const totalQuestions = entries.reduce((acc, cur) => acc + (cur.questionsDone || 0), 0);
+  const totalEssays = entries.reduce((acc, cur) => acc + (cur.essaysDone || 0), 0);
 
   return (
     <section className="flex flex-col bg-[#23202a] border border-[#342e40] rounded-md overflow-hidden shadow-lg">
@@ -107,6 +131,11 @@ export function StudyLogCard({
           <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#24cc8f] font-bold">
             {totalQuestions} questões
           </span>
+          {totalEssays > 0 && (
+            <span className="bg-[#1a181d] border border-[#3a3447] px-2 py-0.5 rounded text-[#d6c7ff] font-bold">
+              {totalEssays} {totalEssays === 1 ? 'redação' : 'redações'}
+            </span>
+          )}
         </div>
       </div>
 
@@ -119,11 +148,11 @@ export function StudyLogCard({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="sm:col-span-2">
               <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
-                Matéria*
+                Matéria{parsedMinutes > 0 ? '*' : ''}
               </label>
               <input
                 type="text"
-                required
+                required={parsedMinutes > 0 && !hasQuestions && !hasEssays}
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Ex.: Legislação de Trânsito"
@@ -133,15 +162,14 @@ export function StudyLogCard({
 
             <div>
               <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
-                Tempo (min)*
+                Tempo (min)
               </label>
               <input
                 type="text"
                 inputMode="numeric"
-                required
                 value={minutesInput}
                 onChange={(e) => setMinutesInput(e.target.value.replace(/[^0-9]/g, ''))}
-                placeholder="30"
+                placeholder="0"
                 className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#ffbe5d] font-bold focus:outline-none focus:border-[#925cf3]"
               />
             </div>
@@ -189,6 +217,34 @@ export function StudyLogCard({
                   onChange={(e) => setQuestionsInput(e.target.value.replace(/[^0-9]/g, ''))}
                   placeholder="0"
                   className="w-24 bg-[#23202a] border border-[#3a3447] rounded px-2.5 py-1 text-sm text-[#24cc8f] font-bold text-center focus:outline-none focus:border-[#925cf3]"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Fez redação? */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#2c2836]">
+            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[#e6dcff]">
+              <input
+                type="checkbox"
+                checked={didEssay}
+                onChange={(e) => setDidEssay(e.target.checked)}
+                className="w-4 h-4 rounded accent-[#6133b4]"
+              />
+              <FileText className="w-3.5 h-3.5 text-[#d6c7ff]" />
+              <span className="font-medium">Fez redação?</span>
+            </label>
+
+            {didEssay && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[#a8a1b5]">Quantas:</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={essaysInput}
+                  onChange={(e) => setEssaysInput(e.target.value.replace(/[^0-9]/g, ''))}
+                  placeholder="1"
+                  className="w-24 bg-[#23202a] border border-[#3a3447] rounded px-2.5 py-1 text-sm text-[#d6c7ff] font-bold text-center focus:outline-none focus:border-[#925cf3]"
                 />
               </div>
             )}
@@ -257,14 +313,22 @@ export function StudyLogCard({
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-white truncate">{entry.subject}</p>
                       <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px]">
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#1a181d] text-[#ffbe5d] font-condensed font-bold">
-                          <Clock className="w-3 h-3" />
-                          {entry.minutes} min
-                        </span>
-                        {entry.didQuestions && (
+                        {entry.minutes > 0 && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#1a181d] text-[#ffbe5d] font-condensed font-bold">
+                            <Clock className="w-3 h-3" />
+                            {entry.minutes} min
+                          </span>
+                        )}
+                        {entry.didQuestions && entry.questionsDone > 0 && (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#1a181d] text-[#24cc8f] font-condensed font-bold">
                             <CheckCircle2 className="w-3 h-3" />
                             {entry.questionsDone} questões feitas
+                          </span>
+                        )}
+                        {entry.didEssay && (entry.essaysDone ?? 0) > 0 && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-[#1a181d] text-[#d6c7ff] font-condensed font-bold">
+                            <FileText className="w-3 h-3" />
+                            {entry.essaysDone} {(entry.essaysDone ?? 0) === 1 ? 'redação' : 'redações'}
                           </span>
                         )}
                         <span className="text-[#8a8299]">{entry.createdAt}</span>

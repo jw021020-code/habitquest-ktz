@@ -474,9 +474,16 @@ export function MemberProfileModal({
                             </span>
                           </div>
                           <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] font-condensed">
-                            <span className="text-[#d6c7ff]">⏱️ {s.minutes} min</span>
-                            {s.didQuestions && (
+                            {s.minutes > 0 && (
+                              <span className="text-[#d6c7ff]">⏱️ {s.minutes} min</span>
+                            )}
+                            {s.didQuestions && s.questionsDone > 0 && (
                               <span className="text-[#ffbe5d]">📝 {s.questionsDone} questões</span>
+                            )}
+                            {s.didEssay && (s.essaysDone ?? 0) > 0 && (
+                              <span className="text-[#24cc8f]">
+                                📄 {s.essaysDone} {(s.essaysDone ?? 0) === 1 ? 'redação' : 'redações'}
+                              </span>
                             )}
                           </div>
                         </div>

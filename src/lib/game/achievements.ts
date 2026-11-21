@@ -69,6 +69,7 @@ export interface AchievementCheckContext {
   metrics: HeroMetrics;
   studyMinutes: number;
   questionsDone: number;
+  essaysDone: number;
   runKm: number;
   workoutsCount: number;
   comboCount: number;
@@ -85,6 +86,10 @@ export function buildAchievementContext(
   const studyMinutes = studyEntries.reduce((acc, s) => acc + Math.max(0, s.minutes || 0), 0);
   const questionsDone = studyEntries.reduce(
     (acc, s) => acc + (s.didQuestions ? Math.max(0, s.questionsDone || 0) : 0),
+    0
+  );
+  const essaysDone = studyEntries.reduce(
+    (acc, s) => acc + (s.didEssay ? Math.max(0, s.essaysDone || 0) : 0),
     0
   );
   const runKm =
@@ -107,6 +112,7 @@ export function buildAchievementContext(
     metrics,
     studyMinutes,
     questionsDone,
+    essaysDone,
     runKm,
     workoutsCount,
     comboCount,
@@ -194,6 +200,28 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     getCurrent: (c) => c.studyMinutes,
     formatProgress: (c) => fmtHours(c.studyMinutes, 30000),
     check: (c) => c.studyMinutes >= 30000,
+  },
+  {
+    id: 'essay_1',
+    category: 'study',
+    title: 'Primeira Discursiva',
+    description: 'Escreva sua primeira redação.',
+    icon: '✍️',
+    target: 1,
+    getCurrent: (c) => c.essaysDone,
+    formatProgress: (c) => `${Math.min(c.essaysDone, 1)} / 1`,
+    check: (c) => c.essaysDone >= 1,
+  },
+  {
+    id: 'essay_20',
+    category: 'study',
+    title: 'Nota Máxima na Discursiva',
+    description: 'Complete 20 redações.',
+    icon: '📄',
+    target: 20,
+    getCurrent: (c) => c.essaysDone,
+    formatProgress: (c) => `${Math.min(c.essaysDone, 20)} / 20`,
+    check: (c) => c.essaysDone >= 20,
   },
 
   // 2. Domínio de Banca (Questões)

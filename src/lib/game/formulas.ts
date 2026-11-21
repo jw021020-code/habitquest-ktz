@@ -188,8 +188,12 @@ function computeBasePreview(
   baseBossDamage: number,
   attrs: Attributes,
   bossAttack: number,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  effortScale = 1.0
 ): RewardPreview {
+  if (baseXp <= 0) {
+    return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
+  }
   const exhaustMult = stats.hp <= 0 && !stats.critGuarantee ? 0.7 : 1.0;
   const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
   const levelScale = getLevelScale(stats.level);
@@ -206,12 +210,13 @@ function computeBasePreview(
         levelScale
     )
   );
-  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
+  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods, effortScale);
   return { xp, gold, bossDamage, staminaLost };
 }
 
 /**
  * Prévia determinística para exibir em tempo real no card de Estudo.
+ * Linearidade pura: minutos=0 é permitido quando houver questões ou redação.
  */
 export function previewStudyReward(
   stats: PlayerStats,
@@ -220,13 +225,20 @@ export function previewStudyReward(
   questionsDone: number,
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  didEssay = false,
+  essaysDone = 0
 ): RewardPreview {
-  const safeMinutes = Math.max(1, minutes || 1);
+  const safeMinutes = Math.max(0, minutes || 0);
   const safeQuestions = didQuestions ? Math.max(0, questionsDone || 0) : 0;
-  const timeFactor = Math.max(0.5, safeMinutes / 30);
-  const questionBonus = safeQuestions * 0.08;
-  const totalFactor = timeFactor + questionBonus;
+  const safeEssays = didEssay ? Math.max(0, essaysDone || 0) : 0;
+  const totalFactor = safeMinutes / 30 + safeQuestions * 0.08 + safeEssays * 2.0;
+
+  if (totalFactor <= 0) {
+    return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
+  }
+
+  const effortScale = Math.min(2.0, Math.max(0.15, totalFactor / 2.0));
 
   return computeBasePreview(
     stats,
@@ -235,7 +247,8 @@ export function previewStudyReward(
     10 * totalFactor,
     attrs,
     bossAttack,
-    bossMods
+    bossMods,
+    effortScale
   );
 }
 
@@ -276,7 +289,9 @@ function applyProgressReward(
   baseMp: number,
   attrs: Attributes,
   bossAttack: number,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  effortScale = 1.0,
+  effortFactor = 1.5
 ) {
   const guaranteedCrit = Boolean(stats.critGuarantee);
   const isExhausted = stats.hp <= 0 && !guaranteedCrit;
@@ -306,9 +321,9 @@ function applyProgressReward(
         vulnMult
     )
   );
-  const gainedMp = Math.max(2, Math.round(baseMp + attrs.int * 0.2));
+  const gainedMp = Math.max(1, Math.round(baseMp + attrs.int * 0.2 * Math.min(1.5, effortScale)));
 
-  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods);
+  const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods, effortScale);
   const staminaAfterHit = Math.max(0, stats.hp - staminaLost);
 
   const maxMp = Math.max(stats.max_mp, 30 + attrs.int * 2 + stats.level * 2);
@@ -348,6 +363,7 @@ function applyProgressReward(
     leveledUp: progressed.leveledUp,
     isCritical,
     becameExhausted: stats.hp > 0 && progressed.hp === 0,
+    effortFactor,
   };
 }
 
@@ -358,14 +374,15 @@ export function calculateStudyReward(
   questionsDone: number,
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
-  bossMods?: BossCombatModifiers
+  bossMods?: BossCombatModifiers,
+  didEssay = false,
+  essaysDone = 0
 ) {
-  const safeMinutes = Math.max(1, minutes);
-  const safeQuestions = didQuestions ? Math.max(0, questionsDone) : 0;
-
-  const timeFactor = Math.max(0.5, safeMinutes / 30);
-  const questionBonus = safeQuestions * 0.08;
-  const totalFactor = timeFactor + questionBonus;
+  const safeMinutes = Math.max(0, minutes || 0);
+  const safeQuestions = didQuestions ? Math.max(0, questionsDone || 0) : 0;
+  const safeEssays = didEssay ? Math.max(0, essaysDone || 0) : 0;
+  const totalFactor = safeMinutes / 30 + safeQuestions * 0.08 + safeEssays * 2.0;
+  const effortScale = Math.min(2.0, Math.max(0.15, totalFactor / 2.0));
 
   return applyProgressReward(
     stats,
@@ -375,7 +392,9 @@ export function calculateStudyReward(
     4 * Math.min(3, totalFactor),
     attrs,
     bossAttack,
-    bossMods
+    bossMods,
+    effortScale,
+    totalFactor
   );
 }
 
