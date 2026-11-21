@@ -341,11 +341,11 @@ export default function HomePage() {
       const nextStage = currentStage + 1;
       const nextBoss = getProgressiveBoss(nextStage);
 
-      // Ao derrotar um Boss: recompensa (com checagem de Level-Up) + drops garantidos + reset 100% STA/MP + reset buffs!
+      // Ao derrotar um Boss: recompensa + drops garantidos + fôlego parcial (+25% STA / +15% MP) + reset buffs!
       const victoryRes = grantXpAndResources(latestStats, totalAttributes, {
         xp: rXp,
         goldDelta: rGold,
-        fullRestore: true,
+        bossVictoryRestore: true,
         resetBuffs: true,
       });
 
@@ -399,7 +399,7 @@ export default function HomePage() {
 
       const gearDropText = bossGearDrop ? ` · 🎁 ${bossGearDrop.label}` : '';
       pushActionLog(
-        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção${gearDropText}, STA/MP 100%! Próximo: #${nextStage} ${nextBoss.name}.`
+        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção${gearDropText}, +25% STA / +15% MP! Próximo: #${nextStage} ${nextBoss.name}.`
       );
       if (bossGearDrop) {
         showToast(`🎁 Drop do Boss: ${bossGearDrop.label}!`);
@@ -492,10 +492,10 @@ export default function HomePage() {
           ? ` · 🎉 Nível ${bossOutcome.nextLevel ?? res.nextStats.level}!`
           : '';
       showToast(
-        `🏆 ${bossOutcome.bossName} derrotado! STA/MP 100%! Próximo: ${bossOutcome.nextBossName}${lvlTag}${dropText}`
+        `🏆 ${bossOutcome.bossName} derrotado! +25% STA / +15% MP! Próximo: ${bossOutcome.nextBossName}${lvlTag}${dropText}`
       );
     } else if (res.leveledUp) {
-      showToast(`🎉 Nível ${res.nextStats.level}! Estamina e Mana restauradas!${dropText}`);
+      showToast(`🎉 Nível ${res.nextStats.level}! +40% STA e +25% MP restaurados!${dropText}`);
     } else if (res.becameExhausted) {
       pushActionLog(`⚠️ ${heroName} ficou Exausto (0 Estamina)!`);
       showToast(`⚠️ Estamina zerou (Exausto: -30% GP/Dano, XP normal)!${dropText}`);
@@ -662,7 +662,7 @@ export default function HomePage() {
     if (bossOutcome.defeated) {
       const lvlTag = bossOutcome.leveledUp ? ` · 🎉 Nível ${bossOutcome.nextLevel}!` : '';
       showToast(
-        `🏆 ${bossOutcome.bossName} derrotado com ${skill.name}! STA/MP 100%! Próximo: ${bossOutcome.nextBossName}${lvlTag}`
+        `🏆 ${bossOutcome.bossName} derrotado com ${skill.name}! +25% STA / +15% MP! Próximo: ${bossOutcome.nextBossName}${lvlTag}`
       );
     } else if (res.bossDamage > 0) {
       const dodgeTag = res.dodged ? ' · 💨 Esquiva (0 STA)!' : ` · -${res.staminaLost} STA`;
@@ -988,13 +988,13 @@ export default function HomePage() {
   };
 
   const handleBuyManaPotion = () => {
-    if (stats.gold < 15 || stats.mp >= stats.max_mp) return;
+    if (stats.gold < 35 || stats.mp >= stats.max_mp) return;
     setStats((s) => ({
       ...s,
-      gold: s.gold - 15,
+      gold: s.gold - 35,
       mp: Math.min(s.max_mp, s.mp + 25),
     }));
-    pushActionLog(`🔷 ${heroName} usou um Elixir de Mana (+25 MP, -15 GP).`);
+    pushActionLog(`🔷 ${heroName} usou um Elixir de Mana (+25 MP, -35 GP).`);
     showToast('🔷 Elixir de Mana usado (+25 MP)!');
   };
 
@@ -1301,7 +1301,7 @@ export default function HomePage() {
       const victoryRes = grantXpAndResources(stats, totalAttributes, {
         xp: prevBoss.rewardXp,
         goldDelta: prevBoss.rewardGold,
-        fullRestore: true,
+        bossVictoryRestore: true,
         resetBuffs: true,
       });
       setStats(victoryRes.nextStats);
@@ -1325,11 +1325,46 @@ export default function HomePage() {
       }));
       const sharedDropText = sharedGearDrop ? ` · 🎁 ${sharedGearDrop.label}` : '';
       showToast(
-        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção${sharedDropText} e STA/MP 100%!`
+        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção${sharedDropText} e +25% STA / +15% MP!`
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [remoteParty?.boss_stage, hydrated]);
+
+  // Recalibra proporcionalmente o Boss ativo caso ainda esteja com o HP antigo (pré-update cooperativo)
+  useEffect(() => {
+    if (!hydrated) return;
+    if (remoteParty) {
+      const stage = remoteParty.boss_stage ?? 1;
+      const expected = getProgressiveBoss(stage);
+      if (remoteParty.boss_max_hp < expected.maxHp) {
+        const ratio = Math.max(0.05, Math.min(1, remoteParty.boss_hp / Math.max(1, remoteParty.boss_max_hp)));
+        const nextHp = Math.max(1, Math.round(expected.maxHp * ratio));
+        updateRemotePartyBoss(remoteParty.id, {
+          boss_hp: nextHp,
+          boss_max_hp: expected.maxHp,
+          boss_attack: expected.attack,
+          reward_gold: expected.rewardGold,
+          reward_xp: expected.rewardXp,
+        });
+      }
+    } else {
+      const expected = getProgressiveBoss(party.bossStage);
+      if (party.bossMaxHp < expected.maxHp) {
+        const ratio = Math.max(0.05, Math.min(1, party.bossHp / Math.max(1, party.bossMaxHp)));
+        const nextHp = Math.max(1, Math.round(expected.maxHp * ratio));
+        setParty((p) => ({
+          ...p,
+          bossHp: nextHp,
+          bossMaxHp: expected.maxHp,
+          bossAttack: expected.attack,
+          rewardGold: expected.rewardGold,
+          rewardXp: expected.rewardXp,
+        }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, remoteParty?.id, remoteParty?.boss_stage, remoteParty?.boss_max_hp]);
 
   const handleSelectBossMission = (bossIndex: number, cycle: number) => {
     const targetStage = cycle * BOSS_CATALOG.length + bossIndex + 1;
@@ -1524,9 +1559,9 @@ export default function HomePage() {
       nowTs !== null
         ? computePeriodTotals(studyEntries, workoutEntries, new Date(nowTs))
         : {
-            daily: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
-            weekly: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
-            monthly: { studyMinutes: 0, questionsDone: 0, runKm: 0, workoutsCount: 0 },
+            daily: { studyMinutes: 0, questionsDone: 0, essaysDone: 0, runKm: 0, workoutsCount: 0 },
+            weekly: { studyMinutes: 0, questionsDone: 0, essaysDone: 0, runKm: 0, workoutsCount: 0 },
+            monthly: { studyMinutes: 0, questionsDone: 0, essaysDone: 0, runKm: 0, workoutsCount: 0 },
           },
     [studyEntries, workoutEntries, nowTs]
   );
@@ -1572,7 +1607,7 @@ export default function HomePage() {
 
   const canClaimMonthlyBonus =
     Boolean(questsState) &&
-    monthlyQuests.length === 4 &&
+    monthlyQuests.length === 5 &&
     monthlyQuests.every((q) => q.completed) &&
     !questsState!.monthlyBonusClaimed;
 

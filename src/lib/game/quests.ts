@@ -3,7 +3,7 @@ import { WorkoutEntry } from '@/components/WorkoutLogCard';
 import { getQuestScale } from './formulas';
 
 export type QuestCycle = 'daily' | 'weekly' | 'monthly';
-export type QuestPillar = 'study_hours' | 'questions' | 'run_km' | 'workout';
+export type QuestPillar = 'study_hours' | 'questions' | 'essay' | 'run_km' | 'workout';
 
 export interface QuestReward {
   xp: number;
@@ -24,7 +24,7 @@ export interface QuestDefinition {
   /** Meta numérica na unidade da métrica (minutos para estudo, unid para questões/treinos, km para corrida) */
   target: number;
   /** Unidade de exibição */
-  unit: 'horas' | 'questões' | 'km' | 'treinos';
+  unit: 'horas' | 'questões' | 'redações' | 'km' | 'treinos';
   reward: QuestReward;
 }
 
@@ -44,6 +44,7 @@ export interface QuestsState {
 export interface PeriodTotals {
   studyMinutes: number;
   questionsDone: number;
+  essaysDone: number;
   runKm: number;
   workoutsCount: number;
 }
@@ -114,6 +115,17 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     unit: 'treinos',
     reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
   },
+  {
+    id: 'daily_essay',
+    cycle: 'daily',
+    pillar: 'essay',
+    title: 'Discursiva do Dia: Redação PRF',
+    description: 'Escreva e registre 1 redação discursiva hoje.',
+    icon: '📝',
+    target: 1,
+    unit: 'redações',
+    reward: { xp: 80, gold: 45, eggOrPotionChance: 0.25 },
+  },
 ];
 
 export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
@@ -161,6 +173,17 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     unit: 'treinos',
     reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
   },
+  {
+    id: 'weekly_essay',
+    cycle: 'weekly',
+    pillar: 'essay',
+    title: 'Oficina Discursiva (Semanal)',
+    description: 'Escreva e registre 2 redações nesta semana.',
+    icon: '📝',
+    target: 2,
+    unit: 'redações',
+    reward: { xp: 250, gold: 180, guaranteedEggOrPotion: true },
+  },
 ];
 
 export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
@@ -206,6 +229,17 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     icon: '💪',
     target: 16,
     unit: 'treinos',
+    reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
+  },
+  {
+    id: 'monthly_essay',
+    cycle: 'monthly',
+    pillar: 'essay',
+    title: 'Mestre da Discursiva PRF (Mensal)',
+    description: 'Escreva e registre 8 redações no mês.',
+    icon: '📝',
+    target: 8,
+    unit: 'redações',
     reward: { xp: 600, gold: 500, eggs: 1, potions: 1 },
   },
 ];
@@ -329,6 +363,7 @@ export function computePeriodTotals(
   const empty = (): PeriodTotals => ({
     studyMinutes: 0,
     questionsDone: 0,
+    essaysDone: 0,
     runKm: 0,
     workoutsCount: 0,
   });
@@ -342,18 +377,22 @@ export function computePeriodTotals(
     if (!keys) continue;
     const mins = Math.max(0, s.minutes || 0);
     const qs = s.didQuestions ? Math.max(0, s.questionsDone || 0) : 0;
+    const essays = s.didEssay ? Math.max(0, s.essaysDone || 0) : 0;
 
     if (keys.dayKey === curDay) {
       daily.studyMinutes += mins;
       daily.questionsDone += qs;
+      daily.essaysDone += essays;
     }
     if (keys.weekKey === curWeek) {
       weekly.studyMinutes += mins;
       weekly.questionsDone += qs;
+      weekly.essaysDone += essays;
     }
     if (keys.monthKey === curMonth) {
       monthly.studyMinutes += mins;
       monthly.questionsDone += qs;
+      monthly.essaysDone += essays;
     }
   }
 
@@ -399,6 +438,8 @@ function getRawValueForPillar(totals: PeriodTotals, pillar: QuestPillar): number
       return totals.studyMinutes;
     case 'questions':
       return totals.questionsDone;
+    case 'essay':
+      return totals.essaysDone;
     case 'run_km':
       return Math.round(totals.runKm * 100) / 100;
     case 'workout':

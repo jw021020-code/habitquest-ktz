@@ -1806,12 +1806,12 @@ export function EquipmentPanel({
                     <p className="text-[11px] text-[#50b5e9] mt-0.5">+25 MP ({mp}/{maxMp})</p>
                   </div>
                   <button
-                    disabled={gold < 15 || mp >= maxMp}
+                    disabled={gold < 35 || mp >= maxMp}
                     onClick={onBuyManaPotion}
                     className="w-full py-2 bg-[#ffbe5d]/20 hover:bg-[#ffbe5d]/30 disabled:bg-[#1a181d] disabled:text-[#6e677d] text-[#ffbe5d] border-t border-[#3a3447] font-condensed font-bold text-xs flex items-center justify-center gap-1 transition"
                   >
                     <Coins className="w-3.5 h-3.5" />
-                    15 GP
+                    35 GP
                   </button>
                 </div>
 

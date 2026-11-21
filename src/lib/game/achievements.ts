@@ -625,13 +625,13 @@ export function rollBossEquipmentDrop(
   ownedIds: string[] = [],
   bossStage = 1
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
-  const dropChance = bossStage >= 61 ? 0.65 : bossStage >= 26 ? 0.5 : 0.35;
+  const dropChance = bossStage >= 61 ? 1.0 : bossStage >= 26 ? 0.75 : 0.55;
   if (Math.random() > dropChance) return null;
   const weights: Partial<Record<ItemRarity, number>> =
     bossStage >= 61
-      ? { rare: 40, epic: 45, legendary: 15 }
+      ? { rare: 30, epic: 48, legendary: 22 }
       : bossStage >= 26
-      ? { rare: 55, epic: 35, legendary: 10 }
-      : { rare: 70, epic: 25, legendary: 5 };
+      ? { rare: 45, epic: 40, legendary: 15 }
+      : { rare: 60, epic: 32, legendary: 8 };
   return rollEquipmentFromWeights(ownedIds, weights);
 }

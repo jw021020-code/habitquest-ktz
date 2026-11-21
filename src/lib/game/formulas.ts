@@ -77,9 +77,9 @@ function applyLevelUps(
     nextLevel += 1;
     nextXpToNext = getXpToNextLevel(nextLevel);
     nextMaxHp += 5;
-    nextHp = nextMaxHp;
+    nextHp = Math.min(nextMaxHp, nextHp + Math.round(nextMaxHp * 0.4));
     nextMaxMp = 30 + attrs.int * 2 + nextLevel * 2;
-    nextMp = nextMaxMp;
+    nextMp = Math.min(nextMaxMp, nextMp + Math.round(nextMaxMp * 0.25));
     leveledUp = true;
   }
 
@@ -97,7 +97,7 @@ function applyLevelUps(
 
 /**
  * Concede XP/Ouro de fontes permitidas (vitória de Boss, estudos/treinos, ouro de baú)
- * garantindo verificação de Level-Up, restauração opcional de 100% STA/MP
+ * garantindo verificação de Level-Up, restauração opcional de STA/MP
  * e reset de buffs temporários de combate.
  */
 export function grantXpAndResources(
@@ -107,6 +107,7 @@ export function grantXpAndResources(
     xp?: number;
     goldDelta?: number;
     fullRestore?: boolean;
+    bossVictoryRestore?: boolean;
     resetBuffs?: boolean;
   }
 ): { nextStats: PlayerStats; leveledUp: boolean } {
@@ -120,8 +121,16 @@ export function grantXpAndResources(
     : attrs;
 
   const baseMaxMp = Math.max(stats.max_mp, 30 + effectiveAttrs.int * 2 + stats.level * 2);
-  const startHp = opts.fullRestore ? stats.max_hp : stats.hp;
-  const startMp = opts.fullRestore ? baseMaxMp : stats.mp;
+  const startHp = opts.fullRestore
+    ? stats.max_hp
+    : opts.bossVictoryRestore
+    ? Math.min(stats.max_hp, stats.hp + Math.round(stats.max_hp * 0.25))
+    : stats.hp;
+  const startMp = opts.fullRestore
+    ? baseMaxMp
+    : opts.bossVictoryRestore
+    ? Math.min(baseMaxMp, stats.mp + Math.round(baseMaxMp * 0.15))
+    : stats.mp;
 
   const progressed = applyLevelUps(
     stats.level,
@@ -168,7 +177,7 @@ function computeStaminaLoss(
   return Math.max(
     1,
     Math.round(
-      bossAttack * 0.45 * conMitigation * bossWeakMult * guardMult * shadowMult * extraMitigationMult
+      bossAttack * 0.85 * conMitigation * bossWeakMult * guardMult * shadowMult * extraMitigationMult
     )
   );
 }
@@ -500,9 +509,9 @@ export function applyClassSkill(
     case 'improvised_strike': {
       bossDamage = Math.max(
         1,
-        Math.round((8 + attrs.str * 0.8 + attrs.int * 0.4) * exhaustMult * vulnMult * critMult)
+        Math.round((8 + attrs.str * 0.6 + attrs.int * 0.3) * exhaustMult * vulnMult * critMult)
       );
-      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.7);
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.9);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
       nextStats.critGuarantee = false;
       break;
@@ -517,7 +526,7 @@ export function applyClassSkill(
     case 'shield_bash': {
       bossDamage = Math.max(
         1,
-        Math.round((14 + attrs.con * 1.4 + attrs.str * 0.6) * exhaustMult * vulnMult * critMult)
+        Math.round((12 + attrs.con * 1.1 + attrs.str * 0.5) * exhaustMult * vulnMult * critMult)
       );
       staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.5);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
@@ -559,7 +568,7 @@ export function applyClassSkill(
     case 'heavy_slash': {
       bossDamage = Math.max(
         1,
-        Math.round((20 + attrs.str * 2.2) * exhaustMult * vulnMult * critMult)
+        Math.round((16 + attrs.str * 1.5) * exhaustMult * vulnMult * critMult)
       );
       staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
@@ -573,7 +582,7 @@ export function applyClassSkill(
     case 'guard_break': {
       bossDamage = Math.max(
         1,
-        Math.round((12 + attrs.str * 1.2) * exhaustMult * vulnMult * critMult)
+        Math.round((10 + attrs.str * 0.9) * exhaustMult * vulnMult * critMult)
       );
       staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
@@ -605,7 +614,7 @@ export function applyClassSkill(
     case 'agile_dash': {
       bossDamage = Math.max(
         1,
-        Math.round((15 + attrs.per * 1.8) * exhaustMult * vulnMult * critMult)
+        Math.round((12 + attrs.per * 1.3) * exhaustMult * vulnMult * critMult)
       );
       dodged = Math.random() < 0.5;
       staminaLost = dodged ? 0 : computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
@@ -614,7 +623,7 @@ export function applyClassSkill(
       break;
     }
     case 'opportunist_loot': {
-      gainedGold = Math.max(1, Math.round((16 + attrs.per * 1.6) * exhaustMult));
+      gainedGold = Math.max(1, Math.round((14 + attrs.per * 1.2) * exhaustMult));
       nextStats.gold += gainedGold;
       bonusDropRoll = true;
       break;
@@ -647,15 +656,15 @@ export function applyClassSkill(
     case 'arcane_bolt': {
       bossDamage = Math.max(
         1,
-        Math.round((18 + attrs.int * 2.0) * exhaustMult * vulnMult * critMult)
+        Math.round((14 + attrs.int * 1.4) * exhaustMult * vulnMult * critMult)
       );
-      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.75);
+      staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods, 0.9);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
       nextStats.critGuarantee = false;
       break;
     }
     case 'ethereal_wave': {
-      const amount = Math.round(14 + Math.floor(attrs.int * 0.5));
+      const amount = Math.round(10 + Math.floor(attrs.int * 0.35));
       nextStats.mp = Math.min(nextStats.max_mp, nextStats.mp + amount);
       groupManaAmount = amount;
       break;
@@ -667,7 +676,7 @@ export function applyClassSkill(
     case 'focused_flame': {
       bossDamage = Math.max(
         1,
-        Math.round((32 + attrs.int * 2.8) * exhaustMult * vulnMult * critMult)
+        Math.round((26 + attrs.int * 2.0) * exhaustMult * vulnMult * critMult)
       );
       staminaLost = computeStaminaLoss(bossAttack, attrs, nextStats, bossMods);
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);

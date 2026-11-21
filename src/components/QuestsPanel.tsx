@@ -195,7 +195,7 @@ export function QuestsPanel({
   }, [onPeriodTick]);
 
   const monthlyCompletedCount = monthlyQuests.filter((q) => q.completed).length;
-  const allMonthlyDone = monthlyQuests.length === 4 && monthlyCompletedCount === 4;
+  const allMonthlyDone = monthlyQuests.length === 5 && monthlyCompletedCount === 5;
   const canClaimBonus = allMonthlyDone && !monthlyBonusClaimed;
 
   const readyCount = [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter(
@@ -230,9 +230,9 @@ export function QuestsPanel({
         <div className="px-4 py-2.5 bg-[#1a181d] border-b border-[#342e40] flex flex-wrap gap-2">
           {[
             { id: 'all' as const, label: 'Todas' },
-            { id: 'daily' as const, label: 'Diária (1/4)' },
-            { id: 'weekly' as const, label: 'Semanais (2/4)' },
-            { id: 'monthly' as const, label: 'Mensais (4/4)' },
+            { id: 'daily' as const, label: 'Diária (1/5)' },
+            { id: 'weekly' as const, label: 'Semanais (2/5)' },
+            { id: 'monthly' as const, label: 'Mensais (5/5)' },
           ].map((btn) => (
             <button
               key={btn.id}
@@ -249,7 +249,7 @@ export function QuestsPanel({
         </div>
       </section>
 
-      {/* 1. Missão Diária (1 sorteada dentre as 4) */}
+      {/* 1. Missão Diária (1 sorteada dentre as 5) */}
       {(tab === 'all' || tab === 'daily') && (
         <section className="space-y-2.5">
           <div className="flex flex-wrap items-center justify-between gap-2 px-1">
@@ -259,7 +259,7 @@ export function QuestsPanel({
                 Missão Diária Sorteada
               </h3>
               <span className="text-[11px] font-condensed text-[#a8a1b5] bg-[#23202a] border border-[#342e40] px-2 py-0.5 rounded">
-                1 de 4 · {dailyKey}
+                1 de 5 · {dailyKey}
               </span>
             </div>
             <CycleTimerBadge cycle="daily" nowMs={nowMs} />
@@ -277,7 +277,7 @@ export function QuestsPanel({
         </section>
       )}
 
-      {/* 2. Missões Semanais (2 sorteadas dentre as 4) */}
+      {/* 2. Missões Semanais (2 sorteadas dentre as 5) */}
       {(tab === 'all' || tab === 'weekly') && (
         <section className="space-y-2.5">
           <div className="flex flex-wrap items-center justify-between gap-2 px-1">
@@ -287,7 +287,7 @@ export function QuestsPanel({
                 Missões Semanais Sorteadas
               </h3>
               <span className="text-[11px] font-condensed text-[#a8a1b5] bg-[#23202a] border border-[#342e40] px-2 py-0.5 rounded">
-                2 de 4 · {weeklyKey}
+                2 de 5 · {weeklyKey}
               </span>
             </div>
             <CycleTimerBadge cycle="weekly" nowMs={nowMs} />
@@ -305,7 +305,7 @@ export function QuestsPanel({
         </section>
       )}
 
-      {/* 3. Metas Mensais PRF (Todas as 4 fixas no mês) */}
+      {/* 3. Metas Mensais PRF (Todas as 5 fixas no mês) */}
       {(tab === 'all' || tab === 'monthly') && (
         <section className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2 px-1">
@@ -315,12 +315,12 @@ export function QuestsPanel({
                 Metas Mensais de Aprovação PRF
               </h3>
               <span className="text-[11px] font-condensed text-[#a8a1b5] bg-[#23202a] border border-[#342e40] px-2 py-0.5 rounded">
-                Todas as 4 ativas · {monthlyKey}
+                Todas as 5 ativas · {monthlyKey}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-condensed font-bold text-[#24cc8f]">
-                {monthlyCompletedCount}/4 concluídas
+                {monthlyCompletedCount}/5 concluídas
               </span>
               <CycleTimerBadge cycle="monthly" nowMs={nowMs} />
             </div>
@@ -336,7 +336,7 @@ export function QuestsPanel({
             ))}
           </div>
 
-          {/* Card Bônus 4/4 Metas Mensais */}
+          {/* Card Bônus 5/5 Metas Mensais */}
           <div
             className={`rounded-md border p-4 flex flex-wrap items-center justify-between gap-3 transition ${
               monthlyBonusClaimed
@@ -352,10 +352,10 @@ export function QuestsPanel({
               </div>
               <div>
                 <h4 className="font-condensed font-bold text-sm sm:text-base text-white flex items-center gap-1.5">
-                  Baú de Honra PRF do Mês (4/4 Metas Concluídas)
+                  Baú de Honra PRF do Mês (5/5 Metas Concluídas)
                 </h4>
                 <p className="text-xs text-[#a8a1b5]">
-                  Complete todas as 4 metas mensais ({monthlyCompletedCount}/4) para ganhar{' '}
+                  Complete todas as 5 metas mensais ({monthlyCompletedCount}/5) para ganhar{' '}
                   <span className="text-[#24cc8f] font-bold">
                     +{getQuestXpForLevel(MONTHLY_BONUS_REWARD.xp, level)} XP
                   </span>
