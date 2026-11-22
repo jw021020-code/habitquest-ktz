@@ -37,6 +37,7 @@ import {
 import { ALL_PET_IDS, formatPetName, getPetSpritePath } from '@/lib/game/pets';
 import { CLASS_INFO } from '@/lib/game/skills';
 import { RemoteProfile } from '@/lib/supabase/data';
+import { formatCardioEntryBadge, getCardioEquivalentKm } from '@/lib/game/cardio';
 import { CharacterAvatar } from './CharacterAvatar';
 
 interface MemberProfileModalProps {
@@ -186,7 +187,7 @@ export function MemberProfileModal({
     0
   );
   const totalRunKm = workoutEntries.reduce(
-    (acc, w) => acc + (w.cardio ? Number(w.km) || 0 : 0),
+    (acc, w) => acc + getCardioEquivalentKm(w),
     0
   );
   const bossDmg =
@@ -515,7 +516,7 @@ export function MemberProfileModal({
                             <div className="flex flex-wrap items-center gap-1.5">
                               {w.cardio && (
                                 <span className="px-1.5 py-0.5 rounded bg-[#ffbe5d]/20 text-[#ffbe5d] text-[10px] font-condensed font-bold">
-                                  🏃 Cárdio{w.km && w.km > 0 ? ` (${w.km} km)` : ''}
+                                  🏃 {formatCardioEntryBadge(w)}
                                 </span>
                               )}
                               {w.musculacao && (

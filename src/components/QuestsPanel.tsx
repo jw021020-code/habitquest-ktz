@@ -5,7 +5,9 @@ import { Calendar, CheckCircle2, Clock, Crown, Gift, ScrollText, Sparkles, Sun, 
 import {
   getCycleTimeRemaining,
   getQuestXpForLevel,
-  MONTHLY_BONUS_REWARD,
+  MONTHLY_CHEST_TIERS,
+  MonthlyChestTier,
+  PendingMonthlyChest,
   QuestCycle,
   QuestProgressItem,
 } from '@/lib/game/quests';
@@ -16,12 +18,14 @@ interface QuestsPanelProps {
   weeklyQuests: QuestProgressItem[];
   monthlyQuests: QuestProgressItem[];
   monthlyBonusClaimed: boolean;
+  pendingMonthlyChest?: PendingMonthlyChest | null;
   totalQuestsCompleted: number;
   dailyKey: string;
   weeklyKey: string;
   monthlyKey: string;
   onClaimQuest: (questId: string, cycle: QuestCycle) => void;
   onClaimMonthlyBonus: () => void;
+  onClaimPendingChest?: () => void;
   onPeriodTick?: () => void;
 }
 
@@ -171,12 +175,14 @@ export function QuestsPanel({
   weeklyQuests,
   monthlyQuests,
   monthlyBonusClaimed,
+  pendingMonthlyChest,
   totalQuestsCompleted,
   dailyKey,
   weeklyKey,
   monthlyKey,
   onClaimQuest,
   onClaimMonthlyBonus,
+  onClaimPendingChest,
   onPeriodTick,
 }: QuestsPanelProps) {
   const [tab, setTab] = useState<'all' | QuestCycle>('all');
@@ -195,12 +201,20 @@ export function QuestsPanel({
   }, [onPeriodTick]);
 
   const monthlyCompletedCount = monthlyQuests.filter((q) => q.completed).length;
+  const currentChestTier =
+    monthlyCompletedCount >= 1
+      ? (Math.min(5, monthlyCompletedCount) as MonthlyChestTier)
+      : null;
+  const currentChestSpec = currentChestTier ? MONTHLY_CHEST_TIERS[currentChestTier] : null;
   const allMonthlyDone = monthlyQuests.length === 5 && monthlyCompletedCount === 5;
   const canClaimBonus = allMonthlyDone && !monthlyBonusClaimed;
+  const pendingSpec = pendingMonthlyChest ? MONTHLY_CHEST_TIERS[pendingMonthlyChest.tier] : null;
 
-  const readyCount = [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter(
-    (q) => q.completed && !q.claimed
-  ).length + (canClaimBonus ? 1 : 0);
+  const readyCount =
+    [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter((q) => q.completed && !q.claimed)
+      .length +
+    (canClaimBonus ? 1 : 0) +
+    (pendingMonthlyChest ? 1 : 0);
 
   return (
     <main className="max-w-7xl w-full mx-auto px-4 pt-4 pb-8 space-y-4">
@@ -248,6 +262,32 @@ export function QuestsPanel({
           ))}
         </div>
       </section>
+
+      {/* Banner de Baú Pendente do Mês Anterior */}
+      {pendingMonthlyChest && pendingSpec && (
+        <section className={`rounded-md border-2 ${pendingSpec.borderClass} bg-gradient-to-r from-[#36205d] to-[#23202a] p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg`}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-md bg-[#1a181d] border border-[#ffbe5d]/50 flex items-center justify-center shrink-0">
+              <Crown className={`w-5 h-5 ${pendingSpec.textClass}`} />
+            </div>
+            <div>
+              <h3 className={`font-condensed font-bold text-sm sm:text-base ${pendingSpec.textClass}`}>
+                {pendingSpec.name} de {pendingMonthlyChest.monthKey} pronto para abrir!
+              </h3>
+              <p className="text-xs text-[#cfc8dc]">
+                Você fechou {pendingMonthlyChest.tier}/5 metas no mês anterior: +{getQuestXpForLevel(pendingSpec.xp, level)} XP, +{pendingSpec.gold} GP e {pendingSpec.equipDesc}.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClaimPendingChest}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded bg-[#ffbe5d] hover:brightness-110 text-[#1a181d] text-xs font-condensed font-bold uppercase tracking-wider transition shadow cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            Abrir {pendingSpec.name}
+          </button>
+        </section>
+      )}
 
       {/* 1. Missão Diária (1 sorteada dentre as 5) */}
       {(tab === 'all' || tab === 'daily') && (
@@ -336,54 +376,90 @@ export function QuestsPanel({
             ))}
           </div>
 
-          {/* Card Bônus 5/5 Metas Mensais */}
+          {/* Card Baú de Honra Progressivo (1/5 Comum -> 5/5 Lendário) */}
           <div
-            className={`rounded-md border p-4 flex flex-wrap items-center justify-between gap-3 transition ${
+            className={`rounded-md border p-4 space-y-3 transition ${
               monthlyBonusClaimed
                 ? 'bg-[#1f1c26] border-[#24cc8f]/40 opacity-85'
                 : canClaimBonus
-                ? 'bg-gradient-to-r from-[#36205d] to-[#282138] border-[#ffbe5d] shadow-lg'
-                : 'bg-[#1a181d] border-[#342e40]'
+                  ? 'bg-gradient-to-r from-[#36205d] to-[#282138] border-[#ffbe5d] shadow-lg'
+                  : currentChestSpec
+                    ? `bg-[#1f1c26] ${currentChestSpec.borderClass}`
+                    : 'bg-[#1a181d] border-[#342e40]'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-md bg-[#271b3d] border border-[#ffbe5d]/50 flex items-center justify-center shrink-0">
-                <Crown className="w-5 h-5 text-[#ffbe5d]" />
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-md bg-[#271b3d] border border-[#ffbe5d]/50 flex items-center justify-center shrink-0">
+                  <Crown className={`w-5 h-5 ${currentChestSpec?.textClass ?? 'text-[#8a8299]'}`} />
+                </div>
+                <div>
+                  <h4 className="font-condensed font-bold text-sm sm:text-base text-white flex items-center gap-2">
+                    Baú de Honra do Mês:{' '}
+                    <span className={currentChestSpec?.textClass ?? 'text-[#8a8299]'}>
+                      {currentChestSpec ? `${currentChestSpec.name} (${monthlyCompletedCount}/5)` : 'Bloqueado (0/5)'}
+                    </span>
+                  </h4>
+                  <p className="text-xs text-[#a8a1b5]">
+                    {currentChestSpec ? (
+                      <>
+                        Loot atual:{' '}
+                        <span className="text-[#24cc8f] font-bold">
+                          +{getQuestXpForLevel(currentChestSpec.xp, level)} XP
+                        </span>
+                        , <span className="text-[#ffbe5d] font-bold">+{currentChestSpec.gold} GP</span> e{' '}
+                        <span className="text-[#d6c7ff] font-bold">{currentChestSpec.equipDesc}</span>.
+                      </>
+                    ) : (
+                      'Conclua de 1 a 5 metas mensais para evoluir seu único Baú do mês (até Lendário garantido no 5/5)!'
+                    )}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-condensed font-bold text-sm sm:text-base text-white flex items-center gap-1.5">
-                  Baú de Honra do Mês (5/5 Metas Concluídas)
-                </h4>
-                <p className="text-xs text-[#a8a1b5]">
-                  Complete todas as 5 metas mensais ({monthlyCompletedCount}/5) para ganhar{' '}
-                  <span className="text-[#24cc8f] font-bold">
-                    +{getQuestXpForLevel(MONTHLY_BONUS_REWARD.xp, level)} XP
-                  </span>
-                  ,{' '}
-                  <span className="text-[#ffbe5d] font-bold">+{MONTHLY_BONUS_REWARD.gold} GP</span> e{' '}
-                  <span className="text-[#d6c7ff] font-bold">1 Equipamento Garantido (Incomum a Lendário)</span>!
-                </p>
-              </div>
+
+              {monthlyBonusClaimed ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40 text-xs font-condensed font-bold uppercase">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Baú Resgatado
+                </span>
+              ) : canClaimBonus ? (
+                <button
+                  onClick={onClaimMonthlyBonus}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded bg-[#ffbe5d] hover:brightness-110 text-[#1a181d] text-xs font-condensed font-bold uppercase tracking-wider transition shadow cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Abrir Baú Lendário
+                </button>
+              ) : (
+                <span className="px-3 py-1.5 rounded bg-[#23202a] border border-[#3a3447] text-xs font-condensed font-bold text-[#a8a1b5]">
+                  {monthlyCompletedCount === 0
+                    ? 'Falta 1 meta p/ Comum'
+                    : 'Evoluindo · Abre ao fechar 5/5 ou fim do mês'}
+                </span>
+              )}
             </div>
 
-            {monthlyBonusClaimed ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40 text-xs font-condensed font-bold uppercase">
-                <CheckCircle2 className="w-4 h-4" />
-                Baú Resgatado
-              </span>
-            ) : canClaimBonus ? (
-              <button
-                onClick={onClaimMonthlyBonus}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded bg-[#ffbe5d] hover:brightness-110 text-[#1a181d] text-xs font-condensed font-bold uppercase tracking-wider transition shadow cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4" />
-                Abrir Baú de Honra
-              </button>
-            ) : (
-              <span className="px-3 py-1.5 rounded bg-[#23202a] border border-[#3a3447] text-xs font-condensed font-bold text-[#8a8299]">
-                Faltam {5 - monthlyCompletedCount} metas
-              </span>
-            )}
+            {/* Trilha de 5 Graus do Baú */}
+            <div className="grid grid-cols-5 gap-1.5 pt-1">
+              {([1, 2, 3, 4, 5] as MonthlyChestTier[]).map((t) => {
+                const spec = MONTHLY_CHEST_TIERS[t];
+                const reached = monthlyCompletedCount >= t;
+                return (
+                  <div
+                    key={t}
+                    className={`rounded border px-2 py-1.5 text-center transition ${
+                      reached
+                        ? `bg-[#282138] ${spec.borderClass}`
+                        : 'bg-[#1a181d]/60 border-[#2c2836] opacity-55'
+                    }`}
+                  >
+                    <div className={`text-[10px] font-condensed font-bold uppercase ${reached ? spec.textClass : 'text-[#8a8299]'}`}>
+                      {t}/5 {spec.rarityLabel}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}

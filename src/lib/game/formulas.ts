@@ -263,6 +263,7 @@ export function previewStudyReward(
 
 /**
  * Prévia determinística para exibir em tempo real no card de Treino.
+ * kmEq já vem convertido pela modalidade (Corrida 1x, Caminhada 0.5x, Bike 0.333x, HIIT 0.12/min).
  */
 export function previewWorkoutReward(
   stats: PlayerStats,
@@ -271,22 +272,32 @@ export function previewWorkoutReward(
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
-  km = 0
+  kmEq = 0,
+  hasDualDailyBonus = false
 ): RewardPreview {
-  const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
-  if (count === 0) {
+  if (!cardio && !musculacao) {
     return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
   }
-  const mult = count === 2 ? 2.2 : 1.0;
-  const safeKm = cardio ? Math.min(15, Math.max(0, Number(km) || 0)) : 0;
+  const safeKmEq = cardio ? Math.min(15, Math.max(0, Number(kmEq) || 0)) : 0;
+  if (cardio && !musculacao && safeKmEq <= 0) {
+    return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
+  }
+
+  const baseXp = (musculacao ? 55 : 0) + (cardio ? 28 * safeKmEq : 0) + (hasDualDailyBonus ? 25 : 0);
+  const baseGold = (musculacao ? 8 : 0) + (cardio ? 4 * safeKmEq : 0) + (hasDualDailyBonus ? 6 : 0);
+  const baseDmg = (musculacao ? 14 : 0) + (cardio ? 8 * safeKmEq : 0) + (hasDualDailyBonus ? 10 : 0);
+  const effortScale =
+    cardio && !musculacao ? Math.min(2.0, Math.max(0.2, safeKmEq / 3.0)) : 1.0;
+
   return computeBasePreview(
     stats,
-    55 * mult + safeKm * 15,
-    8 * mult + safeKm * 2,
-    14 * mult + safeKm * 4,
+    baseXp,
+    baseGold,
+    baseDmg,
     attrs,
     bossAttack,
-    bossMods
+    bossMods,
+    effortScale
   );
 }
 
@@ -414,21 +425,30 @@ export function calculateWorkoutReward(
   attrs: Attributes = ZERO_ATTRS,
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
-  km = 0
+  kmEq = 0,
+  hasDualDailyBonus = false
 ) {
-  const count = (cardio ? 1 : 0) + (musculacao ? 1 : 0);
-  const mult = count === 2 ? 2.2 : 1.0;
-  const safeKm = cardio ? Math.min(15, Math.max(0, Number(km) || 0)) : 0;
+  const safeKmEq = cardio ? Math.min(15, Math.max(0, Number(kmEq) || 0)) : 0;
+  const baseXp = (musculacao ? 55 : 0) + (cardio ? 28 * safeKmEq : 0) + (hasDualDailyBonus ? 25 : 0);
+  const baseGold = (musculacao ? 8 : 0) + (cardio ? 4 * safeKmEq : 0) + (hasDualDailyBonus ? 6 : 0);
+  const baseDmg = (musculacao ? 14 : 0) + (cardio ? 8 * safeKmEq : 0) + (hasDualDailyBonus ? 10 : 0);
+  const baseMp =
+    (musculacao ? 5 : 0) +
+    (cardio ? Math.min(10, Math.max(2, safeKmEq * 1.5)) : 0) +
+    (hasDualDailyBonus ? 2 : 0);
+  const effortScale =
+    cardio && !musculacao ? Math.min(2.0, Math.max(0.2, safeKmEq / 3.0)) : 1.0;
 
   return applyProgressReward(
     stats,
-    55 * mult + safeKm * 15,
-    8 * mult + safeKm * 2,
-    14 * mult + safeKm * 4,
-    5 * mult,
+    baseXp,
+    baseGold,
+    baseDmg,
+    baseMp,
     attrs,
     bossAttack,
-    bossMods
+    bossMods,
+    effortScale
   );
 }
 

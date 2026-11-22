@@ -36,7 +36,10 @@ interface StudyLogCardProps {
   onDeleteStudy: (id: string) => void;
 }
 
-const TIME_PRESETS = [0, 15, 30, 60, 90, 120];
+type StudyTab = 'theory' | 'questions' | 'essay';
+
+const TIME_PRESETS = [15, 30, 45, 60, 90, 120];
+const QUESTION_PRESETS = [10, 20, 30, 50, 100];
 
 export function StudyLogCard({
   entries,
@@ -46,23 +49,29 @@ export function StudyLogCard({
   onAddStudy,
   onDeleteStudy,
 }: StudyLogCardProps) {
+  const [activeTab, setActiveTab] = useState<StudyTab>('theory');
   const [subject, setSubject] = useState('');
   const [minutesInput, setMinutesInput] = useState<string>('30');
-  const [didQuestions, setDidQuestions] = useState(false);
-  const [questionsInput, setQuestionsInput] = useState<string>('10');
-  const [didEssay, setDidEssay] = useState(false);
+  const [questionsInput, setQuestionsInput] = useState<string>('20');
+  const [essayNotes, setEssayNotes] = useState('');
   const [essaysInput, setEssaysInput] = useState<string>('1');
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
-  const parsedMinutes = Math.max(0, parseInt(minutesInput, 10) || 0);
-  const parsedQuestions = Math.max(0, parseInt(questionsInput, 10) || 0);
-  const parsedEssays = Math.max(0, parseInt(essaysInput, 10) || 0);
+  const parsedMinutes = activeTab === 'theory' ? Math.max(0, parseInt(minutesInput, 10) || 0) : 0;
+  const parsedQuestions =
+    activeTab === 'questions' ? Math.max(0, parseInt(questionsInput, 10) || 0) : 0;
+  const parsedEssays = activeTab === 'essay' ? Math.max(0, parseInt(essaysInput, 10) || 0) : 0;
 
-  const hasQuestions = didQuestions && parsedQuestions > 0;
-  const hasEssays = didEssay && parsedEssays > 0;
-  const hasEffort = parsedMinutes > 0 || hasQuestions || hasEssays;
-  const canSubmit = hasEffort && (subject.trim().length > 0 || hasQuestions || hasEssays);
+  const didQuestions = activeTab === 'questions' && parsedQuestions > 0;
+  const didEssay = activeTab === 'essay' && parsedEssays > 0;
+
+  const canSubmit =
+    activeTab === 'theory'
+      ? parsedMinutes > 0 && subject.trim().length > 0
+      : activeTab === 'questions'
+        ? parsedQuestions > 0 && subject.trim().length > 0
+        : parsedEssays > 0;
 
   const preview = previewStudyReward(
     stats,
@@ -81,25 +90,25 @@ export function StudyLogCard({
     if (!canSubmit) return;
 
     const cleanSubject =
-      subject.trim() ||
-      (hasEssays && !hasQuestions
-        ? 'Redação'
-        : hasQuestions && !hasEssays
-          ? 'Bateria de Questões'
-          : 'Questões e Redação');
+      activeTab === 'essay'
+        ? essayNotes.trim() || 'Redação'
+        : subject.trim();
 
     onAddStudy({
       subject: cleanSubject,
       minutes: parsedMinutes,
       didQuestions,
-      questionsDone: didQuestions ? parsedQuestions : 0,
+      questionsDone: parsedQuestions,
       didEssay,
-      essaysDone: didEssay ? parsedEssays : 0,
+      essaysDone: parsedEssays,
     });
 
-    setSubject('');
-    setDidQuestions(false);
-    setDidEssay(false);
+    if (activeTab === 'essay') {
+      setEssayNotes('');
+      setEssaysInput('1');
+    } else {
+      setSubject('');
+    }
   };
 
   const filteredEntries = entries.filter((e) =>
@@ -112,12 +121,12 @@ export function StudyLogCard({
 
   return (
     <section className="flex flex-col bg-[#23202a] border border-[#342e40] rounded-md overflow-hidden shadow-lg">
-      {/* Cabeçalho da Coluna estilo Habitica */}
+      {/* Cabeçalho da Coluna */}
       <div className="bg-[#2c2836] border-b border-[#3a3447] px-4 py-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-[#ffbe5d]" />
           <h2 className="font-condensed font-bold text-base tracking-wide text-white uppercase">
-            Estudo Teórico
+            Estudos
           </h2>
           <span className="px-2 py-0.5 rounded-full bg-[#36205d] border border-[#6133b4] text-[11px] font-condensed font-bold text-[#d6c7ff]">
             {entries.length}
@@ -139,116 +148,169 @@ export function StudyLogCard({
         </div>
       </div>
 
+      {/* Sub-abas Dedicadas: Teoria | Questões | Redação */}
+      <div className="bg-[#1f1c26] border-b border-[#342e40] px-3.5 pt-2.5 flex items-center gap-1.5">
+        {[
+          { id: 'theory' as StudyTab, label: 'Teoria', icon: <BookOpen className="w-3.5 h-3.5" /> },
+          { id: 'questions' as StudyTab, label: 'Questões', icon: <HelpCircle className="w-3.5 h-3.5" /> },
+          { id: 'essay' as StudyTab, label: 'Redação', icon: <FileText className="w-3.5 h-3.5" /> },
+        ].map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setActiveTab(t.id)}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-t text-xs font-condensed font-bold uppercase tracking-wide border-b-2 transition cursor-pointer ${
+              activeTab === t.id
+                ? 'bg-[#2c2836] text-[#ffbe5d] border-[#ffbe5d]'
+                : 'text-[#a8a1b5] border-transparent hover:text-white hover:bg-[#23202a]'
+            }`}
+          >
+            {t.icon}
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="p-3.5 space-y-3">
-        {/* Caixa de Registro Rápido no topo da coluna */}
+        {/* Formulário Específico da Aba Selecionada */}
         <form
           onSubmit={handleSubmit}
           className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3.5 space-y-3 text-sm shadow-inner"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
-                Matéria{parsedMinutes > 0 ? '*' : ''}
-              </label>
-              <input
-                type="text"
-                required={parsedMinutes > 0 && !hasQuestions && !hasEssays}
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="Ex.: Português, Matemática, Direito..."
-                className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
-              />
-            </div>
+          {activeTab === 'theory' && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                    Matéria*
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Ex.: Português, Matemática, Direito..."
+                    className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
+                  />
+                </div>
 
-            <div>
-              <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
-                Tempo (min)
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={minutesInput}
-                onChange={(e) => setMinutesInput(e.target.value.replace(/[^0-9]/g, ''))}
-                placeholder="0"
-                className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#ffbe5d] font-bold focus:outline-none focus:border-[#925cf3]"
-              />
-            </div>
-          </div>
+                <div>
+                  <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                    Tempo líquido (min)*
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={minutesInput}
+                    onChange={(e) => setMinutesInput(e.target.value.replace(/[^0-9]/g, ''))}
+                    placeholder="30"
+                    className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#ffbe5d] font-bold focus:outline-none focus:border-[#925cf3]"
+                  />
+                </div>
+              </div>
 
-          {/* Botões rápidos de tempo */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] text-[#8a8299] mr-1">Tempo rápido:</span>
-            {TIME_PRESETS.map((preset) => (
-              <button
-                key={preset}
-                type="button"
-                onClick={() => setMinutesInput(String(preset))}
-                className={`px-2 py-0.5 rounded text-[11px] font-condensed font-bold border transition ${
-                  parsedMinutes === preset
-                    ? 'bg-[#6133b4] border-[#925cf3] text-white'
-                    : 'bg-[#23202a] border-[#3a3447] text-[#a8a1b5] hover:text-white'
-                }`}
-              >
-                {preset}m
-              </button>
-            ))}
-          </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] text-[#8a8299] mr-1">Tempo rápido:</span>
+                {TIME_PRESETS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setMinutesInput(String(preset))}
+                    className={`px-2 py-0.5 rounded text-[11px] font-condensed font-bold border transition cursor-pointer ${
+                      parsedMinutes === preset
+                        ? 'bg-[#6133b4] border-[#925cf3] text-white'
+                        : 'bg-[#23202a] border-[#3a3447] text-[#a8a1b5] hover:text-white'
+                    }`}
+                  >
+                    {preset}m
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
-          {/* Fez questões? */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#2c2836]">
-            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[#e6dcff]">
-              <input
-                type="checkbox"
-                checked={didQuestions}
-                onChange={(e) => setDidQuestions(e.target.checked)}
-                className="w-4 h-4 rounded accent-[#6133b4]"
-              />
-              <HelpCircle className="w-3.5 h-3.5 text-[#50b5e9]" />
-              <span className="font-medium">Fez questões nesse estudo?</span>
-            </label>
+          {activeTab === 'questions' && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                    Matéria*
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Ex.: Direito Constitucional, Física..."
+                    className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
+                  />
+                </div>
 
-            {didQuestions && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-[#a8a1b5]">Quantas feitas:</span>
+                <div>
+                  <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                    Questões feitas*
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={questionsInput}
+                    onChange={(e) => setQuestionsInput(e.target.value.replace(/[^0-9]/g, ''))}
+                    placeholder="20"
+                    className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#24cc8f] font-bold focus:outline-none focus:border-[#925cf3]"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] text-[#8a8299] mr-1">Bateria rápida:</span>
+                {QUESTION_PRESETS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setQuestionsInput(String(preset))}
+                    className={`px-2 py-0.5 rounded text-[11px] font-condensed font-bold border transition cursor-pointer ${
+                      parsedQuestions === preset
+                        ? 'bg-[#6133b4] border-[#925cf3] text-white'
+                        : 'bg-[#23202a] border-[#3a3447] text-[#a8a1b5] hover:text-white'
+                    }`}
+                  >
+                    {preset}q
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+
+          {activeTab === 'essay' && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                  Tema / Observação pessoal
+                </label>
                 <input
                   type="text"
-                  inputMode="numeric"
-                  value={questionsInput}
-                  onChange={(e) => setQuestionsInput(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder="0"
-                  className="w-24 bg-[#23202a] border border-[#3a3447] rounded px-2.5 py-1 text-sm text-[#24cc8f] font-bold text-center focus:outline-none focus:border-[#925cf3]"
+                  value={essayNotes}
+                  onChange={(e) => setEssayNotes(e.target.value)}
+                  placeholder="Ex.: Tema de atualidades, nota 920..."
+                  className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
                 />
               </div>
-            )}
-          </div>
 
-          {/* Fez redação? */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#2c2836]">
-            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-[#e6dcff]">
-              <input
-                type="checkbox"
-                checked={didEssay}
-                onChange={(e) => setDidEssay(e.target.checked)}
-                className="w-4 h-4 rounded accent-[#6133b4]"
-              />
-              <FileText className="w-3.5 h-3.5 text-[#d6c7ff]" />
-              <span className="font-medium">Fez redação?</span>
-            </label>
-
-            {didEssay && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-[#a8a1b5]">Quantas:</span>
+              <div>
+                <label className="block text-xs font-condensed font-bold text-[#cfc8dc] mb-1">
+                  Redações*
+                </label>
                 <input
                   type="text"
                   inputMode="numeric"
                   value={essaysInput}
                   onChange={(e) => setEssaysInput(e.target.value.replace(/[^0-9]/g, ''))}
                   placeholder="1"
-                  className="w-24 bg-[#23202a] border border-[#3a3447] rounded px-2.5 py-1 text-sm text-[#d6c7ff] font-bold text-center focus:outline-none focus:border-[#925cf3]"
+                  className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#d6c7ff] font-bold focus:outline-none focus:border-[#925cf3]"
                 />
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Prévia em Tempo Real de Recompensa e Contra-Ataque */}
           <div className="bg-[#23202a] border border-[#342e40] rounded px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-condensed">
@@ -271,7 +333,11 @@ export function StudyLogCard({
             }`}
           >
             <Plus className="w-4 h-4" />
-            Registrar Estudo & Atacar Boss
+            {activeTab === 'theory'
+              ? 'Registrar Teoria & Atacar Boss'
+              : activeTab === 'questions'
+                ? 'Registrar Questões & Atacar Boss'
+                : 'Registrar Redação & Atacar Boss'}
           </button>
         </form>
 
@@ -283,7 +349,7 @@ export function StudyLogCard({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Filtrar histórico por matéria..."
+              placeholder="Filtrar histórico por matéria ou tema..."
               className="w-full bg-[#1a181d] border border-[#3a3447] rounded pl-8 pr-3 py-1.5 text-xs text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
             />
           </div>

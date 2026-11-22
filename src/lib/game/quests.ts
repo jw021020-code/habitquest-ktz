@@ -1,5 +1,6 @@
 import { StudyEntry } from '@/components/StudyLogCard';
 import { WorkoutEntry } from '@/components/WorkoutLogCard';
+import { getCardioEquivalentKm } from './cardio';
 import { getQuestScale } from './formulas';
 
 export type QuestCycle = 'daily' | 'weekly' | 'monthly';
@@ -28,16 +29,103 @@ export interface QuestDefinition {
   reward: QuestReward;
 }
 
+export type MonthlyChestTier = 1 | 2 | 3 | 4 | 5;
+
+export interface PendingMonthlyChest {
+  monthKey: string;
+  tier: MonthlyChestTier;
+}
+
+export interface MonthlyChestSpec {
+  tier: MonthlyChestTier;
+  name: string;
+  rarityLabel: string;
+  xp: number;
+  gold: number;
+  eggs: number;
+  potions: number;
+  eggOrPotion?: number;
+  equipDesc: string;
+  borderClass: string;
+  textClass: string;
+}
+
+export const MONTHLY_CHEST_TIERS: Record<MonthlyChestTier, MonthlyChestSpec> = {
+  1: {
+    tier: 1,
+    name: 'Baú Comum',
+    rarityLabel: 'Comum',
+    xp: 150,
+    gold: 120,
+    eggs: 0,
+    potions: 0,
+    eggOrPotion: 1,
+    equipDesc: 'Equipamento Comum (75%) ou Incomum (25%)',
+    borderClass: 'border-slate-400/60',
+    textClass: 'text-slate-200',
+  },
+  2: {
+    tier: 2,
+    name: 'Baú Incomum',
+    rarityLabel: 'Incomum',
+    xp: 250,
+    gold: 220,
+    eggs: 1,
+    potions: 1,
+    equipDesc: 'Equipamento Incomum (65%) ou Raro (35%)',
+    borderClass: 'border-[#24cc8f]/70',
+    textClass: 'text-[#24cc8f]',
+  },
+  3: {
+    tier: 3,
+    name: 'Baú Raro',
+    rarityLabel: 'Raro',
+    xp: 400,
+    gold: 350,
+    eggs: 2,
+    potions: 2,
+    equipDesc: 'Equipamento Raro (65%), Épico (30%) ou Lendário (5%)',
+    borderClass: 'border-[#50b5e9]/80',
+    textClass: 'text-[#50b5e9]',
+  },
+  4: {
+    tier: 4,
+    name: 'Baú Épico',
+    rarityLabel: 'Épico',
+    xp: 520,
+    gold: 450,
+    eggs: 2,
+    potions: 2,
+    equipDesc: 'Equipamento Épico (80%) ou Lendário (20%)',
+    borderClass: 'border-[#925cf3]',
+    textClass: 'text-[#d6c7ff]',
+  },
+  5: {
+    tier: 5,
+    name: 'Baú Lendário',
+    rarityLabel: 'Lendário',
+    xp: 650,
+    gold: 600,
+    eggs: 3,
+    potions: 3,
+    equipDesc: '1 Equipamento Lendário 100% Garantido',
+    borderClass: 'border-[#ffbe5d]',
+    textClass: 'text-[#ffbe5d]',
+  },
+};
+
 export interface QuestsState {
   dailyKey: string;
   dailyQuestIds: string[];
   dailyClaimedIds: string[];
+  recentDailyQuestIds?: string[];
   weeklyKey: string;
   weeklyQuestIds: string[];
   weeklyClaimedIds: string[];
   monthlyKey: string;
   monthlyClaimedIds: string[];
   monthlyBonusClaimed: boolean;
+  pendingMonthlyChest?: PendingMonthlyChest | null;
   totalQuestsCompleted: number;
 }
 
@@ -98,7 +186,7 @@ export const DAILY_QUESTS_POOL: QuestDefinition[] = [
     cycle: 'daily',
     pillar: 'run_km',
     title: 'Fôlego do Dia: Cárdio',
-    description: 'Percorra 3 km no cárdio hoje.',
+    description: 'Acumule 3 km eq. no cárdio hoje (Corrida 1x, Caminhada 0,5x, Bike 0,33x ou HIIT).',
     icon: '🏃',
     target: 3,
     unit: 'km',
@@ -156,7 +244,7 @@ export const WEEKLY_QUESTS_POOL: QuestDefinition[] = [
     cycle: 'weekly',
     pillar: 'run_km',
     title: 'Resistência no Cárdio (Semanal)',
-    description: 'Percorra 15 km acumulados ao longo desta semana.',
+    description: 'Acumule 15 km eq. no cárdio ao longo desta semana (Corrida, Caminhada, Bike ou HIIT).',
     icon: '🏃',
     target: 15,
     unit: 'km',
@@ -214,7 +302,7 @@ export const MONTHLY_QUESTS_POOL: QuestDefinition[] = [
     cycle: 'monthly',
     pillar: 'run_km',
     title: 'Resistência Aeróbica (Mensal)',
-    description: 'Percorra 60 km acumulados no mês.',
+    description: 'Acumule 60 km eq. no cárdio no mês (Corrida, Caminhada, Bike ou HIIT).',
     icon: '🏃',
     target: 60,
     unit: 'km',
@@ -288,25 +376,66 @@ function pickRandomIds(pool: QuestDefinition[], count: number): string[] {
   return copy.slice(0, count).map((q) => q.id);
 }
 
+function pickDailyQuestNoRepeat(recentIds: string[] = []): string {
+  const blocked = new Set(recentIds.slice(-2));
+  const candidates = DAILY_QUESTS_POOL.filter((q) => !blocked.has(q.id));
+  const pool = candidates.length > 0 ? candidates : DAILY_QUESTS_POOL;
+  const idx = Math.floor(Math.random() * pool.length);
+  return pool[idx].id;
+}
+
 export function createInitialQuestsState(now: Date = new Date()): QuestsState {
+  const firstDaily = pickDailyQuestNoRepeat([]);
   return {
     dailyKey: getDayKey(now),
-    dailyQuestIds: pickRandomIds(DAILY_QUESTS_POOL, 1),
+    dailyQuestIds: [firstDaily],
     dailyClaimedIds: [],
+    recentDailyQuestIds: [firstDaily],
     weeklyKey: getWeekKey(now),
     weeklyQuestIds: pickRandomIds(WEEKLY_QUESTS_POOL, 2),
     weeklyClaimedIds: [],
     monthlyKey: getMonthKey(now),
     monthlyClaimedIds: [],
     monthlyBonusClaimed: false,
+    pendingMonthlyChest: null,
     totalQuestsCompleted: 0,
   };
 }
 
-/** Garante que as missões sorteadas correspondam ao dia/semana/mês atuais. */
+function computeTotalsForMonthKey(
+  monthKey: string,
+  studyEntries: StudyEntry[],
+  workoutEntries: WorkoutEntry[]
+): PeriodTotals {
+  const totals: PeriodTotals = {
+    studyMinutes: 0,
+    questionsDone: 0,
+    essaysDone: 0,
+    runKm: 0,
+    workoutsCount: 0,
+  };
+  for (const s of studyEntries) {
+    const keys = getEntryPeriodKeys(s.loggedAt);
+    if (!keys || keys.monthKey !== monthKey) continue;
+    totals.studyMinutes += Math.max(0, s.minutes || 0);
+    totals.questionsDone += s.didQuestions ? Math.max(0, s.questionsDone || 0) : 0;
+    totals.essaysDone += s.didEssay ? Math.max(0, s.essaysDone || 0) : 0;
+  }
+  for (const w of workoutEntries) {
+    const keys = getEntryPeriodKeys(w.loggedAt);
+    if (!keys || keys.monthKey !== monthKey) continue;
+    totals.runKm += getCardioEquivalentKm(w);
+    totals.workoutsCount += (w.cardio ? 1 : 0) + (w.musculacao ? 1 : 0);
+  }
+  return totals;
+}
+
+/** Garante que as missões sorteadas correspondam ao dia/semana/mês atuais, com anti-repetição diária e fechamento do Baú Mensal. */
 export function syncQuestsPeriod(
   current: QuestsState | undefined,
-  now: Date = new Date()
+  now: Date = new Date(),
+  studyEntries: StudyEntry[] = [],
+  workoutEntries: WorkoutEntry[] = []
 ): QuestsState {
   if (!current) return createInitialQuestsState(now);
 
@@ -322,16 +451,40 @@ export function syncQuestsPeriod(
     return current;
   }
 
+  let nextDailyQuestIds = current.dailyQuestIds;
+  let nextRecent = current.recentDailyQuestIds ?? [...(current.dailyQuestIds ?? [])];
+  if (dailyChanged) {
+    const picked = pickDailyQuestNoRepeat(nextRecent);
+    nextDailyQuestIds = [picked];
+    nextRecent = [...nextRecent, picked].slice(-2);
+  }
+
+  let nextPendingChest = current.pendingMonthlyChest ?? null;
+  if (monthlyChanged && !current.monthlyBonusClaimed && current.monthlyKey) {
+    const prevTotals = computeTotalsForMonthKey(current.monthlyKey, studyEntries, workoutEntries);
+    const completedCount = MONTHLY_QUESTS_POOL.filter(
+      (q) => getRawValueForPillar(prevTotals, q.pillar) >= q.target
+    ).length;
+    if (completedCount >= 1) {
+      nextPendingChest = {
+        monthKey: current.monthlyKey,
+        tier: Math.min(5, completedCount) as MonthlyChestTier,
+      };
+    }
+  }
+
   return {
     dailyKey: dayKey,
-    dailyQuestIds: dailyChanged ? pickRandomIds(DAILY_QUESTS_POOL, 1) : current.dailyQuestIds,
+    dailyQuestIds: nextDailyQuestIds,
     dailyClaimedIds: dailyChanged ? [] : current.dailyClaimedIds ?? [],
+    recentDailyQuestIds: nextRecent,
     weeklyKey: weekKey,
     weeklyQuestIds: weeklyChanged ? pickRandomIds(WEEKLY_QUESTS_POOL, 2) : current.weeklyQuestIds,
     weeklyClaimedIds: weeklyChanged ? [] : current.weeklyClaimedIds ?? [],
     monthlyKey: monthKey,
     monthlyClaimedIds: monthlyChanged ? [] : current.monthlyClaimedIds ?? [],
     monthlyBonusClaimed: monthlyChanged ? false : Boolean(current.monthlyBonusClaimed),
+    pendingMonthlyChest: nextPendingChest,
     totalQuestsCompleted: current.totalQuestsCompleted ?? 0,
   };
 }
@@ -399,7 +552,7 @@ export function computePeriodTotals(
   for (const w of workoutEntries) {
     const keys = getEntryPeriodKeys(w.loggedAt);
     if (!keys) continue;
-    const km = w.cardio ? Math.max(0, Number(w.km) || 0) : 0;
+    const km = getCardioEquivalentKm(w);
     const count = (w.cardio ? 1 : 0) + (w.musculacao ? 1 : 0);
 
     if (keys.dayKey === curDay) {

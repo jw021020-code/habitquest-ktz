@@ -50,17 +50,19 @@ import {
   HeroMetrics,
   rollArmoireReward,
   rollBossEquipmentDrop,
-  rollGuaranteedEquipment,
+  rollMonthlyChestEquipment,
   rollWeeklyQuestEquipmentDrop,
 } from '@/lib/game/achievements';
+import { formatCardioEntryBadge, getCardioEquivalentKm } from '@/lib/game/cardio';
 import {
   buildQuestProgressList,
   computePeriodTotals,
   getDayKey,
   getQuestById,
   getQuestXpForLevel,
-  MONTHLY_BONUS_REWARD,
+  MONTHLY_CHEST_TIERS,
   MONTHLY_QUESTS_POOL,
+  MonthlyChestTier,
   QuestCycle,
   syncQuestsPeriod,
 } from '@/lib/game/quests';
@@ -550,10 +552,21 @@ export default function HomePage() {
 
   const handleAddWorkout = (entry: Omit<WorkoutEntry, 'id' | 'createdAt'>) => {
     const now = new Date();
+    const todayKey = getDayKey(now);
     const nowLabel = now.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
     });
+
+    const todayEntries = workoutEntries.filter(
+      (w) => w.loggedAt && getDayKey(new Date(w.loggedAt)) === todayKey
+    );
+    const alreadyCardioToday = todayEntries.some((w) => w.cardio);
+    const alreadyMuscToday = todayEntries.some((w) => w.musculacao);
+    const hasDualDailyBonus =
+      (entry.musculacao && !entry.cardio && alreadyCardioToday && !alreadyMuscToday) ||
+      (entry.cardio && !entry.musculacao && alreadyMuscToday && !alreadyCardioToday);
+
     const newEntry: WorkoutEntry = {
       ...entry,
       id: crypto.randomUUID(),
@@ -562,11 +575,14 @@ export default function HomePage() {
     };
     setWorkoutEntries((prev) => [newEntry, ...prev]);
 
-    const kmText = entry.cardio && entry.km && entry.km > 0 ? ` (${entry.km} km)` : '';
-    const label = [entry.cardio ? `Cárdio${kmText}` : '', entry.musculacao ? 'Musculação' : '']
-      .filter(Boolean)
-      .join(' + ');
-    pushActionLog(`💪 ${heroName} registrou Treino: ${label}.`);
+    const kmEq = getCardioEquivalentKm(entry);
+    const cardioLabel = entry.cardio ? formatCardioEntryBadge(entry) : '';
+    const muscLabel = entry.musculacao
+      ? `Musculação${entry.muscleGroup ? ` (${entry.muscleGroup})` : ''}`
+      : '';
+    const label = [cardioLabel, muscLabel].filter(Boolean).join(' + ');
+    const comboTag = hasDualDailyBonus ? ' [Combo Diário!]' : '';
+    pushActionLog(`💪 ${heroName} registrou Treino: ${label}${comboTag}.`);
 
     const res = calculateWorkoutReward(
       stats,
@@ -575,7 +591,8 @@ export default function HomePage() {
       totalAttributes,
       activeBossAttack,
       bossMods,
-      entry.km ?? 0
+      kmEq,
+      hasDualDailyBonus
     );
     processDropAndToast(res, `Treino: ${label}`);
   };
@@ -1538,9 +1555,25 @@ export default function HomePage() {
   }, []);
 
   const questsState = useMemo(
-    () => (nowTs !== null ? syncQuestsPeriod(metrics.quests, new Date(nowTs)) : null),
-    [metrics.quests, nowTs]
+    () =>
+      nowTs !== null
+        ? syncQuestsPeriod(metrics.quests, new Date(nowTs), studyEntries, workoutEntries)
+        : null,
+    [metrics.quests, nowTs, studyEntries, workoutEntries]
   );
+
+  const { todayHasCardio, todayHasMusculacao } = useMemo(() => {
+    if (nowTs === null) return { todayHasCardio: false, todayHasMusculacao: false };
+    const todayKey = getDayKey(new Date(nowTs));
+    let hasC = false;
+    let hasM = false;
+    for (const w of workoutEntries) {
+      if (!w.loggedAt || getDayKey(new Date(w.loggedAt)) !== todayKey) continue;
+      if (w.cardio) hasC = true;
+      if (w.musculacao) hasM = true;
+    }
+    return { todayHasCardio: hasC, todayHasMusculacao: hasM };
+  }, [workoutEntries, nowTs]);
 
   useEffect(() => {
     if (!questsState) return;
@@ -1614,7 +1647,9 @@ export default function HomePage() {
 
   const readyQuestsCount =
     [...dailyQuests, ...weeklyQuests, ...monthlyQuests].filter((q) => q.completed && !q.claimed)
-      .length + (canClaimMonthlyBonus ? 1 : 0);
+      .length +
+    (canClaimMonthlyBonus ? 1 : 0) +
+    (questsState?.pendingMonthlyChest ? 1 : 0);
 
   const canCheckInToday =
     nowTs !== null && canClaimDailyCheckIn(metrics.checkin, new Date(nowTs));
@@ -1800,40 +1835,65 @@ export default function HomePage() {
     showToast(`🎯 Missão Concluída! +${xp} XP, +${gold} GP${extraText}`);
   };
 
-  const handleClaimMonthlyBonus = () => {
-    if (!canClaimMonthlyBonus) return;
-
-    const equipDrop = rollGuaranteedEquipment(inventory);
-    const scaledBonusXp = getQuestXpForLevel(MONTHLY_BONUS_REWARD.xp, stats.level);
+  const openMonthlyChest = (tier: MonthlyChestTier, isPending: boolean) => {
+    const spec = MONTHLY_CHEST_TIERS[tier];
+    const equipDrop = rollMonthlyChestEquipment(tier, inventory);
+    const scaledBonusXp = getQuestXpForLevel(spec.xp, stats.level);
     const res = grantXpAndResources(stats, totalAttributes, {
       xp: scaledBonusXp,
-      goldDelta: MONTHLY_BONUS_REWARD.gold,
+      goldDelta: spec.gold,
     });
     setStats(res.nextStats);
+
+    let extraEggs = spec.eggs;
+    let extraPotions = spec.potions;
+    if (spec.eggOrPotion && spec.eggOrPotion > 0) {
+      if (Math.random() < 0.5) extraEggs += spec.eggOrPotion;
+      else extraPotions += spec.eggOrPotion;
+    }
+    if (extraEggs > 0 || extraPotions > 0) {
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + extraEggs,
+        potions: prev.potions + extraPotions,
+      }));
+    }
 
     if (equipDrop && !inventory.includes(equipDrop.item.id)) {
       setInventory((prev) => [...prev, equipDrop.item.id]);
     }
 
     setMetrics((prev) => {
-      const synced = syncQuestsPeriod(prev.quests);
+      const synced = syncQuestsPeriod(prev.quests, new Date(), studyEntries, workoutEntries);
       return {
         ...prev,
-        totalGoldEarned: prev.totalGoldEarned + MONTHLY_BONUS_REWARD.gold,
+        totalGoldEarned: prev.totalGoldEarned + spec.gold,
         quests: {
           ...synced,
-          monthlyBonusClaimed: true,
+          monthlyBonusClaimed: isPending ? synced.monthlyBonusClaimed : true,
+          pendingMonthlyChest: isPending ? null : synced.pendingMonthlyChest,
         },
       };
     });
 
-    const dropLabel = equipDrop ? ` · 🎁 ${equipDrop.label}` : '';
-    pushActionLog(
-      `👑 ${heroName} fechou todas as 5 Metas Mensais e abriu o Baú de Honra: +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
-    );
-    showToast(
-      `👑 Baú de Honra! +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
-    );
+    const parts = [`+${scaledBonusXp} XP`, `+${spec.gold} GP`];
+    if (extraEggs > 0) parts.push(`+${extraEggs} Ovo`);
+    if (extraPotions > 0) parts.push(`+${extraPotions} Poção`);
+    if (equipDrop) parts.push(`🎁 ${equipDrop.label}`);
+    const summary = parts.join(', ');
+
+    pushActionLog(`👑 ${heroName} abriu o ${spec.name} (${tier}/5 Metas Mensais): ${summary}!`);
+    showToast(`👑 ${spec.name}! ${summary}`);
+  };
+
+  const handleClaimMonthlyBonus = () => {
+    if (!canClaimMonthlyBonus) return;
+    openMonthlyChest(5, false);
+  };
+
+  const handleClaimPendingChest = () => {
+    if (!questsState?.pendingMonthlyChest) return;
+    openMonthlyChest(questsState.pendingMonthlyChest.tier, true);
   };
 
   const showRegistroSection = activeSection === 'registro';
@@ -1942,6 +2002,8 @@ export default function HomePage() {
                 stats={stats}
                 totalAttributes={totalAttributes}
                 bossAttack={activeBossAttack}
+                todayHasCardio={todayHasCardio}
+                todayHasMusculacao={todayHasMusculacao}
                 onAddWorkout={handleAddWorkout}
                 onDeleteWorkout={handleDeleteWorkout}
               />
@@ -1958,12 +2020,14 @@ export default function HomePage() {
           weeklyQuests={weeklyQuests}
           monthlyQuests={monthlyQuests}
           monthlyBonusClaimed={questsState.monthlyBonusClaimed}
+          pendingMonthlyChest={questsState.pendingMonthlyChest}
           totalQuestsCompleted={questsState.totalQuestsCompleted}
           dailyKey={questsState.dailyKey}
           weeklyKey={questsState.weeklyKey}
           monthlyKey={questsState.monthlyKey}
           onClaimQuest={handleClaimQuest}
           onClaimMonthlyBonus={handleClaimMonthlyBonus}
+          onClaimPendingChest={handleClaimPendingChest}
           onPeriodTick={() => setNowTs(Date.now())}
         />
       )}

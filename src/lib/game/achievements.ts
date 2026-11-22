@@ -6,6 +6,7 @@ import {
   RARITY_META,
 } from './items';
 import { CheckInState } from './checkin';
+import { getCardioEquivalentKm } from './cardio';
 import { StudyEntry } from '@/components/StudyLogCard';
 import { WorkoutEntry } from '@/components/WorkoutLogCard';
 
@@ -30,6 +31,8 @@ export interface HeroMetrics {
     monthlyClaimedIds: string[];
     monthlyBonusClaimed: boolean;
     totalQuestsCompleted: number;
+    recentDailyQuestIds?: string[];
+    pendingMonthlyChest?: { monthKey: string; tier: 1 | 2 | 3 | 4 | 5 } | null;
   };
   checkin?: CheckInState;
   seasonSeen?: string;
@@ -94,16 +97,36 @@ export function buildAchievementContext(
   );
   const runKm =
     Math.round(
-      workoutEntries.reduce(
-        (acc, w) => acc + (w.cardio ? Math.max(0, Number(w.km) || 0) : 0),
-        0
-      ) * 10
+      workoutEntries.reduce((acc, w) => acc + getCardioEquivalentKm(w), 0) * 10
     ) / 10;
   const workoutsCount = workoutEntries.reduce(
     (acc, w) => acc + (w.cardio ? 1 : 0) + (w.musculacao ? 1 : 0),
     0
   );
-  const comboCount = workoutEntries.filter((w) => w.cardio && w.musculacao).length;
+  const comboDayKeys = new Set<string>();
+  const cardioDays = new Set<string>();
+  const muscDays = new Set<string>();
+  for (const w of workoutEntries) {
+    const dayKey = w.loggedAt
+      ? new Intl.DateTimeFormat('en-CA', {
+          timeZone: 'America/Sao_Paulo',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).format(new Date(w.loggedAt))
+      : w.id;
+    if (w.cardio && w.musculacao) {
+      comboDayKeys.add(dayKey);
+    } else if (w.cardio) {
+      cardioDays.add(dayKey);
+    } else if (w.musculacao) {
+      muscDays.add(dayKey);
+    }
+  }
+  for (const d of cardioDays) {
+    if (muscDays.has(d)) comboDayKeys.add(d);
+  }
+  const comboCount = comboDayKeys.size;
   const questsCompleted = metrics.quests?.totalQuestsCompleted ?? 0;
   const checkInStreak = metrics.checkin?.streak ?? 0;
 
@@ -603,13 +626,31 @@ export function rollEquipmentFromWeights(
 }
 
 /**
- * Sorteia um equipamento inédito garantido para o Baú de Honra do Mês:
- * Raro 45% · Épico 40% · Lendário 15%.
+ * Sorteia um equipamento inédito para o Baú de Honra Mensal conforme o grau (1..5):
+ * 1 Comum (75% Comum / 25% Incomum)
+ * 2 Incomum (65% Incomum / 35% Raro)
+ * 3 Raro (65% Raro / 30% Épico / 5% Lendário)
+ * 4 Épico (80% Épico / 20% Lendário)
+ * 5 Lendário (100% LENDÁRIO GARANTIDO!)
  */
+export function rollMonthlyChestEquipment(
+  tier: 1 | 2 | 3 | 4 | 5,
+  ownedIds: string[] = []
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  const weightsByTier: Record<1 | 2 | 3 | 4 | 5, Partial<Record<ItemRarity, number>>> = {
+    1: { common: 75, uncommon: 25 },
+    2: { uncommon: 65, rare: 35 },
+    3: { rare: 65, epic: 30, legendary: 5 },
+    4: { epic: 80, legendary: 20 },
+    5: { legendary: 100 },
+  };
+  return rollEquipmentFromWeights(ownedIds, weightsByTier[tier]);
+}
+
 export function rollGuaranteedEquipment(
   ownedIds: string[] = []
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
-  return rollEquipmentFromWeights(ownedIds, { rare: 45, epic: 40, legendary: 15 });
+  return rollMonthlyChestEquipment(5, ownedIds);
 }
 
 /** Drop bônus (15%) ao concluir Missão Semanal: Raro 75% · Épico 22% · Lendário 3%. */
