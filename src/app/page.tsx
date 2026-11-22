@@ -8,6 +8,8 @@ import {
   BossCombatModifiers,
   calculateStudyReward,
   calculateWorkoutReward,
+  getCatchUpInfo,
+  getGuildReferenceLevel,
   getUnallocatedStatPoints,
   getXpToNextLevel,
   grantXpAndResources,
@@ -541,7 +543,8 @@ export default function HomePage() {
       activeBossAttack,
       bossMods,
       Boolean(entry.didEssay),
-      entry.essaysDone ?? 0
+      entry.essaysDone ?? 0,
+      catchUpInfo.multiplier
     );
     processDropAndToast(res, `Estudo: ${entry.subject}`);
   };
@@ -592,7 +595,8 @@ export default function HomePage() {
       activeBossAttack,
       bossMods,
       kmEq,
-      hasDualDailyBonus
+      hasDualDailyBonus,
+      catchUpInfo.multiplier
     );
     processDropAndToast(res, `Treino: ${label}`);
   };
@@ -1304,46 +1308,98 @@ export default function HomePage() {
     };
   }, [remoteParty?.id]);
 
-  // Recompensa compartilhada automática para membros da KTZ que participaram do Boss derrotado por outro aliado
+  // Recompensa compartilhada automática para toda a guilda KTZ quando um Boss cai:
+  // - Todos os membros recebem 100% do XP do Boss + fôlego (+25% STA / +15% MP) para ninguém ficar atrás.
+  // - Quem atacou o Boss também recebe Ouro, Ovos/Poções e chance de Equipamento.
   useEffect(() => {
     if (!hydrated || !remoteParty) return;
     const partyStage = remoteParty.boss_stage ?? 1;
-    const prevStage = partyStage - 1;
-    if (
-      prevStage >= 1 &&
-      metrics.currentBossStage === prevStage &&
-      (metrics.currentBossDamage ?? 0) > 0 &&
-      (metrics.lastClaimedBossStage ?? 0) < prevStage
-    ) {
-      const prevBoss = getProgressiveBoss(prevStage);
-      const victoryRes = grantXpAndResources(stats, totalAttributes, {
+    if (partyStage <= 1) return;
+
+    // Proteção para recém-chegados: não concede XP retroativo de Bosses derrotados antes de entrar
+    if (metrics.lastClaimedBossStage === undefined) {
+      setMetrics((m) => ({
+        ...m,
+        currentBossStage: partyStage,
+        currentBossDamage: 0,
+        lastClaimedBossStage: partyStage - 1,
+      }));
+      return;
+    }
+
+    const lastClaimed = metrics.lastClaimedBossStage;
+    if (lastClaimed >= partyStage - 1) return;
+
+    const startStage = Math.max(lastClaimed + 1, partyStage - 5);
+    let nextStats = stats;
+    let totalXpGained = 0;
+    let totalGoldGained = 0;
+    let totalEggs = 0;
+    let totalPotions = 0;
+    let bossesCounted = 0;
+    const droppedLabels: string[] = [];
+    let nextInv = [...inventory];
+    let lastBossName = '';
+
+    for (let s = startStage; s <= partyStage - 1; s++) {
+      const prevBoss = getProgressiveBoss(s);
+      lastBossName = prevBoss.name;
+      const participated =
+        metrics.currentBossStage === s && (metrics.currentBossDamage ?? 0) > 0;
+
+      const victoryRes = grantXpAndResources(nextStats, totalAttributes, {
         xp: prevBoss.rewardXp,
-        goldDelta: prevBoss.rewardGold,
+        goldDelta: participated ? prevBoss.rewardGold : 0,
         bossVictoryRestore: true,
         resetBuffs: true,
       });
-      setStats(victoryRes.nextStats);
-      setBossMods({});
+      nextStats = victoryRes.nextStats;
+      totalXpGained += prevBoss.rewardXp;
+
+      if (participated) {
+        totalGoldGained += prevBoss.rewardGold;
+        totalEggs += prevBoss.dropCount;
+        totalPotions += prevBoss.dropCount;
+        bossesCounted += 1;
+        const sharedGearDrop = rollBossEquipmentDrop(nextInv, s);
+        if (sharedGearDrop && !nextInv.includes(sharedGearDrop.item.id)) {
+          nextInv = [...nextInv, sharedGearDrop.item.id];
+          droppedLabels.push(sharedGearDrop.label);
+        }
+      }
+    }
+
+    setStats(nextStats);
+    setBossMods({});
+    if (totalEggs > 0 || totalPotions > 0) {
       setStable((prev) => ({
         ...prev,
-        eggs: prev.eggs + prevBoss.dropCount,
-        potions: prev.potions + prevBoss.dropCount,
+        eggs: prev.eggs + totalEggs,
+        potions: prev.potions + totalPotions,
       }));
-      const sharedGearDrop = rollBossEquipmentDrop(inventory, prevStage);
-      if (sharedGearDrop && !inventory.includes(sharedGearDrop.item.id)) {
-        setInventory((prev) => [...prev, sharedGearDrop.item.id]);
-      }
-      setMetrics((m) => ({
-        ...m,
-        bossesDefeated: m.bossesDefeated + 1,
-        totalGoldEarned: m.totalGoldEarned + prevBoss.rewardGold,
-        currentBossStage: partyStage,
-        currentBossDamage: 0,
-        lastClaimedBossStage: prevStage,
-      }));
-      const sharedDropText = sharedGearDrop ? ` · 🎁 ${sharedGearDrop.label}` : '';
+    }
+    if (nextInv.length !== inventory.length) {
+      setInventory(nextInv);
+    }
+    setMetrics((m) => ({
+      ...m,
+      bossesDefeated: m.bossesDefeated + bossesCounted,
+      totalGoldEarned: m.totalGoldEarned + totalGoldGained,
+      currentBossStage: partyStage,
+      currentBossDamage: 0,
+      lastClaimedBossStage: partyStage - 1,
+    }));
+
+    const stagesLabel =
+      partyStage - 1 > startStage ? `${partyStage - startStage} Bosses` : lastBossName;
+    if (totalGoldGained > 0) {
+      const dropText = droppedLabels.length > 0 ? ` · 🎁 ${droppedLabels.join(', ')}` : '';
       showToast(
-        `🏆 A guilda derrotou ${prevBoss.name}! +${prevBoss.rewardGold} GP, +${prevBoss.rewardXp} XP, +${prevBoss.dropCount} Ovo/Poção${sharedDropText} e +25% STA / +15% MP!`
+        `🏆 A KTZ derrotou ${stagesLabel}! +${totalGoldGained} GP, +${totalXpGained} XP, +${totalEggs} Ovo/Poção${dropText} e +25% STA / +15% MP!`
+      );
+    } else {
+      showToast(
+        `🏆 A KTZ derrotou ${stagesLabel}! Como membro do clã você recebeu +${totalXpGained} XP e +25% STA / +15% MP (ataque o próximo para ganhar GP e drops)!`
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1548,6 +1604,17 @@ export default function HomePage() {
   const activeRewardGold = remoteParty ? remoteParty.reward_gold : party.rewardGold;
   const activeRewardXp = remoteParty ? remoteParty.reward_xp : party.rewardXp;
   const supabaseReady = isSupabaseConfigured();
+
+  const guildReferenceLevel = useMemo(() => {
+    const levels = remoteMembers.map((m) => (m.id === userId ? stats.level : m.level));
+    if (levels.length === 0) levels.push(stats.level);
+    return getGuildReferenceLevel(levels);
+  }, [remoteMembers, userId, stats.level]);
+
+  const catchUpInfo = useMemo(
+    () => getCatchUpInfo(stats.level, guildReferenceLevel),
+    [stats.level, guildReferenceLevel]
+  );
 
   const [nowTs, setNowTs] = useState<number | null>(null);
   useEffect(() => {
@@ -1934,6 +2001,8 @@ export default function HomePage() {
         readyQuestsCount={readyQuestsCount}
         canClaimCheckIn={canCheckInToday}
         checkInStreak={currentCheckInStreak}
+        catchUpPercent={catchUpInfo.bonusPercent}
+        guildReferenceLevel={guildReferenceLevel}
         supabaseReady={supabaseReady}
         onSelectSection={(sec) => {
           setActiveSection(sec);
@@ -1991,6 +2060,7 @@ export default function HomePage() {
                 stats={stats}
                 totalAttributes={totalAttributes}
                 bossAttack={activeBossAttack}
+                catchUpMult={catchUpInfo.multiplier}
                 onAddStudy={handleAddStudy}
                 onDeleteStudy={handleDeleteStudy}
               />
@@ -2004,6 +2074,7 @@ export default function HomePage() {
                 bossAttack={activeBossAttack}
                 todayHasCardio={todayHasCardio}
                 todayHasMusculacao={todayHasMusculacao}
+                catchUpMult={catchUpInfo.multiplier}
                 onAddWorkout={handleAddWorkout}
                 onDeleteWorkout={handleDeleteWorkout}
               />

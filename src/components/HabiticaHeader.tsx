@@ -57,6 +57,8 @@ interface HabiticaHeaderProps {
   readyQuestsCount?: number;
   canClaimCheckIn?: boolean;
   checkInStreak?: number;
+  catchUpPercent?: number;
+  guildReferenceLevel?: number;
   supabaseReady: boolean;
   onSelectSection: (section: ActiveSection) => void;
   onSelectInvTab: (tab: InventorySubTab) => void;
@@ -102,6 +104,8 @@ export function HabiticaHeader({
   readyQuestsCount = 0,
   canClaimCheckIn = false,
   checkInStreak = 0,
+  catchUpPercent = 0,
+  guildReferenceLevel = 1,
   supabaseReady,
   onSelectSection,
   onSelectInvTab,
@@ -389,6 +393,14 @@ export function HabiticaHeader({
                   >
                     {classMeta.label} · Nv. {stats.level}
                   </span>
+                  {catchUpPercent > 0 && (
+                    <span
+                      className="text-[11px] font-condensed font-bold px-2 py-0.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/50"
+                      title={`Impulso da Guilda: você ganha +${catchUpPercent}% XP em Estudos e Treinos até alcançar o pelotão da KTZ (Ref. Nv. ${guildReferenceLevel})`}
+                    >
+                      ⚡ Catch-Up +{catchUpPercent}% XP
+                    </span>
+                  )}
                 </div>
 
                 {isExhausted && (

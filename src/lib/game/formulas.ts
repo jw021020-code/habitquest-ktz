@@ -190,6 +190,35 @@ export function getQuestScale(level: number): number {
   return 1 + Math.min(2.0, Math.max(0, level - 1) * 0.03);
 }
 
+/**
+ * Calcula o Nível de Referência da Guilda usando a média dos Top 3 membros mais altos.
+ */
+export function getGuildReferenceLevel(memberLevels: number[]): number {
+  const valid = memberLevels.filter((l) => Number.isFinite(l) && l >= 1).sort((a, b) => b - a);
+  if (valid.length === 0) return 1;
+  const top = valid.slice(0, 3);
+  const avg = top.reduce((acc, l) => acc + l, 0) / top.length;
+  return Math.max(1, Math.round(avg));
+}
+
+/**
+ * Impulso da Guilda (Catch-Up de XP):
+ * Jogadores 2+ níveis abaixo da referência da KTZ ganham +12% XP por nível de atraso (até +100% / 2.0x)
+ * exclusivamente em Estudos e Treinos Físicos.
+ */
+export function getCatchUpInfo(
+  playerLevel: number,
+  referenceLevel: number
+): { diff: number; bonusPercent: number; multiplier: number } {
+  const diff = Math.max(0, referenceLevel - playerLevel);
+  if (diff < 2) {
+    return { diff, bonusPercent: 0, multiplier: 1.0 };
+  }
+  const multiplier = Math.min(2.0, Math.round((1.0 + diff * 0.12) * 100) / 100);
+  const bonusPercent = Math.round((multiplier - 1) * 100);
+  return { diff, bonusPercent, multiplier };
+}
+
 function computeBasePreview(
   stats: PlayerStats,
   baseXp: number,
@@ -198,7 +227,8 @@ function computeBasePreview(
   attrs: Attributes,
   bossAttack: number,
   bossMods?: BossCombatModifiers,
-  effortScale = 1.0
+  effortScale = 1.0,
+  catchUpMult = 1.0
 ): RewardPreview {
   if (baseXp <= 0) {
     return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
@@ -207,7 +237,7 @@ function computeBasePreview(
   const vulnMult = bossMods?.vulnerable ? 1.2 : 1.0;
   const levelScale = getLevelScale(stats.level);
   // XP é 100% neutro de classe/atributos (INT e Crítico não alteram XP)
-  const xp = Math.max(1, Math.round(baseXp * levelScale));
+  const xp = Math.max(1, Math.round(baseXp * levelScale * Math.max(1, catchUpMult)));
   const gold = Math.max(1, Math.round(baseGold * (1 + attrs.per * 0.02) * exhaustMult));
   const bossDamage = Math.max(
     1,
@@ -236,7 +266,8 @@ export function previewStudyReward(
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
   didEssay = false,
-  essaysDone = 0
+  essaysDone = 0,
+  catchUpMult = 1.0
 ): RewardPreview {
   const safeMinutes = Math.max(0, minutes || 0);
   const safeQuestions = didQuestions ? Math.max(0, questionsDone || 0) : 0;
@@ -257,7 +288,8 @@ export function previewStudyReward(
     attrs,
     bossAttack,
     bossMods,
-    effortScale
+    effortScale,
+    catchUpMult
   );
 }
 
@@ -273,7 +305,8 @@ export function previewWorkoutReward(
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
   kmEq = 0,
-  hasDualDailyBonus = false
+  hasDualDailyBonus = false,
+  catchUpMult = 1.0
 ): RewardPreview {
   if (!cardio && !musculacao) {
     return { xp: 0, gold: 0, bossDamage: 0, staminaLost: 0 };
@@ -297,7 +330,8 @@ export function previewWorkoutReward(
     attrs,
     bossAttack,
     bossMods,
-    effortScale
+    effortScale,
+    catchUpMult
   );
 }
 
@@ -311,7 +345,8 @@ function applyProgressReward(
   bossAttack: number,
   bossMods?: BossCombatModifiers,
   effortScale = 1.0,
-  effortFactor = 1.5
+  effortFactor = 1.5,
+  catchUpMult = 1.0
 ) {
   const guaranteedCrit = Boolean(stats.critGuarantee);
   const isExhausted = stats.hp <= 0 && !guaranteedCrit;
@@ -324,8 +359,8 @@ function applyProgressReward(
   const isCritical = guaranteedCrit || Math.random() < critChance;
   const critMult = guaranteedCrit ? 1.75 : isCritical ? 1.5 : 1.0;
 
-  // XP é 100% neutro de classe (sem bônus de INT nem de Crítico)
-  const gainedXp = Math.max(1, Math.round(baseXp * levelScale));
+  // XP é 100% neutro de classe (sem bônus de INT nem de Crítico), com Impulso Catch-Up quando aplicável
+  const gainedXp = Math.max(1, Math.round(baseXp * levelScale * Math.max(1, catchUpMult)));
   const gainedGold = Math.max(
     1,
     Math.round(baseGold * (1 + attrs.per * 0.02) * critMult * exhaustMult)
@@ -396,7 +431,8 @@ export function calculateStudyReward(
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
   didEssay = false,
-  essaysDone = 0
+  essaysDone = 0,
+  catchUpMult = 1.0
 ) {
   const safeMinutes = Math.max(0, minutes || 0);
   const safeQuestions = didQuestions ? Math.max(0, questionsDone || 0) : 0;
@@ -414,7 +450,8 @@ export function calculateStudyReward(
     bossAttack,
     bossMods,
     effortScale,
-    totalFactor
+    totalFactor,
+    catchUpMult
   );
 }
 
@@ -426,7 +463,8 @@ export function calculateWorkoutReward(
   bossAttack = 12,
   bossMods?: BossCombatModifiers,
   kmEq = 0,
-  hasDualDailyBonus = false
+  hasDualDailyBonus = false,
+  catchUpMult = 1.0
 ) {
   const safeKmEq = cardio ? Math.min(15, Math.max(0, Number(kmEq) || 0)) : 0;
   const baseXp = (musculacao ? 55 : 0) + (cardio ? 28 * safeKmEq : 0) + (hasDualDailyBonus ? 25 : 0);
@@ -448,7 +486,9 @@ export function calculateWorkoutReward(
     attrs,
     bossAttack,
     bossMods,
-    effortScale
+    effortScale,
+    1.5,
+    catchUpMult
   );
 }
 

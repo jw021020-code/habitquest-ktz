@@ -274,14 +274,11 @@ export function PartyPanel({
                     🏆 Recompensa Compartilhada (KTZ)
                   </div>
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-condensed font-bold">
-                    <span className="flex items-center gap-1 text-[#ffbe5d]">
-                      <Coins className="w-3 h-3" />+{rewardGold} GP
-                    </span>
                     <span className="flex items-center gap-1 text-[#24cc8f]">
-                      <Sparkles className="w-3 h-3" />+{rewardXp} XP
+                      <Sparkles className="w-3 h-3" />+{rewardXp} XP (Toda a KTZ)
                     </span>
-                    <span className="text-[#d6c7ff]">
-                      +{bossDropCount} Ovo · +{bossDropCount} Poção
+                    <span className="flex items-center gap-1 text-[#ffbe5d]">
+                      <Coins className="w-3 h-3" />+{rewardGold} GP · +{bossDropCount} Ovo/Poção (Quem atacar)
                     </span>
                     <span className="text-[#50b5e9]">+25% STA · +15% MP</span>
                   </div>

@@ -32,6 +32,7 @@ interface StudyLogCardProps {
   stats: PlayerStats;
   totalAttributes: Attributes;
   bossAttack: number;
+  catchUpMult?: number;
   onAddStudy: (entry: Omit<StudyEntry, 'id' | 'createdAt'>) => void;
   onDeleteStudy: (id: string) => void;
 }
@@ -46,6 +47,7 @@ export function StudyLogCard({
   stats,
   totalAttributes,
   bossAttack,
+  catchUpMult = 1.0,
   onAddStudy,
   onDeleteStudy,
 }: StudyLogCardProps) {
@@ -82,8 +84,10 @@ export function StudyLogCard({
     bossAttack,
     undefined,
     didEssay,
-    parsedEssays
+    parsedEssays,
+    catchUpMult
   );
+  const catchUpBonusPct = Math.round((Math.max(1, catchUpMult) - 1) * 100);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -314,7 +318,14 @@ export function StudyLogCard({
 
           {/* Prévia em Tempo Real de Recompensa e Contra-Ataque */}
           <div className="bg-[#23202a] border border-[#342e40] rounded px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-condensed">
-            <span className="text-[#a8a1b5]">Estimativa base:</span>
+            <span className="text-[#a8a1b5]">
+              Estimativa base:
+              {catchUpBonusPct > 0 && (
+                <span className="ml-1.5 text-[#24cc8f] font-bold">
+                  (⚡ +{catchUpBonusPct}% Catch-Up)
+                </span>
+              )}
+            </span>
             <div className="flex flex-wrap items-center gap-2.5 font-bold">
               <span className="text-[#ffbe5d]">+{preview.xp} XP</span>
               <span className="text-[#ffbe5d]">+{preview.gold} GP</span>
