@@ -34,8 +34,9 @@ declare
   client_info text;
   expected_info text;
 begin
-  -- Só bloqueia requisições vindas do app autenticado; nunca bloqueia SQL manual no Dashboard
-  if current_user <> 'authenticated' then
+  -- Só bloqueia requisições vindas de usuários logados via API (auth.role() = 'authenticated');
+  -- nunca bloqueia SQL manual no Dashboard do Supabase.
+  if coalesce(auth.role(), '') <> 'authenticated' then
     return new;
   end if;
 
