@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { BookOpen, Dumbbell, ScrollText, ShoppingBag, Store, Users } from 'lucide-react';
+import { APP_VERSION } from '@/lib/version';
 import {
   applyClassSkill,
   BossCombatModifiers,
@@ -2099,6 +2100,10 @@ export default function HomePage() {
         userEmail={userEmail}
         onAuthSuccess={refreshSupabaseSession}
       />
+
+      <footer className="max-w-7xl w-full mx-auto px-4 py-3 text-center text-[11px] font-condensed text-[#7e7791]">
+        HabitQuest KTZ · v{APP_VERSION}
+      </footer>
 
       {/* Barra de Navegação Inferior no Mobile (6 Abas Estilo Habitica Mobile) */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[#36205d] border-t border-[#4f2a93] grid grid-cols-6">

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
+import { VersionGuard } from "@/components/VersionGuard";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${roboto.variable} ${robotoCondensed.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#1a181d] text-[#f3f1f7] font-sans">
+        <VersionGuard />
         {children}
       </body>
     </html>
