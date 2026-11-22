@@ -52,7 +52,7 @@ begin
   req_headers := coalesce(nullif(current_setting('request.headers', true), ''), '{}')::json;
   client_info := coalesce(req_headers->>'x-client-info', '');
 
-  if client_info <> expected_info then
+  if position(expected_info in client_info) = 0 then
     raise exception 'APP_OUTDATED: Versão desatualizada (%). Recarregue a página para atualizar para %.', client_info, expected_info;
   end if;
 
