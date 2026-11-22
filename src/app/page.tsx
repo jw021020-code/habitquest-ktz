@@ -52,6 +52,7 @@ import {
   HeroMetrics,
   rollArmoireReward,
   rollBossEquipmentDrop,
+  rollCompensationEquipment,
   rollMonthlyChestEquipment,
   rollWeeklyQuestEquipmentDrop,
 } from '@/lib/game/achievements';
@@ -86,6 +87,7 @@ import {
   updateRemotePartyBoss,
 } from '@/lib/supabase/data';
 import { AuthModal } from '@/components/AuthModal';
+import { CompensationModal, CompensationPackage } from '@/components/CompensationModal';
 import { DailyCheckInModal } from '@/components/DailyCheckInModal';
 import { EquipmentPanel } from '@/components/EquipmentPanel';
 import {
@@ -134,6 +136,28 @@ const DEFAULT_STATS: PlayerStats = {
   gold: 0,
   heroClass: 'apprentice',
   buffs: { ...ZERO_ATTRS },
+};
+
+const COMPENSATION_ID = 'boss_exploit_comp_1_0_6_1';
+const COMPENSATION_PACKAGES: Record<string, CompensationPackage> = {
+  fousekonly: {
+    username: 'FousekOnly',
+    missedBosses: 4,
+    xp: 520,
+    gold: 220,
+    eggs: 4,
+    potions: 4,
+    equipOddsLabel: '45% Raro · 40% Épico · 15% Lendário',
+  },
+  zxmcz: {
+    username: 'zxmcz',
+    missedBosses: 3,
+    xp: 395,
+    gold: 170,
+    eggs: 3,
+    potions: 3,
+    equipOddsLabel: '55% Raro · 35% Épico · 10% Lendário',
+  },
 };
 
 const FIRST_BOSS = getProgressiveBoss(1);
@@ -1718,6 +1742,47 @@ export default function HomePage() {
     (canClaimMonthlyBonus ? 1 : 0) +
     (questsState?.pendingMonthlyChest ? 1 : 0);
 
+  const activeCompensation = useMemo(() => {
+    if (!hydrated || !userId) return null;
+    const key = heroName.trim().toLowerCase();
+    const pkg = COMPENSATION_PACKAGES[key];
+    if (!pkg) return null;
+    if (metrics.claimedCompensations?.includes(COMPENSATION_ID)) return null;
+    return pkg;
+  }, [hydrated, userId, heroName, metrics.claimedCompensations]);
+
+  const handleClaimCompensation = () => {
+    if (!activeCompensation) return;
+    const equipDrop = rollCompensationEquipment(activeCompensation.missedBosses, inventory);
+    const res = grantXpAndResources(stats, totalAttributes, {
+      xp: activeCompensation.xp,
+      goldDelta: activeCompensation.gold,
+      fullRestore: true,
+    });
+    setStats(res.nextStats);
+    setStable((prev) => ({
+      ...prev,
+      eggs: prev.eggs + activeCompensation.eggs,
+      potions: prev.potions + activeCompensation.potions,
+    }));
+    if (equipDrop && !inventory.includes(equipDrop.item.id)) {
+      setInventory((prev) => [...prev, equipDrop.item.id]);
+    }
+    setMetrics((m) => ({
+      ...m,
+      bossesDefeated: m.bossesDefeated + activeCompensation.missedBosses,
+      totalGoldEarned: m.totalGoldEarned + activeCompensation.gold,
+      claimedCompensations: [...(m.claimedCompensations ?? []), COMPENSATION_ID],
+    }));
+    const dropLabel = equipDrop ? ` · 🎁 ${equipDrop.label}` : '';
+    pushActionLog(
+      `🛡️ ${heroName} resgatou o Baú de Compensação (${activeCompensation.missedBosses} Bosses): +${activeCompensation.xp} XP, +${activeCompensation.gold} GP, +${activeCompensation.eggs} Ovos/Poções${dropLabel}!`
+    );
+    showToast(
+      `🎁 Compensação resgatada! +${activeCompensation.xp} XP, +${activeCompensation.gold} GP${dropLabel}`
+    );
+  };
+
   const canCheckInToday =
     nowTs !== null && canClaimDailyCheckIn(metrics.checkin, new Date(nowTs));
   const currentCheckInStreak = metrics.checkin?.streak ?? 0;
@@ -2191,6 +2256,12 @@ export default function HomePage() {
             setAuthOpen(true);
           }
         }}
+      />
+
+      <CompensationModal
+        open={!welcomeOpen && Boolean(activeCompensation)}
+        pkg={activeCompensation}
+        onClaim={handleClaimCompensation}
       />
 
       <DailyCheckInModal

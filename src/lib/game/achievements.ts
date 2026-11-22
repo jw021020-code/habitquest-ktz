@@ -36,6 +36,7 @@ export interface HeroMetrics {
   };
   checkin?: CheckInState;
   seasonSeen?: string;
+  claimedCompensations?: string[];
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -651,6 +652,22 @@ export function rollGuaranteedEquipment(
   ownedIds: string[] = []
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
   return rollMonthlyChestEquipment(5, ownedIds);
+}
+
+/**
+ * Equipamento garantido de compensação proporcional aos Bosses perdidos:
+ * 4 bosses perdidos (FousekOnly): Raro 45% · Épico 40% · Lendário 15%
+ * 3 bosses perdidos (zxmcz): Raro 55% · Épico 35% · Lendário 10%
+ */
+export function rollCompensationEquipment(
+  missedBosses: 3 | 4,
+  ownedIds: string[] = []
+): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
+  const weights: Partial<Record<ItemRarity, number>> =
+    missedBosses === 4
+      ? { rare: 45, epic: 40, legendary: 15 }
+      : { rare: 55, epic: 35, legendary: 10 };
+  return rollEquipmentFromWeights(ownedIds, weights);
 }
 
 /** Drop bônus (15%) ao concluir Missão Semanal: Raro 75% · Épico 22% · Lendário 3%. */
