@@ -154,7 +154,7 @@ export function HabiticaHeader({
                 },
                 {
                   id: 'quests' as ActiveSection,
-                  label: 'Missões PRF',
+                  label: 'Missões',
                   icon: <ScrollText className="w-4 h-4" />,
                   badge: readyQuestsCount,
                 },

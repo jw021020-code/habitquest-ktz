@@ -204,13 +204,13 @@ export function QuestsPanel({
 
   return (
     <main className="max-w-7xl w-full mx-auto px-4 pt-4 pb-8 space-y-4">
-      {/* Cabeçalho Missões PRF */}
+      {/* Cabeçalho Missões */}
       <section className="bg-[#23202a] border border-[#342e40] rounded-md overflow-hidden shadow-lg">
         <div className="bg-[#2c2836] border-b border-[#3a3447] px-4 py-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <ScrollText className="w-5 h-5 text-[#ffbe5d]" />
             <h2 className="font-condensed font-bold text-base sm:text-lg text-white leading-none">
-              Missões PRF
+              Missões
             </h2>
           </div>
 
@@ -305,14 +305,14 @@ export function QuestsPanel({
         </section>
       )}
 
-      {/* 3. Metas Mensais PRF (Todas as 5 fixas no mês) */}
+      {/* 3. Metas Mensais (Todas as 5 fixas no mês) */}
       {(tab === 'all' || tab === 'monthly') && (
         <section className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2">
               <Target className="w-4 h-4 text-[#24cc8f]" />
               <h3 className="font-condensed font-bold text-sm sm:text-base uppercase tracking-wider text-white">
-                Metas Mensais de Aprovação PRF
+                Metas Mensais de Evolução
               </h3>
               <span className="text-[11px] font-condensed text-[#a8a1b5] bg-[#23202a] border border-[#342e40] px-2 py-0.5 rounded">
                 Todas as 5 ativas · {monthlyKey}
@@ -352,7 +352,7 @@ export function QuestsPanel({
               </div>
               <div>
                 <h4 className="font-condensed font-bold text-sm sm:text-base text-white flex items-center gap-1.5">
-                  Baú de Honra PRF do Mês (5/5 Metas Concluídas)
+                  Baú de Honra do Mês (5/5 Metas Concluídas)
                 </h4>
                 <p className="text-xs text-[#a8a1b5]">
                   Complete todas as 5 metas mensais ({monthlyCompletedCount}/5) para ganhar{' '}
@@ -381,7 +381,7 @@ export function QuestsPanel({
               </button>
             ) : (
               <span className="px-3 py-1.5 rounded bg-[#23202a] border border-[#3a3447] text-xs font-condensed font-bold text-[#8a8299]">
-                Faltam {4 - monthlyCompletedCount} metas
+                Faltam {5 - monthlyCompletedCount} metas
               </span>
             )}
           </div>
@@ -460,7 +460,7 @@ export function QuestsSummaryStrip({
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#36205d] hover:bg-[#432874] border border-[#6133b4] text-[#e2d8ff] text-[11px] font-condensed font-bold uppercase tracking-wide transition cursor-pointer"
           >
             <ScrollText className="w-3.5 h-3.5 text-[#ffbe5d]" />
-            Missões PRF
+            Missões
             {readyCount > 0 && (
               <span className="px-1.5 py-0.2 rounded-full bg-[#ffbe5d] text-[#1a181d] text-[10px] font-extrabold">
                 {readyCount}

@@ -30,7 +30,7 @@ export function WelcomeSeasonModal({ open, onClose }: WelcomeSeasonModalProps) {
               Bem-vindo à Temporada 1.0.0 da KTZ
             </h2>
             <p className="text-xs text-[#e2d8ff]">
-              O servidor foi reiniciado. Todos começam juntos no Nível 1, rumo à aprovação na PRF.
+              O servidor foi reiniciado. Todos começam juntos no Nível 1, rumo à evolução nos estudos e na saúde física.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export function WelcomeSeasonModal({ open, onClose }: WelcomeSeasonModalProps) {
             <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3 space-y-1">
               <div className="font-condensed font-bold text-[#24cc8f] flex items-center gap-1.5">
                 <Dumbbell className="w-3.5 h-3.5 shrink-0" />
-                Treino Físico e TAF
+                Treino Físico e Bem-Estar
               </div>
               <p className="text-[#cfc8dc] leading-relaxed">
                 Cárdio + Musculação contam como 2 treinos (+ Combo 2,2x). Informe seus KM corridos
@@ -84,7 +84,7 @@ export function WelcomeSeasonModal({ open, onClose }: WelcomeSeasonModalProps) {
                 101 Bosses e Drops Raros
               </div>
               <p className="text-[#cfc8dc] leading-relaxed">
-                Cumpra Missões PRF, faça o Check-in Diário e derrote Bosses em equipe para dropar
+                Cumpra Missões, faça o Check-in Diário e derrote Bosses em equipe para dropar
                 itens Épicos e Lendários (fora da Loja).
               </p>
             </div>

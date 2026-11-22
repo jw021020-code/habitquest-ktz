@@ -1829,10 +1829,10 @@ export default function HomePage() {
 
     const dropLabel = equipDrop ? ` · 🎁 ${equipDrop.label}` : '';
     pushActionLog(
-      `👑 ${heroName} fechou todas as 4 Metas Mensais PRF e abriu o Baú de Honra: +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
+      `👑 ${heroName} fechou todas as 5 Metas Mensais e abriu o Baú de Honra: +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}!`
     );
     showToast(
-      `👑 Baú de Honra PRF! +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
+      `👑 Baú de Honra! +${scaledBonusXp} XP, +${MONTHLY_BONUS_REWARD.gold} GP${dropLabel}`
     );
   };
 
@@ -1950,7 +1950,7 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Aba Missões PRF (Diária, Semanais e Metas Mensais) */}
+      {/* Aba Missões (Diária, Semanais e Metas Mensais) */}
       {showQuestsSection && questsState && (
         <QuestsPanel
           level={stats.level}

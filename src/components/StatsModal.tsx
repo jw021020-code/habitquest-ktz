@@ -240,7 +240,7 @@ export function StatsModal({
 
           {tab === 'achievements' && (
             <div className="space-y-3">
-              {/* Filtro por Categoria PRF */}
+              {/* Filtro por Categoria */}
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={() => setAchFilter('all')}

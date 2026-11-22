@@ -149,7 +149,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'study_10h',
     category: 'study',
-    title: 'Edital Aberto',
+    title: 'Primeiros Passos',
     description: 'Acumule 10 horas líquidas de estudo teórico.',
     icon: '📘',
     target: 600,
@@ -160,9 +160,9 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'study_50h',
     category: 'study',
-    title: 'Base Constitucional',
+    title: 'Base Teórica',
     description: 'Acumule 50 horas líquidas de estudo teórico.',
-    icon: '⚖️',
+    icon: '📖',
     target: 3000,
     getCurrent: (c) => c.studyMinutes,
     formatProgress: (c) => fmtHours(c.studyMinutes, 3000),
@@ -171,7 +171,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'study_100h',
     category: 'study',
-    title: 'Blindagem Jurídica',
+    title: 'Mente Afiada',
     description: 'Acumule 100 horas líquidas de estudo teórico.',
     icon: '📚',
     target: 6000,
@@ -182,9 +182,9 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'study_250h',
     category: 'study',
-    title: 'Veterano do CTB',
+    title: 'Erudito Dedicado',
     description: 'Acumule 250 horas líquidas de estudo teórico.',
-    icon: '🚦',
+    icon: '🏛️',
     target: 15000,
     getCurrent: (c) => c.studyMinutes,
     formatProgress: (c) => fmtHours(c.studyMinutes, 15000),
@@ -193,7 +193,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'study_500h',
     category: 'study',
-    title: 'Conhecimento de Aprovado',
+    title: 'Mestre do Conhecimento',
     description: 'Acumule 500 horas líquidas de estudo teórico.',
     icon: '🎓',
     target: 30000,
@@ -204,7 +204,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'essay_1',
     category: 'study',
-    title: 'Primeira Discursiva',
+    title: 'Primeira Redação',
     description: 'Escreva sua primeira redação.',
     icon: '✍️',
     target: 1,
@@ -215,7 +215,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'essay_20',
     category: 'study',
-    title: 'Nota Máxima na Discursiva',
+    title: 'Redação Nota Máxima',
     description: 'Complete 20 redações.',
     icon: '📄',
     target: 20,
@@ -224,12 +224,12 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (c) => c.essaysDone >= 20,
   },
 
-  // 2. Domínio de Banca (Questões)
+  // 2. Domínio de Questões
   {
     id: 'q_100',
     category: 'questions',
     title: 'Primeira Bateria',
-    description: 'Resolva 100 questões de concurso.',
+    description: 'Resolva 100 questões.',
     icon: '✏️',
     target: 100,
     getCurrent: (c) => c.questionsDone,
@@ -239,8 +239,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'q_500',
     category: 'questions',
-    title: 'Certo ou Errado',
-    description: 'Resolva 500 questões de concurso.',
+    title: 'Ritmo de Prova',
+    description: 'Resolva 500 questões.',
     icon: '📝',
     target: 500,
     getCurrent: (c) => c.questionsDone,
@@ -250,8 +250,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'q_1500',
     category: 'questions',
-    title: 'Terror do Cebraspe',
-    description: 'Resolva 1.500 questões de concurso.',
+    title: 'Caçador de Gabaritos',
+    description: 'Resolva 1.500 questões.',
     icon: '🎯',
     target: 1500,
     getCurrent: (c) => c.questionsDone,
@@ -262,7 +262,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     id: 'q_5000',
     category: 'questions',
     title: 'Gabarito Vivo',
-    description: 'Resolva 5.000 questões de concurso.',
+    description: 'Resolva 5.000 questões.',
     icon: '🧠',
     target: 5000,
     getCurrent: (c) => c.questionsDone,
@@ -272,8 +272,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'q_10000',
     category: 'questions',
-    title: 'Lenda das Bancas',
-    description: 'Resolva 10.000 questões de concurso.',
+    title: 'Lenda das Provas',
+    description: 'Resolva 10.000 questões.',
     icon: '👑',
     target: 10000,
     getCurrent: (c) => c.questionsDone,
@@ -281,12 +281,12 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (c) => c.questionsDone >= 10000,
   },
 
-  // 3. Pista do TAF (KM Corridos)
+  // 3. Cárdio & Corrida (KM Percorridos)
   {
     id: 'km_3',
     category: 'run',
-    title: 'Teste de 12 Minutos',
-    description: 'Corra seus primeiros 3 km acumulados (acima dos 2,4 km do TAF).',
+    title: 'Primeira Corrida',
+    description: 'Percorra seus primeiros 3 km acumulados no cárdio.',
     icon: '👟',
     target: 3,
     getCurrent: (c) => c.runKm,
@@ -296,8 +296,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'km_25',
     category: 'run',
-    title: 'Fôlego de Pista',
-    description: 'Acumule 25 km corridos no cárdio.',
+    title: 'Fôlego em Dia',
+    description: 'Acumule 25 km no cárdio.',
     icon: '🏃',
     target: 25,
     getCurrent: (c) => c.runKm,
@@ -307,8 +307,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'km_75',
     category: 'run',
-    title: 'Patrulheiro de Estrada',
-    description: 'Acumule 75 km corridos no cárdio.',
+    title: 'Corredor de Longa Distância',
+    description: 'Acumule 75 km no cárdio.',
     icon: '🛣️',
     target: 75,
     getCurrent: (c) => c.runKm,
@@ -318,8 +318,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'km_200',
     category: 'run',
-    title: 'Motor V8',
-    description: 'Acumule 200 km corridos no cárdio.',
+    title: 'Resistência Máxima',
+    description: 'Acumule 200 km no cárdio.',
     icon: '⚡',
     target: 200,
     getCurrent: (c) => c.runKm,
@@ -329,8 +329,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'km_500',
     category: 'run',
-    title: 'Ultramaratonista PRF',
-    description: 'Acumule 500 km corridos no cárdio.',
+    title: 'Ultramaratonista',
+    description: 'Acumule 500 km no cárdio.',
     icon: '🏅',
     target: 500,
     getCurrent: (c) => c.runKm,
@@ -338,7 +338,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (c) => c.runKm >= 500,
   },
 
-  // 4. Condicionamento Policial (Treinos & Combos)
+  // 4. Condicionamento Físico (Treinos & Combos)
   {
     id: 'wk_5',
     category: 'workout',
@@ -353,7 +353,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'wk_20',
     category: 'workout',
-    title: 'Rotina de Academia',
+    title: 'Rotina Saudável',
     description: 'Realize 20 treinos físicos.',
     icon: '🏋️',
     target: 20,
@@ -364,7 +364,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'wk_50',
     category: 'workout',
-    title: 'Pronto para o TAF',
+    title: 'Corpo Blindado',
     description: 'Realize 50 treinos físicos.',
     icon: '🔥',
     target: 50,
@@ -375,7 +375,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'wk_100',
     category: 'workout',
-    title: 'Físico Operacional',
+    title: 'Atleta Consistente',
     description: 'Realize 100 treinos físicos.',
     icon: '🦾',
     target: 100,
@@ -386,7 +386,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'combo_15',
     category: 'workout',
-    title: 'Treino Duplo Operacional',
+    title: 'Treino Duplo de Elite',
     description: 'Realize 15 treinos Combo (Cárdio + Musculação).',
     icon: '⚔️',
     target: 15,
@@ -395,12 +395,12 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (c) => c.comboCount >= 15,
   },
 
-  // 5. Disciplina & Missões PRF
+  // 5. Disciplina & Missões
   {
     id: 'quest_5',
     category: 'discipline',
     title: 'Missão Cumprida',
-    description: 'Conclua 5 Missões PRF.',
+    description: 'Conclua 5 Missões.',
     icon: '📜',
     target: 5,
     getCurrent: (c) => c.questsCompleted,
@@ -410,8 +410,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'quest_25',
     category: 'discipline',
-    title: 'Operador de Elite',
-    description: 'Conclua 25 Missões PRF.',
+    title: 'Veterano de Missões',
+    description: 'Conclua 25 Missões.',
     icon: '🎖️',
     target: 25,
     getCurrent: (c) => c.questsCompleted,
@@ -422,7 +422,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     id: 'quest_75',
     category: 'discipline',
     title: 'Disciplina de Ferro',
-    description: 'Conclua 75 Missões PRF.',
+    description: 'Conclua 75 Missões.',
     icon: '🏆',
     target: 75,
     getCurrent: (c) => c.questsCompleted,
@@ -441,7 +441,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
     check: (c) => c.checkInStreak >= 7,
   },
 
-  // 6. Carreira & Clã KTZ
+  // 6. Evolução & Clã KTZ
   {
     id: 'lv_5',
     category: 'career',
@@ -456,9 +456,9 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'lv_20',
     category: 'career',
-    title: 'Agente de Patrulha',
+    title: 'Aventureiro Experiente',
     description: 'Alcance o Nível 20.',
-    icon: '🚓',
+    icon: '⚔️',
     target: 20,
     getCurrent: (c) => c.level,
     formatProgress: (c) => `Nv. ${Math.min(c.level, 20)} / 20`,
@@ -467,7 +467,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'lv_50',
     category: 'career',
-    title: 'Inspetor PRF',
+    title: 'Lenda da KTZ',
     description: 'Alcance o Nível 50.',
     icon: '🦅',
     target: 50,
@@ -603,7 +603,7 @@ export function rollEquipmentFromWeights(
 }
 
 /**
- * Sorteia um equipamento inédito garantido para o Baú de Honra PRF do Mês:
+ * Sorteia um equipamento inédito garantido para o Baú de Honra do Mês:
  * Raro 45% · Épico 40% · Lendário 15%.
  */
 export function rollGuaranteedEquipment(
@@ -612,7 +612,7 @@ export function rollGuaranteedEquipment(
   return rollEquipmentFromWeights(ownedIds, { rare: 45, epic: 40, legendary: 15 });
 }
 
-/** Drop bônus (15%) ao concluir Missão Semanal PRF: Raro 75% · Épico 22% · Lendário 3%. */
+/** Drop bônus (15%) ao concluir Missão Semanal: Raro 75% · Épico 22% · Lendário 3%. */
 export function rollWeeklyQuestEquipmentDrop(
   ownedIds: string[] = []
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {

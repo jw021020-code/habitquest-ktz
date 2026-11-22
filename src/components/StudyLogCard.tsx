@@ -155,7 +155,7 @@ export function StudyLogCard({
                 required={parsedMinutes > 0 && !hasQuestions && !hasEssays}
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="Ex.: Legislação de Trânsito"
+                placeholder="Ex.: Português, Matemática, Direito..."
                 className="w-full bg-[#23202a] border border-[#3a3447] rounded px-3 py-2 text-sm text-[#f3f1f7] placeholder-[#6e677d] focus:outline-none focus:border-[#925cf3]"
               />
             </div>

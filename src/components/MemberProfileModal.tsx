@@ -409,7 +409,7 @@ export function MemberProfileModal({
           {/* ABA 2: HISTÓRICO DE ESTUDOS E TREINOS FÍSICOS */}
           {tab === 'history' && (
             <div className="space-y-4">
-              {/* Totais PRF do Jogador */}
+              {/* Totais do Jogador */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3 text-center">
                   <div className="text-[11px] font-condensed text-[#a8a1b5] uppercase">
