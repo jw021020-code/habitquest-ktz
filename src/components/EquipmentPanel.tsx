@@ -79,7 +79,6 @@ interface EquipmentPanelProps {
   onBuyItem: (item: EquipmentItem, afterBuy?: 'bag' | 'equip' | 'costume') => void;
   onBuyBatchItems: (items: EquipmentItem[]) => void;
   onBuyPotion: () => void;
-  onBuyManaPotion: () => void;
   onBuyArmoire: (count?: number) => void;
   onBuyHatchPotion: (count?: number) => void;
   onSellEgg: () => void;
@@ -206,7 +205,6 @@ export function EquipmentPanel({
   onBuyItem,
   onBuyBatchItems,
   onBuyPotion,
-  onBuyManaPotion,
   onBuyArmoire,
   onBuyHatchPotion,
   onSellEgg,
@@ -1763,12 +1761,12 @@ export function EquipmentPanel({
 
           {/* Coluna Principal Direita: Destaques + Grid de Equipamentos estilo Habitica Shop */}
           <div className="lg:col-span-9 space-y-5">
-            {/* Destaques Fixos do Mercado (Tônico, Elixir de Mana, Poção de Chocar, Armoire) */}
+            {/* Destaques Fixos do Mercado (Tônico, Poção de Chocar, Armoire) */}
             <div>
               <h3 className="text-xs font-condensed font-bold text-[#d6c7ff] mb-2.5">
                 Consumíveis e Armoire
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* 1. Tônico de Estamina */}
                 <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
@@ -1794,28 +1792,7 @@ export function EquipmentPanel({
                   </button>
                 </div>
 
-                {/* 2. Elixir de Mana */}
-                <div className="bg-[#23202a] border border-[#50b5e9]/40 rounded-md flex flex-col justify-between overflow-hidden">
-                  <div className="p-3 flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#50b5e9]/40 flex items-center justify-center mb-2">
-                      <Zap className="w-9 h-9 text-[#50b5e9] fill-[#50b5e9]/30" />
-                    </div>
-                    <p className="text-xs font-condensed font-bold text-white">
-                      Elixir de Mana
-                    </p>
-                    <p className="text-[11px] text-[#50b5e9] mt-0.5">+25 MP ({mp}/{maxMp})</p>
-                  </div>
-                  <button
-                    disabled={gold < 35 || mp >= maxMp}
-                    onClick={onBuyManaPotion}
-                    className="w-full py-2 bg-[#ffbe5d]/20 hover:bg-[#ffbe5d]/30 disabled:bg-[#1a181d] disabled:text-[#6e677d] text-[#ffbe5d] border-t border-[#3a3447] font-condensed font-bold text-xs flex items-center justify-center gap-1 transition"
-                  >
-                    <Coins className="w-3.5 h-3.5" />
-                    35 GP
-                  </button>
-                </div>
-
-                {/* 3. Poção de Chocar */}
+                {/* 2. Poção de Chocar */}
                 <div className="bg-[#23202a] border border-[#3a3447] rounded-md flex flex-col justify-between overflow-hidden">
                   <div className="p-3 flex flex-col items-center text-center">
                     <div className="w-16 h-16 rounded bg-[#1a181d] border border-[#3a3447] flex items-center justify-center mb-2">
@@ -1861,7 +1838,7 @@ export function EquipmentPanel({
                     </div>
                     <p className="text-xs font-condensed font-bold text-white">Armoire Encantado</p>
                     <p className="text-[11px] text-[#d6c7ff] mt-0.5">
-                      Sorteia Equipamentos (por Raridade), Ovo ou Poção!
+                      75% Equipamento · 25% 1x Ovo + 1x Poção!
                     </p>
                   </div>
                   <div className="grid grid-cols-2 border-t border-[#3a3447]">

@@ -37,6 +37,7 @@ import {
   ClassSkill,
   getBossAtIndexAndCycle,
   getBossById,
+  getBossContributionReward,
   getProgressiveBoss,
 } from '@/lib/game/skills';
 import {
@@ -353,12 +354,11 @@ export default function HomePage() {
     nextLevel?: number;
   } => {
     const currentStage = remoteParty ? (remoteParty.boss_stage ?? 1) : party.bossStage;
-    const currentBossId = remoteParty ? remoteParty.boss_id : party.bossId;
     const currentHp = remoteParty ? remoteParty.boss_hp : party.bossHp;
+    const currentMaxHp = remoteParty ? remoteParty.boss_max_hp : party.bossMaxHp;
     const bName = remoteParty ? remoteParty.boss_name : party.bossName;
     const rGold = remoteParty ? remoteParty.reward_gold : party.rewardGold;
     const rXp = remoteParty ? remoteParty.reward_xp : party.rewardXp;
-    const dropCount = getProgressiveBoss(currentStage).dropCount;
 
     if (damage <= 0) {
       return { defeated: false, bossName: bName };
@@ -369,30 +369,36 @@ export default function HomePage() {
     if (defeated) {
       const nextStage = currentStage + 1;
       const nextBoss = getProgressiveBoss(nextStage);
+      const prevDamage =
+        metrics.currentBossStage === currentStage ? (metrics.currentBossDamage ?? 0) : 0;
+      const totalMyDamage = prevDamage + damage;
+      const contrib = getBossContributionReward(totalMyDamage, currentMaxHp, rXp, rGold);
 
-      // Ao derrotar um Boss: recompensa + drops garantidos + fôlego parcial (+25% STA / +15% MP) + reset buffs!
+      // Ao derrotar um Boss: recompensa escalonada pela % de contribuição + fôlego parcial (+25% STA / +15% MP)
       const victoryRes = grantXpAndResources(latestStats, totalAttributes, {
-        xp: rXp,
-        goldDelta: rGold,
+        xp: contrib.xp,
+        goldDelta: contrib.gold,
         bossVictoryRestore: true,
         resetBuffs: true,
       });
 
       setStats(victoryRes.nextStats);
       setBossMods({});
-      setStable((prev) => ({
-        ...prev,
-        eggs: prev.eggs + dropCount,
-        potions: prev.potions + dropCount,
-      }));
-      const bossGearDrop = rollBossEquipmentDrop(inventory, currentStage);
+      if (contrib.drops > 0) {
+        setStable((prev) => ({
+          ...prev,
+          eggs: prev.eggs + contrib.drops,
+          potions: prev.potions + contrib.drops,
+        }));
+      }
+      const bossGearDrop = rollBossEquipmentDrop(inventory, currentStage, contrib.equipMode);
       if (bossGearDrop && !inventory.includes(bossGearDrop.item.id)) {
         setInventory((prev) => [...prev, bossGearDrop.item.id]);
       }
       setMetrics((m) => ({
         ...m,
         bossesDefeated: m.bossesDefeated + 1,
-        totalGoldEarned: m.totalGoldEarned + rGold,
+        totalGoldEarned: m.totalGoldEarned + contrib.gold,
         totalBossDamage: (m.totalBossDamage ?? 0) + damage,
         currentBossStage: nextStage,
         currentBossDamage: 0,
@@ -428,7 +434,7 @@ export default function HomePage() {
 
       const gearDropText = bossGearDrop ? ` · 🎁 ${bossGearDrop.label}` : '';
       pushActionLog(
-        `🏆 ${heroName} deu o golpe final em ${bName} (${sourceLabel})! +${rGold} GP, +${rXp} XP, +${dropCount} Ovo, +${dropCount} Poção${gearDropText}, +25% STA / +15% MP! Próximo: #${nextStage} ${nextBoss.name}.`
+        `🏆 ${heroName} deu o golpe final em ${bName} (${contrib.badge} · ${contrib.damagePct}%)! +${contrib.gold} GP, +${contrib.xp} XP, +${contrib.drops} Ovo/Poção${gearDropText}, +25% STA / +15% MP! Próximo: #${nextStage} ${nextBoss.name}.`
       );
       if (bossGearDrop) {
         showToast(`🎁 Drop do Boss: ${bossGearDrop.label}!`);
@@ -630,6 +636,15 @@ export default function HomePage() {
   };
 
   const handleCastSkill = (skill: ClassSkill) => {
+    const todayKey = getDayKey(new Date());
+    const currentCounts =
+      metrics.dailySkillCasts?.dayKey === todayKey ? metrics.dailySkillCasts.counts : {};
+    const usedToday = currentCounts[skill.id] ?? 0;
+    if (skill.dailyLimit && usedToday >= skill.dailyLimit) {
+      showToast(`⏳ ${skill.name}: limite diário atingido (${skill.dailyLimit}x/dia)!`);
+      return;
+    }
+
     const res = applyClassSkill(stats, skill, totalAttributes, activeBossAttack, bossMods);
     if (!res.ok) {
       if (res.reason === 'full_stamina') {
@@ -642,6 +657,18 @@ export default function HomePage() {
       return;
     }
     setStats(res.nextStats);
+    if (skill.dailyLimit) {
+      setMetrics((m) => ({
+        ...m,
+        dailySkillCasts: {
+          dayKey: todayKey,
+          counts: {
+            ...currentCounts,
+            [skill.id]: usedToday + 1,
+          },
+        },
+      }));
+    }
     if (res.gainedGold > 0) {
       setMetrics((m) => ({ ...m, totalGoldEarned: m.totalGoldEarned + res.gainedGold }));
     }
@@ -1033,17 +1060,6 @@ export default function HomePage() {
     showToast('🧪 Tônico de Estamina usado (+30 STA)!');
   };
 
-  const handleBuyManaPotion = () => {
-    if (stats.gold < 35 || stats.mp >= stats.max_mp) return;
-    setStats((s) => ({
-      ...s,
-      gold: s.gold - 35,
-      mp: Math.min(s.max_mp, s.mp + 25),
-    }));
-    pushActionLog(`🔷 ${heroName} usou um Elixir de Mana (+25 MP, -35 GP).`);
-    showToast('🔷 Elixir de Mana usado (+25 MP)!');
-  };
-
   const handleBuyHatchPotion = (count = 1) => {
     const cost = 25 * count;
     if (stats.gold < cost) return;
@@ -1368,24 +1384,30 @@ export default function HomePage() {
     for (let s = startStage; s <= partyStage - 1; s++) {
       const prevBoss = getProgressiveBoss(s);
       lastBossName = prevBoss.name;
-      const participated =
-        metrics.currentBossStage === s && (metrics.currentBossDamage ?? 0) > 0;
+      const myStageDmg =
+        metrics.currentBossStage === s ? (metrics.currentBossDamage ?? 0) : 0;
+      const contrib = getBossContributionReward(
+        myStageDmg,
+        prevBoss.maxHp,
+        prevBoss.rewardXp,
+        prevBoss.rewardGold
+      );
 
       const victoryRes = grantXpAndResources(nextStats, totalAttributes, {
-        xp: prevBoss.rewardXp,
-        goldDelta: participated ? prevBoss.rewardGold : 0,
+        xp: contrib.xp,
+        goldDelta: contrib.gold,
         bossVictoryRestore: true,
         resetBuffs: true,
       });
       nextStats = victoryRes.nextStats;
-      totalXpGained += prevBoss.rewardXp;
+      totalXpGained += contrib.xp;
 
-      if (participated) {
-        totalGoldGained += prevBoss.rewardGold;
-        totalEggs += prevBoss.dropCount;
-        totalPotions += prevBoss.dropCount;
+      if (contrib.tierId !== 'absent') {
+        totalGoldGained += contrib.gold;
+        totalEggs += contrib.drops;
+        totalPotions += contrib.drops;
         bossesCounted += 1;
-        const sharedGearDrop = rollBossEquipmentDrop(nextInv, s);
+        const sharedGearDrop = rollBossEquipmentDrop(nextInv, s, contrib.equipMode);
         if (sharedGearDrop && !nextInv.includes(sharedGearDrop.item.id)) {
           nextInv = [...nextInv, sharedGearDrop.item.id];
           droppedLabels.push(sharedGearDrop.label);
@@ -1525,10 +1547,9 @@ export default function HomePage() {
           simInventory.push(reward.item.id);
         }
         newEquipNames.push(reward.item.name);
-      } else if (reward.kind === 'egg') {
-        totalEggs += 1;
-      } else if (reward.kind === 'potion') {
-        totalPotions += 1;
+      } else if (reward.kind === 'stable_pack') {
+        totalEggs += reward.eggs;
+        totalPotions += reward.potions;
       }
     }
 
@@ -1822,10 +1843,9 @@ export default function HomePage() {
         if (!inventory.includes(drop.item.id)) {
           setInventory((prev) => [...prev, drop.item.id]);
         }
-      } else if (drop.kind === 'egg') {
-        extraEggs += 1;
-      } else if (drop.kind === 'potion') {
-        extraPotions += 1;
+      } else if (drop.kind === 'stable_pack') {
+        extraEggs += drop.eggs;
+        extraPotions += drop.potions;
       }
     }
 
@@ -2094,6 +2114,11 @@ export default function HomePage() {
           guardCharges={stats.guardCharges}
           critGuarantee={stats.critGuarantee}
           shadowCharges={stats.shadowCharges}
+          dailySkillCounts={
+            nowTs !== null && metrics.dailySkillCasts?.dayKey === getDayKey(new Date(nowTs))
+              ? metrics.dailySkillCasts.counts
+              : {}
+          }
           onChangeClass={handleChangeClass}
           onCastSkill={handleCastSkill}
         />
@@ -2196,7 +2221,6 @@ export default function HomePage() {
         onBuyItem={handleBuyItem}
         onBuyBatchItems={handleBuyBatchItems}
         onBuyPotion={handleBuyPotion}
-        onBuyManaPotion={handleBuyManaPotion}
         onBuyArmoire={handleBuyArmoire}
         onBuyHatchPotion={handleBuyHatchPotion}
         onSellEgg={handleSellEgg}

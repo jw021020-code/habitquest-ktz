@@ -37,6 +37,7 @@ export interface HeroMetrics {
   checkin?: CheckInState;
   seasonSeen?: string;
   claimedCompensations?: string[];
+  dailySkillCasts?: { dayKey: string; counts: Record<string, number> };
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -514,20 +515,19 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 
 export type ArmoireReward =
   | { kind: 'equipment'; item: EquipmentItem; rarity: ItemRarity; label: string }
-  | { kind: 'egg'; label: string }
-  | { kind: 'potion'; label: string };
+  | { kind: 'stable_pack'; eggs: number; potions: number; label: string };
 
 /**
  * Sorteia recompensa do Armoire Encantado (SEM OURO e SEM XP):
- * - 60% chance de Equipamento inédito ponderado por Raridade
+ * - 75% chance de Equipamento inédito ponderado por Raridade
  *   (Comum 50% · Incomum 28% · Raro 14% · Épico 6% · Lendário 2%)
- * - 40% chance de Recurso (50% Ovo, 50% Poção de Chocar)
+ * - 25% chance de Pacote de Estábulo (1x Ovo + 1x Poção de Chocar)
  */
 export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
   const ownedSet = new Set(ownedIds);
   const unownedPool = EQUIPMENT_CATALOG.filter((item) => !ownedSet.has(item.id));
 
-  if (unownedPool.length > 0 && Math.random() < 0.6) {
+  if (unownedPool.length > 0 && Math.random() < 0.75) {
     const byRarity: Record<ItemRarity, EquipmentItem[]> = {
       common: [],
       uncommon: [],
@@ -567,9 +567,12 @@ export function rollArmoireReward(ownedIds: string[] = []): ArmoireReward {
     };
   }
 
-  return Math.random() < 0.5
-    ? { kind: 'egg', label: '1x Ovo' }
-    : { kind: 'potion', label: '1x Poção de Chocar' };
+  return {
+    kind: 'stable_pack',
+    eggs: 1,
+    potions: 1,
+    label: '1x Ovo + 1x Poção de Chocar',
+  };
 }
 
 /**
@@ -678,18 +681,32 @@ export function rollWeeklyQuestEquipmentDrop(
   return rollEquipmentFromWeights(ownedIds, { rare: 75, epic: 22, legendary: 3 });
 }
 
-/** Drop de equipamento ao derrotar um Boss da KTZ (escala com o estágio do Boss). */
+/** Drop de equipamento ao derrotar um Boss da KTZ (escala com o estágio do Boss e a faixa de contribuição). */
 export function rollBossEquipmentDrop(
   ownedIds: string[] = [],
-  bossStage = 1
+  bossStage = 1,
+  equipMode: 'none' | 'support' | 'frontline' | 'vanguard' | 'mvp' = 'frontline'
 ): { item: EquipmentItem; rarity: ItemRarity; label: string } | null {
-  const dropChance = bossStage >= 61 ? 1.0 : bossStage >= 26 ? 0.75 : 0.55;
-  if (Math.random() > dropChance) return null;
-  const weights: Partial<Record<ItemRarity, number>> =
-    bossStage >= 61
-      ? { rare: 30, epic: 48, legendary: 22 }
-      : bossStage >= 26
-      ? { rare: 45, epic: 40, legendary: 15 }
-      : { rare: 60, epic: 32, legendary: 8 };
+  if (equipMode === 'none') return null;
+
+  const baseChance = bossStage >= 61 ? 1.0 : bossStage >= 26 ? 0.75 : 0.55;
+  const chanceMult =
+    equipMode === 'support' ? 0.6 : equipMode === 'vanguard' ? 1.3 : equipMode === 'mvp' ? 2.0 : 1.0;
+  const finalChance = equipMode === 'mvp' ? 1.0 : Math.min(1.0, baseChance * chanceMult);
+  if (Math.random() > finalChance) return null;
+
+  let weights: Partial<Record<ItemRarity, number>>;
+  if (equipMode === 'mvp') {
+    weights = bossStage >= 26 ? { rare: 10, epic: 55, legendary: 35 } : { rare: 20, epic: 55, legendary: 25 };
+  } else if (equipMode === 'vanguard') {
+    weights = bossStage >= 26 ? { rare: 30, epic: 48, legendary: 22 } : { rare: 45, epic: 40, legendary: 15 };
+  } else {
+    weights =
+      bossStage >= 61
+        ? { rare: 30, epic: 48, legendary: 22 }
+        : bossStage >= 26
+          ? { rare: 45, epic: 40, legendary: 15 }
+          : { rare: 60, epic: 32, legendary: 8 };
+  }
   return rollEquipmentFromWeights(ownedIds, weights);
 }

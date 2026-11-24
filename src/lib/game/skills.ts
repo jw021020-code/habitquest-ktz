@@ -28,6 +28,7 @@ export interface ClassSkill {
   kind: SkillKind;
   isGroup?: boolean;
   partyEffect?: PartySkillEffect;
+  dailyLimit?: number;
 }
 
 export interface BossDefinition {
@@ -110,11 +111,12 @@ export const CLASS_SKILLS: Record<PlayableHeroClass, ClassSkill[]> = {
     {
       id: 'guild_wall',
       name: 'Muralha da Guilda',
-      description: 'Restaura Estamina sua e de todos os membros da KTZ (CON).',
+      description: 'Restaura Estamina sua e de toda a KTZ (CON · máx. 2x/dia).',
       mpCost: 20,
       kind: 'heal',
       isGroup: true,
       partyEffect: 'heal_all',
+      dailyLimit: 2,
     },
     {
       id: 'defensive_stance',
@@ -178,9 +180,10 @@ export const CLASS_SKILLS: Record<PlayableHeroClass, ClassSkill[]> = {
     {
       id: 'opportunist_loot',
       name: 'Saque Oportunista',
-      description: 'Ganha Ouro imediato e rola chance extra (PER) de encontrar Ovo ou Poção.',
+      description: 'Ganha Ouro imediato (máx. 45 GP) e chance extra de Ovo/Poção (máx. 2x/dia).',
       mpCost: 18,
       kind: 'gold',
+      dailyLimit: 2,
     },
     {
       id: 'shadow_steps',
@@ -210,11 +213,12 @@ export const CLASS_SKILLS: Record<PlayableHeroClass, ClassSkill[]> = {
     {
       id: 'ethereal_wave',
       name: 'Onda Etérea',
-      description: 'Restaura Mana (MP) de todos os membros da KTZ (baseado em INT).',
+      description: 'Restaura Mana (MP) dos aliados da KTZ (não afeta a si mesmo · máx. 2x/dia).',
       mpCost: 24,
       kind: 'buff',
       isGroup: true,
       partyEffect: 'mana_all',
+      dailyLimit: 2,
     },
     {
       id: 'curse_weakness',
@@ -272,4 +276,90 @@ export function getProgressiveBoss(stage: number): BossDefinition {
   const idx = (safeStage - 1) % BOSS_CATALOG.length;
   const cycle = Math.floor((safeStage - 1) / BOSS_CATALOG.length);
   return getBossAtIndexAndCycle(idx, cycle);
+}
+
+export type BossContributionTierId = 'absent' | 'support' | 'frontline' | 'vanguard' | 'mvp';
+
+export interface BossContributionReward {
+  tierId: BossContributionTierId;
+  label: string;
+  badge: string;
+  damagePct: number;
+  xp: number;
+  gold: number;
+  drops: number;
+  equipMode: 'none' | 'support' | 'frontline' | 'vanguard' | 'mvp';
+}
+
+/**
+ * Calcula a recompensa individual de um Boss derrotado conforme o % de dano causado.
+ */
+export function getBossContributionReward(
+  playerDamage: number,
+  bossMaxHp: number,
+  baseXp: number,
+  baseGold: number
+): BossContributionReward {
+  const safeMaxHp = Math.max(1, bossMaxHp);
+  const safeDmg = Math.max(0, playerDamage);
+  const damagePct = Math.min(100, Math.round((safeDmg / safeMaxHp) * 1000) / 10);
+
+  if (safeDmg <= 0) {
+    return {
+      tierId: 'absent',
+      label: 'Ausente',
+      badge: '😴 Ausente',
+      damagePct: 0,
+      xp: Math.max(1, Math.round(baseXp * 0.5)),
+      gold: 0,
+      drops: 0,
+      equipMode: 'none',
+    };
+  }
+  if (damagePct < 10) {
+    return {
+      tierId: 'support',
+      label: 'Apoio',
+      badge: '🥉 Apoio',
+      damagePct,
+      xp: Math.max(1, Math.round(baseXp * 1.0)),
+      gold: Math.max(1, Math.round(baseGold * 0.75)),
+      drops: 1,
+      equipMode: 'support',
+    };
+  }
+  if (damagePct < 25) {
+    return {
+      tierId: 'frontline',
+      label: 'Linha de Frente',
+      badge: '🥈 Linha de Frente',
+      damagePct,
+      xp: Math.max(1, Math.round(baseXp * 1.15)),
+      gold: Math.max(1, Math.round(baseGold * 1.1)),
+      drops: 2,
+      equipMode: 'frontline',
+    };
+  }
+  if (damagePct < 40) {
+    return {
+      tierId: 'vanguard',
+      label: 'Vanguarda',
+      badge: '🥇 Vanguarda',
+      damagePct,
+      xp: Math.max(1, Math.round(baseXp * 1.3)),
+      gold: Math.max(1, Math.round(baseGold * 1.4)),
+      drops: 3,
+      equipMode: 'vanguard',
+    };
+  }
+  return {
+    tierId: 'mvp',
+    label: 'MVP do Boss',
+    badge: '👑 MVP',
+    damagePct,
+    xp: Math.max(1, Math.round(baseXp * 1.5)),
+    gold: Math.max(1, Math.round(baseGold * 1.75)),
+    drops: 3,
+    equipMode: 'mvp',
+  };
 }

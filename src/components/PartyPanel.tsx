@@ -28,6 +28,7 @@ import {
   CLASS_INFO,
   getBossAtIndexAndCycle,
   getBossById,
+  getBossContributionReward,
   getProgressiveBoss,
 } from '@/lib/game/skills';
 import { RemoteParty, RemoteProfile } from '@/lib/supabase/data';
@@ -130,6 +131,12 @@ export function PartyPanel({
 
   const localBossDmg =
     heroMetrics.currentBossStage === bossStage ? (heroMetrics.currentBossDamage ?? 0) : 0;
+  const myContribution = getBossContributionReward(
+    localBossDmg,
+    bossMaxHp,
+    rewardXp,
+    rewardGold
+  );
 
   const maxMemberDmg =
     remoteParty && remoteMembers.length > 0
@@ -271,14 +278,14 @@ export function PartyPanel({
 
                 <div className="bg-[#1a181d] border border-[#3a3447] rounded-md p-3">
                   <div className="font-condensed font-bold uppercase text-[#ffbe5d] mb-1">
-                    🏆 Recompensa Compartilhada (KTZ)
+                    🏆 Recompensa por Contribuição ({myContribution.badge} · {myContribution.damagePct}%)
                   </div>
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-condensed font-bold">
                     <span className="flex items-center gap-1 text-[#24cc8f]">
-                      <Sparkles className="w-3 h-3" />+{rewardXp} XP (Toda a KTZ)
+                      <Sparkles className="w-3 h-3" />+{myContribution.xp} XP
                     </span>
                     <span className="flex items-center gap-1 text-[#ffbe5d]">
-                      <Coins className="w-3 h-3" />+{rewardGold} GP · +{bossDropCount} Ovo/Poção (Quem atacar)
+                      <Coins className="w-3 h-3" />+{myContribution.gold} GP · +{myContribution.drops} Ovo/Poção
                     </span>
                     <span className="text-[#50b5e9]">+25% STA · +15% MP</span>
                   </div>

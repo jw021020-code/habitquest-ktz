@@ -243,7 +243,7 @@ function computeBasePreview(
     1,
     Math.round(
       baseBossDamage *
-        (1 + attrs.str * 0.02 + attrs.int * 0.012) *
+        (1 + attrs.str * 0.02 + attrs.int * 0.014 + attrs.con * 0.012 + attrs.per * 0.01) *
         exhaustMult *
         vulnMult *
         levelScale
@@ -369,14 +369,14 @@ function applyProgressReward(
     1,
     Math.round(
       baseBossDamage *
-        (1 + attrs.str * 0.02 + attrs.int * 0.012) *
+        (1 + attrs.str * 0.02 + attrs.int * 0.014 + attrs.con * 0.012 + attrs.per * 0.01) *
         levelScale *
         critMult *
         exhaustMult *
         vulnMult
     )
   );
-  const gainedMp = Math.max(1, Math.round(baseMp + attrs.int * 0.2 * Math.min(1.5, effortScale)));
+  const gainedMp = Math.floor(effortFactor * (3.0 + attrs.int * 0.08));
 
   const staminaLost = computeStaminaLoss(bossAttack, attrs, stats, bossMods, effortScale);
   const staminaAfterHit = Math.max(0, stats.hp - staminaLost);
@@ -606,7 +606,7 @@ export function applyClassSkill(
     }
     case 'guild_bastion': {
       const bonus = Math.max(8, Math.round(attrs.con * 0.15));
-      const cap = 40;
+      const cap = 25;
       const nextCon = Math.min(cap, nextStats.buffs.con + bonus);
       if (nextCon === nextStats.buffs.con) {
         return {
@@ -652,7 +652,7 @@ export function applyClassSkill(
     }
     case 'war_cry': {
       const bonus = Math.max(8, Math.round(attrs.str * 0.15));
-      const cap = 40;
+      const cap = 25;
       const nextStr = Math.min(cap, nextStats.buffs.str + bonus);
       if (nextStr === nextStats.buffs.str) {
         return {
@@ -683,7 +683,7 @@ export function applyClassSkill(
       break;
     }
     case 'opportunist_loot': {
-      gainedGold = Math.max(1, Math.round((14 + attrs.per * 1.2) * exhaustMult));
+      gainedGold = Math.min(45, Math.max(1, Math.round((12 + attrs.per * 0.8) * exhaustMult)));
       nextStats.gold += gainedGold;
       bonusDropRoll = true;
       break;
@@ -694,7 +694,7 @@ export function applyClassSkill(
     }
     case 'mark_prey': {
       const bonus = Math.max(8, Math.round(attrs.per * 0.15));
-      const cap = 40;
+      const cap = 25;
       const nextPer = Math.min(cap, nextStats.buffs.per + bonus);
       if (nextPer === nextStats.buffs.per) {
         return {
@@ -724,8 +724,8 @@ export function applyClassSkill(
       break;
     }
     case 'ethereal_wave': {
-      const amount = Math.round(10 + Math.floor(attrs.int * 0.35));
-      nextStats.mp = Math.min(nextStats.max_mp, nextStats.mp + amount);
+      // Restaura MP apenas para os aliados da KTZ (evita auto-sustento infinito de mana)
+      const amount = Math.min(24, Math.round(12 + Math.floor(attrs.int * 0.25)));
       groupManaAmount = amount;
       break;
     }

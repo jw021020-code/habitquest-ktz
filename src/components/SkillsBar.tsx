@@ -23,6 +23,7 @@ interface SkillsBarProps {
   guardCharges?: number;
   critGuarantee?: boolean;
   shadowCharges?: number;
+  dailySkillCounts?: Record<string, number>;
   onChangeClass: (next: CombatHeroClass) => void;
   onCastSkill: (skill: ClassSkill) => void;
 }
@@ -51,6 +52,7 @@ export function SkillsBar({
   guardCharges = 0,
   critGuarantee = false,
   shadowCharges = 0,
+  dailySkillCounts = {},
   onChangeClass,
   onCastSkill,
 }: SkillsBarProps) {
@@ -224,7 +226,10 @@ export function SkillsBar({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               {skills.map((skill) => {
-                const canCast = mp >= skill.mpCost;
+                const usedToday = dailySkillCounts[skill.id] ?? 0;
+                const remainingToday = skill.dailyLimit ? Math.max(0, skill.dailyLimit - usedToday) : null;
+                const limitReached = remainingToday !== null && remainingToday <= 0;
+                const canCast = mp >= skill.mpCost && !limitReached;
                 return (
                   <div
                     key={skill.id}
@@ -239,7 +244,7 @@ export function SkillsBar({
                     </div>
 
                     <div className="flex-1 px-3 py-2 min-w-0 flex flex-col justify-center">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span className="text-xs sm:text-sm font-condensed font-bold text-white truncate">
                           {skill.name}
                         </span>
@@ -247,6 +252,17 @@ export function SkillsBar({
                           <span className="text-[9px] font-condensed font-bold uppercase px-1.5 py-0.2 rounded bg-[#36205d] text-[#d6c7ff] border border-[#925cf3]/50 flex items-center gap-0.5 shrink-0">
                             <Users className="w-2.5 h-2.5" />
                             Grupo KTZ
+                          </span>
+                        )}
+                        {remainingToday !== null && (
+                          <span
+                            className={`text-[9px] font-condensed font-bold uppercase px-1.5 py-0.2 rounded border shrink-0 ${
+                              limitReached
+                                ? 'bg-[#ff6165]/15 text-[#ff8b8e] border-[#ff6165]/40'
+                                : 'bg-[#24cc8f]/15 text-[#24cc8f] border-[#24cc8f]/40'
+                            }`}
+                          >
+                            {remainingToday}/{skill.dailyLimit} hoje
                           </span>
                         )}
                       </div>
@@ -269,7 +285,9 @@ export function SkillsBar({
                         <Zap className="w-3.5 h-3.5 fill-current" />
                         <span>{skill.mpCost}</span>
                       </div>
-                      <span className="text-[10px] uppercase tracking-wider">Usar MP</span>
+                      <span className="text-[10px] uppercase tracking-wider">
+                        {limitReached ? 'Limite' : 'Usar MP'}
+                      </span>
                     </button>
                   </div>
                 );
