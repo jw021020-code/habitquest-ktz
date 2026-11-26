@@ -18,6 +18,7 @@ export interface HeroMetrics {
   armoireOpened: number;
   currentBossStage?: number;
   currentBossDamage?: number;
+  currentBossAssist?: number;
   totalBossDamage?: number;
   lastClaimedBossStage?: number;
   quests?: {
@@ -48,6 +49,7 @@ export const DEFAULT_METRICS: HeroMetrics = {
   armoireOpened: 0,
   currentBossStage: 1,
   currentBossDamage: 0,
+  currentBossAssist: 0,
   totalBossDamage: 0,
   lastClaimedBossStage: 0,
 };

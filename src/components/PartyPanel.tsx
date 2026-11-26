@@ -131,22 +131,32 @@ export function PartyPanel({
 
   const localBossDmg =
     heroMetrics.currentBossStage === bossStage ? (heroMetrics.currentBossDamage ?? 0) : 0;
+  const localBossAssist =
+    heroMetrics.currentBossStage === bossStage ? (heroMetrics.currentBossAssist ?? 0) : 0;
   const myContribution = getBossContributionReward(
     localBossDmg,
     bossMaxHp,
     rewardXp,
-    rewardGold
+    rewardGold,
+    localBossAssist
   );
 
-  const maxMemberDmg =
+  const getContribTotal = (dmg: number, assist: number) =>
+    dmg > 0 ? dmg + Math.min(Math.max(0, assist), Math.round(bossMaxHp * 0.5)) : 0;
+
+  const maxMemberContrib =
     remoteParty && remoteMembers.length > 0
       ? Math.max(
           0,
-          ...remoteMembers.map((m) =>
-            m.metrics?.currentBossStage === bossStage ? (m.metrics?.currentBossDamage ?? 0) : 0
-          )
+          ...remoteMembers.map((m) => {
+            const d =
+              m.metrics?.currentBossStage === bossStage ? (m.metrics?.currentBossDamage ?? 0) : 0;
+            const a =
+              m.metrics?.currentBossStage === bossStage ? (m.metrics?.currentBossAssist ?? 0) : 0;
+            return getContribTotal(d, a);
+          })
         )
-      : localBossDmg;
+      : getContribTotal(localBossDmg, localBossAssist);
 
   const filteredBossCatalog = BOSS_CATALOG.map((b, index) => ({ b, index })).filter(({ b }) => {
     if (bossCatFilter === 'potions') {
@@ -316,11 +326,19 @@ export function PartyPanel({
                       a.metrics?.currentBossStage === bossStage
                         ? (a.metrics?.currentBossDamage ?? 0)
                         : 0;
+                    const aa =
+                      a.metrics?.currentBossStage === bossStage
+                        ? (a.metrics?.currentBossAssist ?? 0)
+                        : 0;
                     const db =
                       b.metrics?.currentBossStage === bossStage
                         ? (b.metrics?.currentBossDamage ?? 0)
                         : 0;
-                    return db - da || b.level - a.level;
+                    const ab =
+                      b.metrics?.currentBossStage === bossStage
+                        ? (b.metrics?.currentBossAssist ?? 0)
+                        : 0;
+                    return getContribTotal(db, ab) - getContribTotal(da, aa) || b.level - a.level;
                   })
                   .map((member) => {
                     const mStaPct = Math.max(
@@ -336,9 +354,16 @@ export function PartyPanel({
                       member.metrics?.currentBossStage === bossStage
                         ? (member.metrics?.currentBossDamage ?? 0)
                         : 0;
+                    const assist =
+                      member.metrics?.currentBossStage === bossStage
+                        ? (member.metrics?.currentBossAssist ?? 0)
+                        : 0;
+                    const totalContrib = getContribTotal(dmg, assist);
                     const dmgPct =
-                      bossMaxHp > 0 ? Math.min(100, Math.round((dmg / bossMaxHp) * 100)) : 0;
-                    const isMvp = maxMemberDmg > 0 && dmg === maxMemberDmg;
+                      bossMaxHp > 0
+                        ? Math.min(100, Math.round((totalContrib / bossMaxHp) * 100))
+                        : 0;
+                    const isMvp = maxMemberContrib > 0 && totalContrib === maxMemberContrib;
                     const isExhausted = member.hp <= 0;
 
                     return (
@@ -422,7 +447,7 @@ export function PartyPanel({
                           {/* Contribuição na Luta Atual */}
                           <div className="flex items-center justify-between text-[10px] font-condensed pt-0.5">
                             <span className="text-[#ffbe5d] font-bold">
-                              ⚔️ {dmg} dano ({dmgPct}%)
+                              ⚔️ {dmg} dano{assist > 0 ? ` · 🤝 ${assist} assist.` : ''} ({dmgPct}%)
                             </span>
                             <div className="flex items-center gap-2">
                               <span className="text-[#8a8299]">
@@ -497,9 +522,9 @@ export function PartyPanel({
 
                     <div className="flex items-center justify-between text-[10px] font-condensed pt-0.5">
                       <span className="text-[#ffbe5d] font-bold">
-                        ⚔️ {localBossDmg} dano (
-                        {bossMaxHp > 0 ? Math.min(100, Math.round((localBossDmg / bossMaxHp) * 100)) : 0}
-                        %)
+                        ⚔️ {localBossDmg} dano
+                        {localBossAssist > 0 ? ` · 🤝 ${localBossAssist} assist.` : ''} (
+                        {myContribution.damagePct}%)
                       </span>
                       <span className="text-[#8a8299]">
                         {heroMetrics.bossesDefeated ?? 0} bosses vencidos

@@ -345,7 +345,8 @@ export default function HomePage() {
   const applyBossDamageAndCheckVictory = (
     damage: number,
     sourceLabel: string,
-    latestStats: PlayerStats
+    latestStats: PlayerStats,
+    extraAssist = 0
   ): {
     defeated: boolean;
     bossName: string;
@@ -371,8 +372,17 @@ export default function HomePage() {
       const nextBoss = getProgressiveBoss(nextStage);
       const prevDamage =
         metrics.currentBossStage === currentStage ? (metrics.currentBossDamage ?? 0) : 0;
+      const prevAssist =
+        metrics.currentBossStage === currentStage ? (metrics.currentBossAssist ?? 0) : 0;
       const totalMyDamage = prevDamage + damage;
-      const contrib = getBossContributionReward(totalMyDamage, currentMaxHp, rXp, rGold);
+      const totalMyAssist = prevAssist + extraAssist;
+      const contrib = getBossContributionReward(
+        totalMyDamage,
+        currentMaxHp,
+        rXp,
+        rGold,
+        totalMyAssist
+      );
 
       // Ao derrotar um Boss: recompensa escalonada pela % de contribuição + fôlego parcial (+25% STA / +15% MP)
       const victoryRes = grantXpAndResources(latestStats, totalAttributes, {
@@ -402,6 +412,7 @@ export default function HomePage() {
         totalBossDamage: (m.totalBossDamage ?? 0) + damage,
         currentBossStage: nextStage,
         currentBossDamage: 0,
+        currentBossAssist: 0,
         lastClaimedBossStage: currentStage,
       }));
 
@@ -459,6 +470,8 @@ export default function HomePage() {
       currentBossStage: currentStage,
       currentBossDamage:
         (m.currentBossStage === currentStage ? (m.currentBossDamage ?? 0) : 0) + damage,
+      currentBossAssist:
+        (m.currentBossStage === currentStage ? (m.currentBossAssist ?? 0) : 0) + extraAssist,
     }));
 
     if (remoteParty) {
@@ -727,9 +740,25 @@ export default function HomePage() {
       }
     }
 
+    const assistDelta = res.assistPoints ?? 0;
+    const activeStage = remoteParty ? (remoteParty.boss_stage ?? 1) : party.bossStage;
+    if (assistDelta > 0 && res.bossDamage <= 0) {
+      setMetrics((m) => ({
+        ...m,
+        currentBossStage: activeStage,
+        currentBossAssist:
+          (m.currentBossStage === activeStage ? (m.currentBossAssist ?? 0) : 0) + assistDelta,
+      }));
+    }
+
+    const assistTag =
+      assistDelta > 0
+        ? ` · 🤝 +${assistDelta} Assistência${res.gainedGold > 0 ? ` + ${res.gainedGold} GP` : ''}`
+        : '';
+
     const bossOutcome =
       res.bossDamage > 0
-        ? applyBossDamageAndCheckVictory(res.bossDamage, skill.name, res.nextStats)
+        ? applyBossDamageAndCheckVictory(res.bossDamage, skill.name, res.nextStats, assistDelta)
         : { defeated: false, bossName: '' };
 
     if (bossOutcome.defeated) {
@@ -740,17 +769,17 @@ export default function HomePage() {
     } else if (res.bossDamage > 0) {
       const dodgeTag = res.dodged ? ' · 💨 Esquiva (0 STA)!' : ` · -${res.staminaLost} STA`;
       const vulnTag = res.appliedBossVulnerable ? ' · Boss Vulnerável (+20%)' : '';
-      showToast(`⚔️ ${skill.name}: -${res.bossDamage} Boss HP${dodgeTag}${vulnTag}!`);
+      showToast(`⚔️ ${skill.name}: -${res.bossDamage} Boss HP${dodgeTag}${vulnTag}${assistTag}!`);
     } else if (res.healedHp > 0 || res.groupHealAmount) {
-      showToast(`💚 ${skill.name}: +${res.healedHp} STA (Guilda KTZ curada)!`);
+      showToast(`💚 ${skill.name}: +${res.healedHp} STA (Guilda KTZ curada)${assistTag}!`);
     } else if (res.groupManaAmount) {
-      showToast(`💙 ${skill.name}: +${res.groupManaAmount} MP restaurado para toda a KTZ!`);
+      showToast(`💙 ${skill.name}: +${res.groupManaAmount} MP restaurado para toda a KTZ${assistTag}!`);
+    } else if (skill.kind === 'buff') {
+      showToast(`🛡️ ${skill.name} aplicado para toda a KTZ${assistTag}!`);
     } else if (res.gainedGold > 0) {
       showToast(`🪙 ${skill.name}: +${res.gainedGold} GP!${dropText}`);
     } else if (skill.kind === 'stance') {
       showToast(`⚡ ${skill.name} ativado!`);
-    } else if (skill.kind === 'buff') {
-      showToast(`🛡️ ${skill.name} aplicado para toda a KTZ!`);
     }
   };
 
@@ -1362,6 +1391,7 @@ export default function HomePage() {
         ...m,
         currentBossStage: partyStage,
         currentBossDamage: 0,
+        currentBossAssist: 0,
         lastClaimedBossStage: partyStage - 1,
       }));
       return;
@@ -1386,11 +1416,14 @@ export default function HomePage() {
       lastBossName = prevBoss.name;
       const myStageDmg =
         metrics.currentBossStage === s ? (metrics.currentBossDamage ?? 0) : 0;
+      const myStageAssist =
+        metrics.currentBossStage === s ? (metrics.currentBossAssist ?? 0) : 0;
       const contrib = getBossContributionReward(
         myStageDmg,
         prevBoss.maxHp,
         prevBoss.rewardXp,
-        prevBoss.rewardGold
+        prevBoss.rewardGold,
+        myStageAssist
       );
 
       const victoryRes = grantXpAndResources(nextStats, totalAttributes, {
@@ -1433,6 +1466,7 @@ export default function HomePage() {
       totalGoldEarned: m.totalGoldEarned + totalGoldGained,
       currentBossStage: partyStage,
       currentBossDamage: 0,
+      currentBossAssist: 0,
       lastClaimedBossStage: partyStage - 1,
     }));
 
@@ -1494,6 +1528,7 @@ export default function HomePage() {
       ...m,
       currentBossStage: targetStage,
       currentBossDamage: 0,
+      currentBossAssist: 0,
     }));
 
     if (remoteParty) {

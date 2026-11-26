@@ -497,6 +497,7 @@ export interface SkillCastResult {
   reason?: 'no_mp' | 'full_stamina' | 'buff_maxed';
   nextStats: PlayerStats;
   bossDamage: number;
+  assistPoints?: number;
   healedHp: number;
   gainedGold: number;
   staminaLost: number;
@@ -553,7 +554,9 @@ export function applyClassSkill(
     mp: stats.mp - skill.mpCost,
   };
   let bossDamage = 0;
+  let assistPoints = 0;
   let healedHp = 0;
+  const levelScale = getLevelScale(stats.level);
   let gainedGold = 0;
   let staminaLost = 0;
   let dodged = false;
@@ -598,6 +601,9 @@ export function applyClassSkill(
       healedHp = Math.min(nextStats.max_hp - nextStats.hp, amount);
       nextStats.hp += healedHp;
       groupHealAmount = amount;
+      assistPoints = Math.round((55 + attrs.con * 0.9) * levelScale);
+      gainedGold = 10;
+      nextStats.gold += gainedGold;
       break;
     }
     case 'defensive_stance': {
@@ -621,6 +627,9 @@ export function applyClassSkill(
       }
       nextStats.buffs = { ...nextStats.buffs, con: nextCon };
       groupBuffDelta = { con: bonus };
+      assistPoints = Math.round(65 * levelScale);
+      gainedGold = 12;
+      nextStats.gold += gainedGold;
       break;
     }
 
@@ -648,6 +657,11 @@ export function applyClassSkill(
       nextStats.hp = Math.max(0, nextStats.hp - staminaLost);
       nextStats.critGuarantee = false;
       appliedBossVulnerable = true;
+      if (!bossMods?.vulnerable) {
+        assistPoints = Math.round(55 * levelScale);
+        gainedGold = 12;
+        nextStats.gold += gainedGold;
+      }
       break;
     }
     case 'war_cry': {
@@ -667,6 +681,9 @@ export function applyClassSkill(
       }
       nextStats.buffs = { ...nextStats.buffs, str: nextStr };
       groupBuffDelta = { str: bonus };
+      assistPoints = Math.round(65 * levelScale);
+      gainedGold = 12;
+      nextStats.gold += gainedGold;
       break;
     }
 
@@ -709,6 +726,9 @@ export function applyClassSkill(
       }
       nextStats.buffs = { ...nextStats.buffs, per: nextPer };
       groupBuffDelta = { per: bonus };
+      assistPoints = Math.round(65 * levelScale);
+      gainedGold = 15;
+      nextStats.gold += gainedGold;
       break;
     }
 
@@ -727,10 +747,18 @@ export function applyClassSkill(
       // Restaura MP apenas para os aliados da KTZ (evita auto-sustento infinito de mana)
       const amount = Math.min(24, Math.round(12 + Math.floor(attrs.int * 0.25)));
       groupManaAmount = amount;
+      assistPoints = Math.round((65 + attrs.int * 0.6) * levelScale);
+      gainedGold = 10;
+      nextStats.gold += gainedGold;
       break;
     }
     case 'curse_weakness': {
       appliedBossWeakened = true;
+      if (!bossMods?.weakened) {
+        assistPoints = Math.round(70 * levelScale);
+        gainedGold = 12;
+        nextStats.gold += gainedGold;
+      }
       break;
     }
     case 'focused_flame': {
@@ -754,6 +782,7 @@ export function applyClassSkill(
     ok: true,
     nextStats,
     bossDamage,
+    assistPoints,
     healedHp,
     gainedGold,
     staminaLost,

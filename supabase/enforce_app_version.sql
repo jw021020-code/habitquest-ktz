@@ -9,7 +9,7 @@ create table if not exists public.app_config (
 );
 
 insert into public.app_config (id, min_client_info)
-values ('global', 'habitquest-ktz/1.0.7')
+values ('global', 'habitquest-ktz/1.0.8')
 on conflict (id) do update
 set min_client_info = excluded.min_client_info,
     updated_at = now();

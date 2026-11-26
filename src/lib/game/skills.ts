@@ -292,17 +292,21 @@ export interface BossContributionReward {
 }
 
 /**
- * Calcula a recompensa individual de um Boss derrotado conforme o % de dano causado.
+ * Calcula a recompensa individual de um Boss derrotado conforme o % de contribuição
+ * (Dano Direto + Pontos de Assistência até o teto de 50% do HP do Boss).
  */
 export function getBossContributionReward(
   playerDamage: number,
   bossMaxHp: number,
   baseXp: number,
-  baseGold: number
+  baseGold: number,
+  playerAssist = 0
 ): BossContributionReward {
   const safeMaxHp = Math.max(1, bossMaxHp);
   const safeDmg = Math.max(0, playerDamage);
-  const damagePct = Math.min(100, Math.round((safeDmg / safeMaxHp) * 1000) / 10);
+  const cappedAssist = Math.min(Math.max(0, playerAssist), Math.round(safeMaxHp * 0.5));
+  const totalContribution = safeDmg > 0 ? safeDmg + cappedAssist : 0;
+  const damagePct = Math.min(100, Math.round((totalContribution / safeMaxHp) * 1000) / 10);
 
   if (safeDmg <= 0) {
     return {
