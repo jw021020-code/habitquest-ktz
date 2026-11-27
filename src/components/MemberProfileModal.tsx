@@ -81,10 +81,12 @@ function SlotGrid({
   gear,
   heroClass,
   isCostume,
+  enhancements,
 }: {
   gear: EquippedGear;
   heroClass: RemoteProfile['hero_class'];
   isCostume?: boolean;
+  enhancements?: Record<string, number>;
 }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -93,7 +95,8 @@ function SlotGrid({
         const rarity = item ? getItemRarity(item) : null;
         const rarityMeta = rarity ? RARITY_META[rarity] : null;
         const affinity = item && !isCostume ? hasClassAffinity(item, heroClass) : false;
-        const effStats = item && !isCostume ? getItemEffectiveStats(item, heroClass) : null;
+        const enhLv = item && !isCostume ? (enhancements?.[item.id] ?? 0) : 0;
+        const effStats = item && !isCostume ? getItemEffectiveStats(item, heroClass, enhLv) : null;
 
         return (
           <div
@@ -131,7 +134,7 @@ function SlotGrid({
                 {SLOT_LABEL[slot]}
               </div>
               <div className="text-xs font-condensed font-bold text-white truncate">
-                {item ? item.name : '—'}
+                {item ? `${item.name}${enhLv > 0 ? ` +${enhLv}` : ''}` : '—'}
               </div>
             </div>
 
@@ -166,7 +169,11 @@ export function MemberProfileModal({
   const showCostumeOnStage = previewCostume ?? member.use_costume;
   const clsMeta = CLASS_INFO[member.hero_class] ?? CLASS_INFO.apprentice;
   const metrics = { ...DEFAULT_METRICS, ...(member.metrics ?? {}) };
-  const gearAttrs = computeTotalAttributes(member.equipped ?? {}, member.hero_class);
+  const gearAttrs = computeTotalAttributes(
+    member.equipped ?? {},
+    member.hero_class,
+    metrics.itemEnhancements
+  );
   const alloc = member.allocated_stats ?? { str: 0, int: 0, con: 0, per: 0 };
   const buffs = member.buffs ?? { str: 0, int: 0, con: 0, per: 0 };
   const totalAttrs: Attributes = {
@@ -379,7 +386,11 @@ export function MemberProfileModal({
                     Equipamentos de Batalha (Atributos + Afinidade)
                   </h3>
                 </div>
-                <SlotGrid gear={member.equipped ?? {}} heroClass={member.hero_class} />
+                <SlotGrid
+                    gear={member.equipped ?? {}}
+                    heroClass={member.hero_class}
+                    enhancements={metrics.itemEnhancements}
+                  />
               </div>
 
               <div className="space-y-2.5">

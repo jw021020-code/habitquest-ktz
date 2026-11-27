@@ -7,6 +7,7 @@ import {
 } from './items';
 import { CheckInState } from './checkin';
 import { getCardioEquivalentKm } from './cardio';
+import { DEFAULT_ROULETTE_STATE, RouletteState } from './roulette';
 import { StudyEntry } from '@/components/StudyLogCard';
 import { WorkoutEntry } from '@/components/WorkoutLogCard';
 
@@ -39,6 +40,9 @@ export interface HeroMetrics {
   seasonSeen?: string;
   claimedCompensations?: string[];
   dailySkillCasts?: { dayKey: string; counts: Record<string, number> };
+  fragments?: number;
+  itemEnhancements?: Record<string, number>;
+  roulette?: RouletteState;
 }
 
 export const DEFAULT_METRICS: HeroMetrics = {
@@ -52,6 +56,9 @@ export const DEFAULT_METRICS: HeroMetrics = {
   currentBossAssist: 0,
   totalBossDamage: 0,
   lastClaimedBossStage: 0,
+  fragments: 0,
+  itemEnhancements: {},
+  roulette: { ...DEFAULT_ROULETTE_STATE },
 };
 
 export type AchievementCategory =

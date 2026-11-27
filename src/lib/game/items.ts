@@ -268,30 +268,66 @@ export function hasClassAffinity(
   );
 }
 
+export const MAX_ENHANCEMENT_LEVEL = 5;
+export const ENHANCEMENT_PCT_BY_LEVEL = [0, 0.08, 0.16, 0.25, 0.35, 0.45] as const;
+
 /**
- * Retorna os atributos efetivos de um equipamento considerando o bônus de +50%
- * quando equipado por um herói da mesma classe (afinidade de classe).
+ * Retorna os atributos base do equipamento já somados ao nível de Forja (+1..+5).
+ */
+export function getEnhancedBaseStats(
+  item: EquipmentItem,
+  enhancementLevel = 0
+): Attributes {
+  const lv = Math.min(MAX_ENHANCEMENT_LEVEL, Math.max(0, Math.floor(enhancementLevel)));
+  const power = item.stats.str + item.stats.int + item.stats.con + item.stats.per;
+  if (lv <= 0 || power < 1) {
+    return item.stats;
+  }
+  const pct = ENHANCEMENT_PCT_BY_LEVEL[lv];
+  const maxStat = Math.max(item.stats.str, item.stats.int, item.stats.con, item.stats.per);
+
+  const scaleStat = (val: number) => {
+    if (val <= 0) return 0;
+    const rawBonus = Math.round(val * pct);
+    const minBonus = val === maxStat ? lv : 0;
+    return val + Math.max(minBonus, rawBonus);
+  };
+
+  return {
+    str: scaleStat(item.stats.str),
+    int: scaleStat(item.stats.int),
+    con: scaleStat(item.stats.con),
+    per: scaleStat(item.stats.per),
+  };
+}
+
+/**
+ * Retorna os atributos efetivos de um equipamento considerando o nível de Forja (+1..+5)
+ * e o bônus de +50% quando equipado por um herói da mesma classe (afinidade de classe).
  */
 export function getItemEffectiveStats(
   item: EquipmentItem,
-  heroClass?: PlayableHeroClass
+  heroClass?: PlayableHeroClass,
+  enhancementLevel = 0
 ): Attributes {
+  const base = getEnhancedBaseStats(item, enhancementLevel);
   const mult = hasClassAffinity(item, heroClass) ? 1.5 : 1.0;
   return {
-    str: Math.round(item.stats.str * mult),
-    int: Math.round(item.stats.int * mult),
-    con: Math.round(item.stats.con * mult),
-    per: Math.round(item.stats.per * mult),
+    str: Math.round(base.str * mult),
+    int: Math.round(base.int * mult),
+    con: Math.round(base.con * mult),
+    per: Math.round(base.per * mult),
   };
 }
 
 /**
  * Soma os atributos de todos os itens equipados nos 8 slots oficiais,
- * aplicando +50% de bônus de afinidade para itens da classe do herói.
+ * aplicando aprimoramentos de Forja e +50% de bônus de afinidade para itens da classe do herói.
  */
 export function computeTotalAttributes(
   equipped: EquippedGear,
-  heroClass?: PlayableHeroClass
+  heroClass?: PlayableHeroClass,
+  enhancements?: Record<string, number>
 ): Attributes {
   const total: Attributes = { str: 0, int: 0, con: 0, per: 0 };
   const slots: EquipmentSlot[] = [
@@ -307,7 +343,8 @@ export function computeTotalAttributes(
   for (const slot of slots) {
     const item = getEquipmentById(equipped[slot]);
     if (item) {
-      const eff = getItemEffectiveStats(item, heroClass);
+      const enhLv = enhancements?.[item.id] ?? 0;
+      const eff = getItemEffectiveStats(item, heroClass, enhLv);
       total.str += eff.str;
       total.int += eff.int;
       total.con += eff.con;

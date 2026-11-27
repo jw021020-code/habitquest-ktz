@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, Dumbbell, ScrollText, ShoppingBag, Store, Users } from 'lucide-react';
+import { BookOpen, Disc3, Dumbbell, ScrollText, ShoppingBag, Store, Users } from 'lucide-react';
 import { APP_VERSION } from '@/lib/version';
 import {
   applyClassSkill,
@@ -87,6 +87,22 @@ import {
   syncProfileToSupabase,
   updateRemotePartyBoss,
 } from '@/lib/supabase/data';
+import {
+  canSalvageItem,
+  getForgeUpgradeCost,
+  getItemSalvageFragments,
+  MAX_ENHANCEMENT_LEVEL,
+} from '@/lib/game/forge';
+import {
+  addRouletteEnergy,
+  computeStudyRouletteEnergy,
+  computeWorkoutRouletteEnergy,
+  DEFAULT_ROULETTE_STATE,
+  isRouletteUnlocked,
+  RouletteSpinResult,
+  spinRoulette,
+} from '@/lib/game/roulette';
+import { RoulettePanel } from '@/components/RoulettePanel';
 import { AuthModal } from '@/components/AuthModal';
 import { CompensationModal, CompensationPackage } from '@/components/CompensationModal';
 import { DailyCheckInModal } from '@/components/DailyCheckInModal';
@@ -119,7 +135,7 @@ interface PartyState {
   rewardXp: number;
 }
 
-type MobileTab = 'study' | 'workout' | 'quests' | 'inventario' | 'loja' | 'ktz';
+type MobileTab = 'study' | 'workout' | 'quests' | 'roleta' | 'inventario' | 'loja' | 'ktz';
 
 const SEASON_VERSION = '1.0.0';
 const LEGACY_STORAGE_KEY = 'habitquest_ktz_launch_v1';
@@ -220,7 +236,7 @@ export default function HomePage() {
   const [bossMods, setBossMods] = useState<BossCombatModifiers>({});
 
   const totalAttributes = useMemo(() => {
-    const gear = computeTotalAttributes(equipped, stats.heroClass);
+    const gear = computeTotalAttributes(equipped, stats.heroClass, metrics.itemEnhancements);
     const alloc = stats.allocatedStats ?? ZERO_ATTRS;
     return {
       str: gear.str + stats.buffs.str + alloc.str,
@@ -228,7 +244,7 @@ export default function HomePage() {
       con: gear.con + stats.buffs.con + alloc.con,
       per: gear.per + stats.buffs.per + alloc.per,
     };
-  }, [equipped, stats.heroClass, stats.buffs, stats.allocatedStats]);
+  }, [equipped, stats.heroClass, stats.buffs, stats.allocatedStats, metrics.itemEnhancements]);
 
   const unallocatedPoints = useMemo(
     () => getUnallocatedStatPoints(stats.level, stats.allocatedStats),
@@ -590,6 +606,27 @@ export default function HomePage() {
       catchUpInfo.multiplier
     );
     processDropAndToast(res, `Estudo: ${entry.subject}`);
+
+    const studyEnergy = computeStudyRouletteEnergy(
+      entry.minutes,
+      entry.didQuestions,
+      entry.questionsDone,
+      Boolean(entry.didEssay),
+      entry.essaysDone ?? 0
+    );
+    if (studyEnergy > 0 && isRouletteUnlocked(now)) {
+      setMetrics((m) => {
+        const { nextState, tokensEarned } = addRouletteEnergy(
+          m.roulette ?? DEFAULT_ROULETTE_STATE,
+          studyEnergy,
+          now
+        );
+        if (tokensEarned > 0) {
+          pushActionLog(`🎡 ${heroName} ganhou +${tokensEarned} Ficha(s) da Roleta!`);
+        }
+        return { ...m, roulette: nextState };
+      });
+    }
   };
 
   const handleDeleteStudy = (id: string) => {
@@ -642,6 +679,21 @@ export default function HomePage() {
       catchUpInfo.multiplier
     );
     processDropAndToast(res, `Treino: ${label}`);
+
+    const workoutEnergy = computeWorkoutRouletteEnergy(entry.cardio, kmEq, entry.musculacao);
+    if (workoutEnergy > 0 && isRouletteUnlocked(now)) {
+      setMetrics((m) => {
+        const { nextState, tokensEarned } = addRouletteEnergy(
+          m.roulette ?? DEFAULT_ROULETTE_STATE,
+          workoutEnergy,
+          now
+        );
+        if (tokensEarned > 0) {
+          pushActionLog(`🎡 ${heroName} ganhou +${tokensEarned} Ficha(s) da Roleta!`);
+        }
+        return { ...m, roulette: nextState };
+      });
+    }
   };
 
   const handleDeleteWorkout = (id: string) => {
@@ -2083,9 +2135,119 @@ export default function HomePage() {
     openMonthlyChest(questsState.pendingMonthlyChest.tier, true);
   };
 
+  const handleSpinRoulette = (): RouletteSpinResult => {
+    const curState = metrics.roulette ?? DEFAULT_ROULETTE_STATE;
+    const res = spinRoulette(curState, inventory, new Date());
+    if (!res.ok) {
+      showToast(
+        res.reason === 'locked'
+          ? '🔒 A Roleta abre em 27/11 às 00h00 (Brasília)!'
+          : '🎟️ Você não tem Fichas da Roleta. Estude ou treine para carregar!'
+      );
+      return res;
+    }
+
+    if (res.reward.gold > 0) {
+      setStats((s) => ({ ...s, gold: s.gold + res.reward.gold }));
+    }
+    if (res.reward.eggs > 0 || res.reward.potions > 0) {
+      setStable((prev) => ({
+        ...prev,
+        eggs: prev.eggs + res.reward.eggs,
+        potions: prev.potions + res.reward.potions,
+      }));
+    }
+    if (res.reward.item && !inventory.includes(res.reward.item.id)) {
+      setInventory((prev) => [...prev, res.reward.item!.id]);
+    }
+
+    setMetrics((m) => ({
+      ...m,
+      totalGoldEarned: m.totalGoldEarned + res.reward.gold,
+      fragments: (m.fragments ?? 0) + res.reward.fragments,
+      roulette: res.nextState,
+    }));
+
+    setTimeout(() => {
+      pushActionLog(`🎡 ${heroName} girou a Roleta e ganhou: ${res.nextState.lastPrizeLabel}!`);
+      showToast(`🎡 Roleta: ${res.nextState.lastPrizeLabel}!`);
+    }, 4600);
+
+    return res;
+  };
+
+  const handleUpgradeItem = (item: EquipmentItem) => {
+    const curEnhancements = metrics.itemEnhancements ?? {};
+    const curLv = curEnhancements[item.id] ?? 0;
+    if (curLv >= MAX_ENHANCEMENT_LEVEL) {
+      showToast('✨ Este item já atingiu o nível máximo (+5)!');
+      return;
+    }
+    const cost = getForgeUpgradeCost(item, curLv);
+    if (!cost) return;
+
+    const curFrags = metrics.fragments ?? 0;
+    if (curFrags < cost.fragments || stats.gold < cost.gold) {
+      showToast(`💎 Recursos insuficientes (${cost.fragments} Frag. + ${cost.gold} GP)!`);
+      return;
+    }
+
+    const nextLv = curLv + 1;
+    setStats((s) => ({ ...s, gold: s.gold - cost.gold }));
+    setMetrics((m) => ({
+      ...m,
+      fragments: (m.fragments ?? 0) - cost.fragments,
+      itemEnhancements: {
+        ...(m.itemEnhancements ?? {}),
+        [item.id]: nextLv,
+      },
+    }));
+    pushActionLog(`⚒️ ${heroName} aprimorou ${item.name} para +${nextLv}!`);
+    showToast(`⚒️ ${item.name} aprimorado para +${nextLv}!`);
+  };
+
+  const handleSalvageItems = (itemIds: string[]) => {
+    if (itemIds.length === 0) return;
+    const idSet = new Set(itemIds);
+    const curEnhancements = metrics.itemEnhancements ?? {};
+    let totalFrags = 0;
+    const salvagedIds: string[] = [];
+
+    for (const id of inventory) {
+      if (!idSet.has(id) || salvagedIds.includes(id)) continue;
+      const item = getEquipmentById(id);
+      if (!item || !canSalvageItem(item, equipped, costume)) continue;
+      totalFrags += getItemSalvageFragments(item, curEnhancements[id] ?? 0);
+      salvagedIds.push(id);
+    }
+
+    if (salvagedIds.length === 0 || totalFrags <= 0) {
+      showToast('⚠️ Nenhum item elegível para desfragmentar.');
+      return;
+    }
+
+    const removedSet = new Set(salvagedIds);
+    setInventory((prev) => prev.filter((id) => !removedSet.has(id)));
+    setMetrics((m) => {
+      const nextEnh = { ...(m.itemEnhancements ?? {}) };
+      for (const id of salvagedIds) delete nextEnh[id];
+      return {
+        ...m,
+        fragments: (m.fragments ?? 0) + totalFrags,
+        itemEnhancements: nextEnh,
+      };
+    });
+    pushActionLog(
+      `💎 ${heroName} desfragmentou ${salvagedIds.length} item(ns) e obteve +${totalFrags} Fragmentos!`
+    );
+    showToast(`💎 +${totalFrags} Fragmentos obtidos (${salvagedIds.length} item(ns))!`);
+  };
+
   const showRegistroSection = activeSection === 'registro';
   const showQuestsSection = activeSection === 'quests';
+  const showRouletteSection = activeSection === 'roleta';
   const showKtzSection = activeSection === 'ktz';
+  const rouletteUnlockedNow = nowTs !== null ? isRouletteUnlocked(new Date(nowTs)) : false;
   const gearMode: 'inventory' | 'shop' | null =
     activeSection === 'inventario'
       ? 'inventory'
@@ -2119,6 +2281,8 @@ export default function HomePage() {
         invTab={invTab}
         shopFilter={shopFilter}
         readyQuestsCount={readyQuestsCount}
+        rouletteTokens={metrics.roulette?.tokens ?? 0}
+        rouletteUnlocked={rouletteUnlockedNow}
         canClaimCheckIn={canCheckInToday}
         checkInStreak={currentCheckInStreak}
         catchUpPercent={catchUpInfo.bonusPercent}
@@ -2128,6 +2292,7 @@ export default function HomePage() {
           setActiveSection(sec);
           if (sec === 'ktz') setMobileTab('ktz');
           else if (sec === 'quests') setMobileTab('quests');
+          else if (sec === 'roleta') setMobileTab('roleta');
           else if (sec === 'inventario') setMobileTab('inventario');
           else if (sec === 'loja') setMobileTab('loja');
           else if (mobileTab !== 'study' && mobileTab !== 'workout') setMobileTab('study');
@@ -2228,6 +2393,16 @@ export default function HomePage() {
         />
       )}
 
+      {/* Aba Roleta de Produção */}
+      {showRouletteSection && (
+        <main className="max-w-7xl w-full mx-auto px-4 pt-4">
+          <RoulettePanel
+            roulette={metrics.roulette ?? DEFAULT_ROULETTE_STATE}
+            onSpin={handleSpinRoulette}
+          />
+        </main>
+      )}
+
       {/* Abas 2 & 3: INVENTÁRIO e LOJA (Views de Página Inteira Estilo Habitica) */}
       <EquipmentPanel
         mode={gearMode}
@@ -2252,6 +2427,10 @@ export default function HomePage() {
         inventory={inventory}
         stable={stable}
         totalAttributes={totalAttributes}
+        fragments={metrics.fragments ?? 0}
+        enhancements={metrics.itemEnhancements ?? {}}
+        onUpgradeItem={handleUpgradeItem}
+        onSalvageItems={handleSalvageItems}
         onChangeAppearance={setAppearance}
         onBuyItem={handleBuyItem}
         onBuyBatchItems={handleBuyBatchItems}
@@ -2370,13 +2549,19 @@ export default function HomePage() {
         HabitQuest KTZ · v{APP_VERSION}
       </footer>
 
-      {/* Barra de Navegação Inferior no Mobile (6 Abas Estilo Habitica Mobile) */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[#36205d] border-t border-[#4f2a93] grid grid-cols-6">
+      {/* Barra de Navegação Inferior no Mobile (7 Abas Estilo Habitica Mobile) */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[#36205d] border-t border-[#4f2a93] grid grid-cols-7">
         {[
           { id: 'study', label: 'Estudo', icon: <BookOpen className="w-4 h-4" /> },
           { id: 'workout', label: 'Treino', icon: <Dumbbell className="w-4 h-4" /> },
           { id: 'quests', label: 'Missões', icon: <ScrollText className="w-4 h-4" />, badge: readyQuestsCount },
-          { id: 'inventario', label: 'Inventário', icon: <ShoppingBag className="w-4 h-4" /> },
+          {
+            id: 'roleta',
+            label: 'Roleta',
+            icon: <Disc3 className="w-4 h-4" />,
+            badge: rouletteUnlockedNow ? (metrics.roulette?.tokens ?? 0) : 0,
+          },
+          { id: 'inventario', label: 'Mochila', icon: <ShoppingBag className="w-4 h-4" /> },
           { id: 'loja', label: 'Lojas', icon: <Store className="w-4 h-4" /> },
           { id: 'ktz', label: 'KTZ', icon: <Users className="w-4 h-4" /> },
         ].map((tab) => (
@@ -2387,6 +2572,7 @@ export default function HomePage() {
               setMobileTab(id);
               if (id === 'ktz') setActiveSection('ktz');
               else if (id === 'quests') setActiveSection('quests');
+              else if (id === 'roleta') setActiveSection('roleta');
               else if (id === 'inventario') setActiveSection('inventario');
               else if (id === 'loja') setActiveSection('loja');
               else setActiveSection('registro');

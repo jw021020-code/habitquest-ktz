@@ -54,6 +54,7 @@ import {
   StableState,
 } from '@/lib/game/pets';
 import { CharacterAvatar } from './CharacterAvatar';
+import { ForgePanel } from './ForgePanel';
 import { InventorySubTab, ShopSubTab } from './HabiticaHeader';
 
 interface EquipmentPanelProps {
@@ -75,6 +76,10 @@ interface EquipmentPanelProps {
   inventory: string[];
   stable: StableState;
   totalAttributes: Attributes;
+  fragments?: number;
+  enhancements?: Record<string, number>;
+  onUpgradeItem?: (item: EquipmentItem) => void;
+  onSalvageItems?: (itemIds: string[]) => void;
   onChangeAppearance: (next: CharacterAppearance) => void;
   onBuyItem: (item: EquipmentItem, afterBuy?: 'bag' | 'equip' | 'costume') => void;
   onBuyBatchItems: (items: EquipmentItem[]) => void;
@@ -201,6 +206,10 @@ export function EquipmentPanel({
   inventory,
   stable,
   totalAttributes,
+  fragments = 0,
+  enhancements = {},
+  onUpgradeItem,
+  onSalvageItems,
   onChangeAppearance,
   onBuyItem,
   onBuyBatchItems,
@@ -789,7 +798,8 @@ export function EquipmentPanel({
                       const rarity = getItemRarity(item);
                       const rarityMeta = RARITY_META[rarity];
                       const hasAffinity = hasClassAffinity(item, heroClass);
-                      const effStats = getItemEffectiveStats(item, heroClass);
+                      const enhLv = enhancements[item.id] ?? 0;
+                      const effStats = getItemEffectiveStats(item, heroClass, enhLv);
                       return (
                         <div
                           key={item.id}
@@ -814,14 +824,21 @@ export function EquipmentPanel({
                               <span className="px-1.5 py-0.5 rounded bg-[#271b3d] text-[#d6c7ff] truncate">
                                 {SLOT_LABEL[item.slot]}
                               </span>
-                              {hasAffinity && (
-                                <span
-                                  className="px-1.5 py-0.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40 shrink-0"
-                                  title="Afinidade de Classe: +50% de atributos"
-                                >
-                                  +50%
-                                </span>
-                              )}
+                              <div className="flex items-center gap-1 shrink-0">
+                                {enhLv > 0 && (
+                                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/50">
+                                    +{enhLv}
+                                  </span>
+                                )}
+                                {hasAffinity && (
+                                  <span
+                                    className="px-1.5 py-0.5 rounded bg-[#24cc8f]/20 text-[#24cc8f] border border-[#24cc8f]/40"
+                                    title="Afinidade de Classe: +50% de atributos"
+                                  >
+                                    +50%
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             <div
                               style={
@@ -900,6 +917,21 @@ export function EquipmentPanel({
                 </>
               )}
             </div>
+          )}
+
+          {/* Sub-aba: FORJA & DESFRAGMENTAÇÃO */}
+          {invTab === 'forge' && onUpgradeItem && onSalvageItems && (
+            <ForgePanel
+              gold={gold}
+              fragments={fragments}
+              heroClass={heroClass}
+              equipped={equipped}
+              costume={costume}
+              inventory={inventory}
+              enhancements={enhancements}
+              onUpgradeItem={onUpgradeItem}
+              onSalvageItems={onSalvageItems}
+            />
           )}
 
           {/* Sub-aba 2: ESTÁBULO (INCUBADORA + 1.248 MASCOTES) */}

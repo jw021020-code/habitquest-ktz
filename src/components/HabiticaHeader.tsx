@@ -6,6 +6,8 @@ import {
   CalendarCheck,
   CheckSquare,
   Coins,
+  Disc3,
+  Hammer,
   Heart,
   Palette,
   PawPrint,
@@ -27,8 +29,8 @@ import { CLASS_INFO } from '@/lib/game/skills';
 import { RemoteProfile } from '@/lib/supabase/data';
 import { CharacterAvatar } from './CharacterAvatar';
 
-export type ActiveSection = 'registro' | 'quests' | 'inventario' | 'loja' | 'ktz';
-export type InventorySubTab = 'equipment' | 'stable' | 'appearance';
+export type ActiveSection = 'registro' | 'quests' | 'roleta' | 'inventario' | 'loja' | 'ktz';
+export type InventorySubTab = 'equipment' | 'stable' | 'forge' | 'appearance';
 export type ShopSubTab = HeroClass | 'all';
 
 interface HabiticaHeaderProps {
@@ -55,6 +57,8 @@ interface HabiticaHeaderProps {
   invTab: InventorySubTab;
   shopFilter: ShopSubTab;
   readyQuestsCount?: number;
+  rouletteTokens?: number;
+  rouletteUnlocked?: boolean;
   canClaimCheckIn?: boolean;
   checkInStreak?: number;
   catchUpPercent?: number;
@@ -102,6 +106,8 @@ export function HabiticaHeader({
   invTab,
   shopFilter,
   readyQuestsCount = 0,
+  rouletteTokens = 0,
+  rouletteUnlocked = false,
   canClaimCheckIn = false,
   checkInStreak = 0,
   catchUpPercent = 0,
@@ -161,6 +167,12 @@ export function HabiticaHeader({
                   label: 'Missões',
                   icon: <ScrollText className="w-4 h-4" />,
                   badge: readyQuestsCount,
+                },
+                {
+                  id: 'roleta' as ActiveSection,
+                  label: rouletteUnlocked ? 'Roleta' : 'Roleta 🔒',
+                  icon: <Disc3 className="w-4 h-4" />,
+                  badge: rouletteUnlocked ? rouletteTokens : 0,
                 },
                 {
                   id: 'inventario' as ActiveSection,
@@ -297,6 +309,17 @@ export function HabiticaHeader({
                 >
                   <PawPrint className="w-3.5 h-3.5" />
                   Estábulo ({ownedPetsCount}/{ALL_PET_IDS.length})
+                </button>
+                <button
+                  onClick={() => onSelectInvTab('forge')}
+                  className={`px-3 py-1.5 rounded-md flex items-center gap-1.5 transition shrink-0 ${
+                    invTab === 'forge'
+                      ? 'bg-[#6133b4] text-white shadow-sm'
+                      : 'text-[#d6c7ff]/80 hover:text-white hover:bg-[#432874]'
+                  }`}
+                >
+                  <Hammer className="w-3.5 h-3.5" />
+                  Forja & Fragmentos
                 </button>
                 <button
                   onClick={() => onSelectInvTab('appearance')}
